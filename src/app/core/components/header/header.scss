@@ -1,6 +1,14 @@
 header {
   padding: var(--basic-indent);
   background-color: aliceblue;
+  display: flex;
+  align-items: center;
+  column-gap: var(--basic-indent);
+
+  .menu-link {
+    font-size: 22px;
+    color: #272626;
+  }
 }
 
 img {
