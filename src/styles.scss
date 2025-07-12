@@ -1,4 +1,7 @@
 ///* CSS Reset */
+@import "styles/indentation.scss";
+@import "styles/colors.scss";
+@import "styles/theme.scss";
 *,
 *::before,
 *::after {
@@ -18,8 +21,8 @@ html, body {
 
 body {
   line-height: 1;
-  background: none;
-  color: inherit;
+  color: var(--text);
+  background-color: var(--background);
 }
 
 ol, ul {

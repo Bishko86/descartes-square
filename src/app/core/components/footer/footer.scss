@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  background-color: var(--surface);
+  padding: var(--basic-indent);
+
+  footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    color: var(--muted);
+    width: 100%;
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+  }
+}

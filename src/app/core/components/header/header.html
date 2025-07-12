@@ -1,1 +1,10 @@
-<p>header works!</p>
+<header>
+  <div class="right-section">
+  <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto"/>
+    @for (item of menuItems; track item.name) {
+      <a class="menu-link" [routerLink]="item.route" routerLinkActive="active"
+      >{{ item.name }}</a>
+    }
+  </div>
+  <button id="theme-toggle" class="btn-outline" (click)="changeTheme()">🌓 Change theme</button>
+</header>
