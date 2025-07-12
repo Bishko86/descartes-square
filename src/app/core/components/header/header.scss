@@ -1,18 +1,28 @@
 header {
-  padding: var(--basic-indent);
-  background-color: aliceblue;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  column-gap: var(--basic-indent);
+  padding: var(--basic-indent);
+  background-color: var(--surface);
+
+  .right-section {
+    display: flex;
+    align-items: center;
+    column-gap: var(--basic-indent);
+  }
+
 
   .menu-link {
     font-size: 22px;
-    color: #272626;
+    color: var(--text);
+
+    &.active {
+      color: var(--highlighted-text);
+    }
   }
 }
 
 img {
   height: 56px;
-  width: 164px;
-  object-fit: cover;
+  width: 56px;
 }
