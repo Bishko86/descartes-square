@@ -1,1 +1,4 @@
-<p>descartes-square works!</p>
+<section class="descartes-section">
+  <button class="plus_btn" [ngClass]="{'clicked': isClicked()}" (click)="onClick()"></button>
+  <router-outlet></router-outlet>
+</section>
