@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  transition: all 2.5s ease;
+  padding: var(--basic-indent);
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--basic-indent);
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      list-style-type: circle;
+      padding-bottom: var(--small-indent);
+    }
+
+    .add-arg {
+      display: inline-block;
+      transform: rotate(45deg) !important;
+    }
+  }
+
+  input {
+    border-style: solid;
+    background-color: var(--surface);
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+    border-color: var(--border);
+    width: 50%;
+    padding: var(--small-indent);
+    margin-left: -40px;
+  }
+
+  .align-input {
+    margin-left: 0;
+  }
+
+  input[id="title"] {
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .argument-btn {
+    width: fit-content;
+  }
+}

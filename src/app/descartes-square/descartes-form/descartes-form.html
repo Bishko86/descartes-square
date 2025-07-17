@@ -1,0 +1,68 @@
+<form [formGroup]="form">
+  <label for="title">Title</label>
+  <input class="align-input" id="title" type="text" formControlName="title">
+
+  <ng-container
+    *ngTemplateOutlet="controlTemplate;
+    context: {key: 'q1', question: 'What will happen if it happens?'}"
+  >
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="controlTemplate;
+    context: {key: 'q2', question: 'What will happen if it doesn\'t happen?'}"
+  >
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="controlTemplate;
+    context: {key: 'q3', question: 'What won\'t happen if it happens?'}"
+  >
+  </ng-container>
+
+  <ng-container
+    *ngTemplateOutlet="controlTemplate;
+    context: {key: 'q4', question: 'What won\'t happen if it doesn\'t happen?'}"
+  >
+  </ng-container>
+
+  <label for="conclusion">Conclusion</label>
+  <input class="align-input" type="text" formControlName="conclusion">
+</form>
+
+
+<ng-template
+  #controlTemplate
+  let-key=key;
+  let-question=question;
+>
+  <ng-container [formGroup]="form">
+    <label [for]="key">{{ question }}</label>
+
+    <ng-container [formArrayName]="key">
+      <ul>
+        @for (control of getFormArrayControls(key);
+          let index = $index;
+          track index;
+          let last = $last) {
+          @if (last && formEditTracker.get(key)) {
+            <input [id]="key" type="text" [formControl]="control">
+          } @else {
+            <li>{{ control.value }} <span (click)="deleteArgument(index, key)"> &#x2715;</span></li>
+          }
+        }
+      </ul>
+    </ng-container>
+
+    @if (formEditTracker.get(key)) {
+      <div>
+        <span (click)="addArgument(key)"> <span class="remove-arg">&#x2715;</span> Remove Argument</span>
+        <span (click)="saveArgument(key)"> &#x2713; Save</span>
+      </div>
+    } @else {
+      <span (click)="addArgument(key)"> <span class="add-arg">&#x2715;</span> Add Argument</span>
+    }
+
+  </ng-container>
+</ng-template>
+
