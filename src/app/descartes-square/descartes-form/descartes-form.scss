@@ -1,0 +1,132 @@
+:host {
+  display: block;
+  transition: all 2.5s ease;
+  padding: var(--basic-indent);
+
+  form {
+    display: grid;
+    grid-template-columns: 1fr;
+    row-gap: var(--basic-indent);
+
+    ul {
+      margin: 0;
+    }
+
+    li {
+      list-style-type: circle;
+      padding-bottom: var(--small-indent);
+    }
+
+    .add-arg {
+      display: inline-block;
+      transform: rotate(45deg) !important;
+    }
+  }
+
+  input {
+    border-style: solid;
+    outline: none;
+    box-shadow: none;
+    appearance: none;
+    width: 50%;
+    padding: var(--small-indent);
+    color: var(--text-secondary);
+    border-color: var(--border);
+    background-color: var(--surface);
+  }
+
+  .arg-input {
+    position: relative;
+    left: -40px;
+    width: calc(50% + 20px);
+  }
+
+  label {
+    font-size: var(--big);
+    font-weight: 600;
+  }
+
+  .align-input {
+    margin-left: 0;
+  }
+
+  input[id="title"] {
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .argument-btn {
+    width: fit-content;
+  }
+
+  .btn {
+    cursor: pointer;
+  }
+
+  .btn-group,
+  .add-btn {
+    padding-bottom: var(--basic-indent);
+    border-bottom: 1px solid var(--border);
+    width: calc(50% + 20px);
+  }
+  .action-btn {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    text-align: center;
+    border-radius: 50%;
+    padding: var(--extra-small-indent);
+    border: 1px solid;
+
+    &.cancel-arg,
+    &.remove-arg {
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    &.save-arg {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    &.add-arg {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    column-gap: var(--basic-indent);
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 80px 80px;
+    column-gap: var(--basic-indent);
+    margin-top: var(--basic-indent);
+  }
+
+  .control-btn {
+    width: 80px;
+    height: 40px;
+    border-radius: 4px;
+    color: var(--text-secondary);
+    background-color: var(--surface);
+    border-style: solid;
+    border-color: var(--border);
+    transition: 0.3s ease;
+
+    &:hover {
+      &:first-child {
+        color: var(--error);
+        border-color: var(--error);
+      }
+
+      &:last-child {
+        color: var(--green);
+        border-color: var(--green);
+      }
+    }
+  }
+}
