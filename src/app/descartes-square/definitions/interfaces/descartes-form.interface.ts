@@ -14,7 +14,7 @@ export interface IDescartesFormValues {
 }
 
 
-export interface IDescartesForm extends Omit<TFormControl<IDescartesFormValues>, 'q1' | 'q2' | 'q3' | 'q4'> {
+export interface IDescartesForm extends Omit<TFormControl<IDescartesFormValues>, TFormNames> {
   q1: FormArray<FormControl<Maybe<string>>>;
   q2: FormArray<FormControl<Maybe<string>>>;
   q3: FormArray<FormControl<Maybe<string>>>;
