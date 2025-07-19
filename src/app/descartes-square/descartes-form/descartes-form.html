@@ -1,5 +1,5 @@
 <form [formGroup]="form">
-  <label for="title">Title</label>
+  <label class="open-sans-regular" for="title">Title</label>
   <input class="align-input" id="title" type="text" formControlName="title">
 
   <ng-container
@@ -26,9 +26,12 @@
   >
   </ng-container>
 
-  <label for="conclusion">Conclusion</label>
+  <label class="open-sans-regular" for="conclusion">Conclusion</label>
   <input class="align-input" type="text" formControlName="conclusion">
 </form>
+
+<button (click)="clearForm()">Clear</button>
+<button (click)="saveForm()">Save</button>
 
 
 <ng-template
@@ -37,30 +40,41 @@
   let-question=question;
 >
   <ng-container [formGroup]="form">
-    <label [for]="key">{{ question }}</label>
+    @let formArray = getFormArrayControls(key);
+    <label class="open-sans-regular">{{ question }}</label>
 
     <ng-container [formArrayName]="key">
       <ul>
-        @for (control of getFormArrayControls(key);
+        @for (control of formArray;
           let index = $index;
           track index;
           let last = $last) {
           @if (last && formEditTracker.get(key)) {
-            <input [id]="key" type="text" [formControl]="control">
+            <input class="roboto-regular" [id]="key" type="text" [formControl]="control" autocomplete="off">
           } @else {
-            <li>{{ control.value }} <span (click)="deleteArgument(index, key)"> &#x2715;</span></li>
+            <li class="roboto-regular">{{ control.value }} <span class="btn open-sans-regular" (click)="deleteArgument(index, key)"> <span class="action-btn remove-arg">&#x2715;</span></span>
+            </li>
           }
         }
       </ul>
     </ng-container>
 
     @if (formEditTracker.get(key)) {
-      <div>
-        <span (click)="addArgument(key)"> <span class="remove-arg">&#x2715;</span> Remove Argument</span>
-        <span (click)="saveArgument(key)"> &#x2713; Save</span>
+      <div class="btn-group">
+        <span class="btn open-sans-regular" (click)="deleteArgument(formArray.length - 1, key)">
+          <span class="action-btn cancel-arg">&#x2715;</span>
+          Cancel
+        </span>
+        <span class="btn open-sans-regular" (click)="saveArgument(key)" >
+          <span class="action-btn save-arg">&#x2713;</span>
+          Save
+        </span>
       </div>
     } @else {
-      <span (click)="addArgument(key)"> <span class="add-arg">&#x2715;</span> Add Argument</span>
+      <span class="btn open-sans-regular" (click)="addArgument(key)">
+        <span class="action-btn add-arg">&#x2715;</span>
+        Add Argument
+      </span>
     }
 
   </ng-container>

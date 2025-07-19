@@ -35,6 +35,11 @@ export class DescartesForm implements OnInit {
 
   deleteArgument(index: number, key: TFormNames,): void {
     const formArray = this.#getArgumentForm(key);
+
+    if (index === formArray.length - 1) {
+      this.formEditTracker.set(key, false);
+    }
+
     formArray.removeAt(index);
   }
 
@@ -48,6 +53,14 @@ export class DescartesForm implements OnInit {
   getFormArrayControls(key: TFormNames): FormControl<Maybe<string>>[] {
     const formArray = this.#getArgumentForm(key);
     return formArray?.controls || [];
+  }
+
+  clearForm(): void {
+    this. #initForm();
+  }
+
+  saveForm(): void {
+    console.log(this.form.value);
   }
 
   #getArgumentForm(key: string): FormArray<FormControl<Maybe<string>>> {

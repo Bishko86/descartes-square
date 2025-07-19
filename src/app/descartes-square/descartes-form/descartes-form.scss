@@ -33,6 +33,11 @@
     width: 50%;
     padding: var(--small-indent);
     margin-left: -40px;
+    color: var(--text-secondary);
+  }
+
+  label {
+    font-size: var(--big);
   }
 
   .align-input {
@@ -46,5 +51,39 @@
 
   .argument-btn {
     width: fit-content;
+  }
+
+  .btn {
+    cursor: pointer;
+  }
+  .action-btn {
+    display: inline-block;
+    height: 14px;
+    width: 14px;
+    text-align: center;
+    border-radius: 50%;
+    padding: var(--extra-small-indent);
+    border: 1px solid;
+
+    &.cancel-arg,
+    &.remove-arg {
+      color: var(--error);
+      border-color: var(--error);
+    }
+
+    &.save-arg {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    &.add-arg {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+  }
+
+  .btn-group {
+    display: flex;
+    column-gap: var(--basic-indent);
   }
 }
