@@ -30,8 +30,10 @@
   <input class="align-input" type="text" formControlName="conclusion">
 </form>
 
-<button (click)="clearForm()">Clear</button>
-<button (click)="saveForm()">Save</button>
+<div class="controls">
+  <button class="open-sans-regular control-btn" (click)="clearForm()">Clear</button>
+  <button class="open-sans-regular control-btn" (click)="saveForm()">Save</button>
+</div>
 
 
 <ng-template
@@ -50,9 +52,11 @@
           track index;
           let last = $last) {
           @if (last && formEditTracker.get(key)) {
-            <input class="roboto-regular" [id]="key" type="text" [formControl]="control" autocomplete="off">
+            <input class="roboto-regular arg-input" [id]="key" type="text" [formControl]="control" autocomplete="off">
           } @else {
-            <li class="roboto-regular">{{ control.value }} <span class="btn open-sans-regular" (click)="deleteArgument(index, key)"> <span class="action-btn remove-arg">&#x2715;</span></span>
+            <li class="roboto-regular">{{ control.value }} <span class="btn open-sans-regular"
+                                                                 (click)="deleteArgument(index, key)"> <span
+              class="action-btn remove-arg">&#x2715;</span></span>
             </li>
           }
         }
@@ -65,13 +69,13 @@
           <span class="action-btn cancel-arg">&#x2715;</span>
           Cancel
         </span>
-        <span class="btn open-sans-regular" (click)="saveArgument(key)" >
+        <span class="btn open-sans-regular" (click)="saveArgument(key)">
           <span class="action-btn save-arg">&#x2713;</span>
           Save
         </span>
       </div>
     } @else {
-      <span class="btn open-sans-regular" (click)="addArgument(key)">
+      <span class="btn add-btn open-sans-regular" (click)="addArgument(key)">
         <span class="action-btn add-arg">&#x2715;</span>
         Add Argument
       </span>
