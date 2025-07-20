@@ -22,6 +22,12 @@ export class DescartesSquare implements OnInit {
     this.isClicked.update((isClicked) => !isClicked)
   }
 
+  public toggleList(): void {
+    if (this.isClicked()) {
+      this.onClick();
+    }
+  }
+
   public ngOnInit(): void {
     this.listenToFormVisibility();
   }

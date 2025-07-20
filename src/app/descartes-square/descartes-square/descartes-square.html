@@ -1,4 +1,11 @@
 <section class="descartes-section">
-  <button class="plus_btn" [ngClass]="{'clicked': isClicked()}" (click)="onClick()"></button>
+  <section class="descartes-header">
+    <button class="list_btn" (click)="toggleList()">
+      <i class="line"></i>
+      <i class="line"></i>
+      <i class="line"></i>
+    </button>
+    <button class="plus_btn" [ngClass]="{'clicked': isClicked()}" (click)="onClick()"></button>
+  </section>
   <router-outlet></router-outlet>
 </section>
