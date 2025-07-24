@@ -31,8 +31,19 @@
 </form>
 
 <div class="controls">
-  <button class="open-sans-regular control-btn" (click)="clearForm()">Clear</button>
-  <button class="open-sans-regular control-btn" (click)="saveForm()">Save</button>
+  <button
+    class="open-sans-regular control-btn"
+    (click)="clearForm()"
+  >
+    Clear
+  </button>
+  <button
+    class="open-sans-regular control-btn"
+    [disabled]="!this.form.dirty"
+    (click)="saveForm()"
+  >
+    Save
+  </button>
 </div>
 
 
