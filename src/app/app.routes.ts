@@ -19,6 +19,10 @@ export const routes: Routes = [
         loadComponent: () => import('./descartes-square/descartes-form/descartes-form').then((mod) => mod.DescartesForm)
       },
       {
+        path: 'edit/:id',
+        loadComponent: () => import('./descartes-square/descartes-form/descartes-form').then((mod) => mod.DescartesForm)
+      },
+      {
         path: 'list',
         loadComponent: () => import('./descartes-square/descartes-list/descartes-list').then((mod) => mod.DescartesList)
       },
