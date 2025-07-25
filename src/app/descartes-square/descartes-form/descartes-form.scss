@@ -35,10 +35,12 @@
     background-color: var(--surface);
   }
 
+  .btn-group,
   .arg-input {
     position: relative;
     left: -40px;
     width: calc(50% + 20px);
+    margin-bottom: var(--basic-indent);
   }
 
   label {
@@ -89,9 +91,14 @@
       border-color: var(--green);
     }
 
+    &.edit-arg,
     &.add-arg {
       color: var(--primary);
       border-color: var(--primary);
+    }
+
+    &.edit-arg {
+      margin-left: var(--small-indent);
     }
   }
 
@@ -102,38 +109,14 @@
 
   .controls {
     display: grid;
-    grid-template-columns: 80px 80px;
+    grid-template-columns: 100px auto 100px;
     column-gap: var(--basic-indent);
     margin-top: var(--basic-indent);
-  }
 
-  .control-btn {
-    width: 80px;
-    height: 40px;
-    border-radius: 4px;
-    color: var(--text-secondary);
-    background-color: var(--surface);
-    border-style: solid;
-    border-color: var(--border);
-    transition: 0.3s ease;
 
-    &:hover {
-      &:first-child {
-        color: var(--error);
-        border-color: var(--error);
-      }
-
-      &:last-child {
-        color: var(--green);
-        border-color: var(--green);
-      }
-    }
-
-    &:disabled:hover,
-    &:disabled {
-      color: var(--muted);
-      border-color: var(--muted);
-      cursor: not-allowed;
+    &__clear {
+      width: 100px;
+      justify-self: right;
     }
   }
 }
