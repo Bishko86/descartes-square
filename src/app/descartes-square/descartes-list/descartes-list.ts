@@ -7,10 +7,11 @@ import {MatIcon} from '@core/enums/mat-icon.enum';
 import {MoreOptionAction} from '@core/enums/more-options-action.enum';
 import {Router} from '@angular/router';
 import {IDescartesSolution} from '../definitions/interfaces/descartes-solution.interface';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-descartes-list',
-  imports: [MatTableModule, MoreOptions],
+  imports: [MatTableModule, MoreOptions, MatButton],
   templateUrl: './descartes-list.html',
   styleUrl: './descartes-list.scss'
 })
@@ -50,5 +51,9 @@ export class DescartesList implements OnInit {
     )
 
     this.dataSource.set(currList);
+  }
+
+  addData(): void {
+    this.#router.navigate(['descartes-square/create']).then();
   }
 }
