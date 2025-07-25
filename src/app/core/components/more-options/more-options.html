@@ -1,0 +1,19 @@
+<ng-container>
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="more-options-button"
+    class="more-options-btn"
+  >
+    <mat-icon>{{ moreOptionsIcon }}</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    @for(option of moreOptions(); track option.text){
+      <button mat-menu-item (click)="emitAction(option.action)">
+        <mat-icon>{{ option.icon }}</mat-icon>
+        <span>{{ option.text }}</span>
+      </button>
+    }
+  </mat-menu>
+</ng-container>

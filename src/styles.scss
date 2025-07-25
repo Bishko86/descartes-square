@@ -1,8 +1,8 @@
-///* CSS Reset */
-@import "styles/indentation.scss";
-@import "styles/colors.scss";
-@import "styles/theme.scss";
-@import "styles/fonts.scss";
+@use "styles/indentation.scss";
+@use "styles/colors.scss";
+@use "styles/theme.scss";
+@use "styles/fonts.scss";
+@use "styles/material.scss";
 
 html, body {
   height: 100%;
@@ -25,4 +25,13 @@ ol, ul {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
 }

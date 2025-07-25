@@ -1,12 +1,12 @@
 import {Component, effect, OnInit, signal, inject, Injector,} from '@angular/core';
-import {NgClass} from '@angular/common';
 import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
 
 @Component({
   selector: 'app-descartes-square',
   imports: [
-    NgClass,
-    RouterOutlet
+    RouterOutlet,
+    MatButtonModule,
   ],
   templateUrl: './descartes-square.html',
   styleUrl: './descartes-square.scss'
@@ -20,6 +20,12 @@ export class DescartesSquare implements OnInit {
 
   public onClick(): void {
     this.isClicked.update((isClicked) => !isClicked)
+  }
+
+  public toggleList(): void {
+    if (this.isClicked()) {
+      this.onClick();
+    }
   }
 
   public ngOnInit(): void {

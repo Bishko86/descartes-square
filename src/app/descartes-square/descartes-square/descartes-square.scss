@@ -3,41 +3,11 @@
   height: 100%;
 
   .descartes-section {
-    .plus_btn {
+    .descartes-header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      font-family: monospace;
-      color: var(--muted);
-      height: 3rem;
-      width: 3rem;
-      border: 3px solid var(--primary);
-      border-radius: 50%;
-      cursor: pointer;
-      transition: all 0.5s ease;
-      margin-left: auto;
-      background-color: var(--surface);
-
-      &:hover {
-        background-color: var(--primary);
-        color: var(--background);
-      }
-
-      &:before {
-        content: "—";
-        rotate: 90deg;
-        transform: translateY(-13px) translateY(-4px);
-      }
-
-      &:after {
-        content: "—";
-        transform: translateX(-14px) translateY(-2px);
-      }
-
-      &.clicked {
-        transform: rotate(135deg);
-      }
+      justify-content: right;
+      column-gap: var(--basic-indent);
     }
   }
 }
