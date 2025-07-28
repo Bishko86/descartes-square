@@ -33,6 +33,8 @@ export class DescartesForm implements OnInit {
     .set('q3', null)
     .set('q4', null);
 
+  isAddingArgument = signal(false);
+
   readonly #snackBar = inject(MatSnackBar);
 
   readonly #router = inject(Router);
@@ -47,22 +49,31 @@ export class DescartesForm implements OnInit {
     if (formArray.valid) {
       formArray.push(new FormControl('', Validators.required));
       this.formEditTracker.set(key, formArray.length - 1);
+      this.isAddingArgument.set(true);
     }
   }
 
-  deleteArgument(index: number, key: TFormNames,): void {
+  deleteArgument(index: number, key: TFormNames): void {
     const formArray = this.#getArgumentForm(key);
 
     if (index === formArray.length - 1) {
       this.formEditTracker.set(key, null);
+      this.isAddingArgument.set(false);
     }
 
     formArray.removeAt(index);
   }
 
-  editArgument(index: number, key: TFormNames,): void {
+  cancelArgument(index: number, key: TFormNames): void {
+    if (this.isAddingArgument()) {
+      this.deleteArgument(index, key);
+    } else {
+      this.formEditTracker.set(key, null);
+    }
+  }
+
+  editArgument(index: number, key: TFormNames): void {
     const formArray = this.#getArgumentForm(key);
-    const control = formArray.at(index);
 
     if (formArray.valid) {
       this.formEditTracker.set(key, index);
@@ -73,6 +84,7 @@ export class DescartesForm implements OnInit {
     const formArray = this.#getArgumentForm(key);
     if (formArray.valid) {
       this.formEditTracker.set(key, null);
+      this.isAddingArgument.set(false);
     }
   }
 
@@ -86,15 +98,11 @@ export class DescartesForm implements OnInit {
   }
 
   saveForm(): void {
-    const list = JSON.parse(localStorage.getItem(LocalStorageKeys.LIST) || '[]');
-    const id = crypto.randomUUID();
-    list.push({...this.form.value, id});
-
-    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
-
-    this.#snackBar.open('Form saved', 'Close', {})
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    if (this.id()) {
+      this.#update();
+    } else {
+      this.#create();
+    }
   }
 
   cancelForm(): void {
@@ -123,5 +131,28 @@ export class DescartesForm implements OnInit {
 
   #mapFormArrayControls(collection: Maybe<string[]>): FormControl<Maybe<string>>[] {
     return (collection || []).map((item: string) => new FormControl(item))
+  }
+
+  #create(): void {
+    const list: IDescartesSolution[] = JSON.parse(localStorage.getItem(LocalStorageKeys.LIST) || '[]');
+    const id = crypto.randomUUID();
+    list.push(<IDescartesSolution>{...this.form.value, id});
+
+    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
+
+    this.#snackBar.open('Form is saved', 'Close', {})
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
+  }
+
+  #update(): void {
+    const list: IDescartesSolution[] = JSON.parse(localStorage.getItem(LocalStorageKeys.LIST) || '[]');
+    const updatedList = list.map((item) => this.id() === item.id ? {...item, ...this.form.value} : item);
+
+    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(updatedList));
+
+    this.#snackBar.open('Form is updated', 'Close', {})
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 }

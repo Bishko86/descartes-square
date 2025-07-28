@@ -42,6 +42,7 @@
   <button
     class="controls__clear"
     matButton="outlined"
+    [disabled]="form.pristine"
     (click)="clearForm()"
   >
     Clear
@@ -50,10 +51,10 @@
   <button
     class="controls__save"
     matButton="filled"
-    [disabled]="!this.form.dirty"
+    [disabled]="form.pristine"
     (click)="saveForm()"
   >
-    Save
+    {{ id() ? 'Update' : 'Save' }}
   </button>
 </div>
 
@@ -83,7 +84,7 @@
             >
 
             <div class="btn-group">
-              <span class="btn open-sans-regular" (click)="deleteArgument(formArray.length - 1, key)">
+              <span class="btn open-sans-regular" (click)="cancelArgument(index, key)">
                 <span class="action-btn cancel-arg">&#x2715;</span>
                 Cancel
               </span>

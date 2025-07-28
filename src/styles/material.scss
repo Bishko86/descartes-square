@@ -17,4 +17,9 @@ html {
     background-color: var(--surface);
     color: var(--text-secondary);
   }
+
+  .mdc-button.mat-mdc-button-base {
+    color: var(--highlighted-text);
+    background-color: var(--surface);
+  }
 }

@@ -3,12 +3,14 @@ import {MENU_ITEMS} from '@core/consts/menu-items.const';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 import {MenuItem} from '@core/interfaces/menu-item.interface';
 import {ThemeService} from '@core/services/theme.service';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-header',
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    MatButton
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss'
