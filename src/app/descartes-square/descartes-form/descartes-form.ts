@@ -9,6 +9,8 @@ import {IDescartesSolution} from '../definitions/interfaces/descartes-solution.i
 import {MatButton} from '@angular/material/button';
 import {Router} from '@angular/router';
 import {MatTooltipModule} from '@angular/material/tooltip';
+import {ConfirmService} from '@core/services/confirm.service';
+import {filter, first, tap} from 'rxjs';
 
 @Component({
   selector: 'app-descartes-form',
@@ -24,6 +26,8 @@ import {MatTooltipModule} from '@angular/material/tooltip';
 })
 export class DescartesForm implements OnInit {
   readonly id = input<string>();
+
+  readonly #confirmService = inject(ConfirmService);
 
   form: FormGroup<IDescartesForm>;
 
@@ -62,6 +66,7 @@ export class DescartesForm implements OnInit {
     }
 
     formArray.removeAt(index);
+    formArray.markAsDirty();
   }
 
   cancelArgument(index: number, key: TFormNames): void {
@@ -94,7 +99,13 @@ export class DescartesForm implements OnInit {
   }
 
   clearForm(): void {
-    this.#initForm();
+    this.#confirmService.confirm('Are you sure you want to clear this form? All unsaved changes will be lost.')
+      .pipe(
+        first(),
+        filter(Boolean),
+        tap(() => {
+          this.#initForm();
+        })).subscribe()
   }
 
   saveForm(): void {
@@ -141,8 +152,7 @@ export class DescartesForm implements OnInit {
     localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
 
     this.#snackBar.open('Form is saved', 'Close', {})
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    this.#redirectToDescartesDetails(id);
   }
 
   #update(): void {
@@ -152,7 +162,10 @@ export class DescartesForm implements OnInit {
     localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(updatedList));
 
     this.#snackBar.open('Form is updated', 'Close', {})
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
+    this.#redirectToDescartesDetails(<string>this.id());
+  }
+
+  #redirectToDescartesDetails(id: string): void {
+    this.#router.navigate([`descartes-square/list/${id}/details`]).then();
   }
 }
