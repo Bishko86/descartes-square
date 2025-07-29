@@ -31,8 +31,31 @@
 </form>
 
 <div class="controls">
-  <button class="open-sans-regular control-btn" (click)="clearForm()">Clear</button>
-  <button class="open-sans-regular control-btn" (click)="saveForm()">Save</button>
+  <button
+    class="controls__cancel"
+    matButton="tonal"
+    (click)="cancelForm()"
+  >
+    Cancel
+  </button>
+
+  <button
+    class="controls__clear"
+    matButton="outlined"
+    [disabled]="form.pristine"
+    (click)="clearForm()"
+  >
+    Clear
+  </button>
+
+  <button
+    class="controls__save"
+    matButton="outlined"
+    [disabled]="form.pristine"
+    (click)="saveForm()"
+  >
+    {{ id() ? 'Update' : 'Save' }}
+  </button>
 </div>
 
 
@@ -51,30 +74,61 @@
           let index = $index;
           track index;
           let last = $last) {
-          @if (last && formEditTracker.get(key)) {
-            <input class="roboto-regular arg-input" [id]="key" type="text" [formControl]="control" autocomplete="off">
+          @if (formEditTracker.get(key) === index) {
+            <input
+              class="roboto-regular arg-input"
+              [id]="key"
+              type="text"
+              [formControl]="control"
+              autocomplete="off"
+            >
+
+            <div class="btn-group">
+              <span class="btn open-sans-regular" (click)="cancelArgument(index, key)">
+                <span class="action-btn cancel-arg">&#x2715;</span>
+                Cancel
+              </span>
+              <span class="btn open-sans-regular" (click)="saveArgument(key)">
+              <span class="action-btn save-arg">&#x2713;</span>
+                Save
+               </span>
+            </div>
           } @else {
-            <li class="roboto-regular">{{ control.value }} <span class="btn open-sans-regular"
-                                                                 (click)="deleteArgument(index, key)"> <span
-              class="action-btn remove-arg">&#x2715;</span></span>
+            <li class="roboto-regular">
+              {{ control.value }}
+              <span
+                class="btn open-sans-regular"
+                matTooltip="Remove"
+                [matTooltipPosition]="'above'"
+                (click)="deleteArgument(index, key)"
+              >
+                <span
+                  class="action-btn remove-arg"
+                >
+                  &#x2715;
+                </span>
+              </span>
+
+              <span
+                class="btn open-sans-regular"
+                matTooltip="Edit"
+                [matTooltipPosition]="'above'"
+                (click)="editArgument(index, key)"
+              >
+                <span
+                  class="action-btn edit-arg"
+                >
+                  &#9998;
+                </span>
+              </span>
             </li>
+
           }
         }
       </ul>
     </ng-container>
 
-    @if (formEditTracker.get(key)) {
-      <div class="btn-group">
-        <span class="btn open-sans-regular" (click)="deleteArgument(formArray.length - 1, key)">
-          <span class="action-btn cancel-arg">&#x2715;</span>
-          Cancel
-        </span>
-        <span class="btn open-sans-regular" (click)="saveArgument(key)">
-          <span class="action-btn save-arg">&#x2713;</span>
-          Save
-        </span>
-      </div>
-    } @else {
+    @if (formEditTracker.get(key) === null) {
       <span class="btn add-btn open-sans-regular" (click)="addArgument(key)">
         <span class="action-btn add-arg">&#x2715;</span>
         Add Argument

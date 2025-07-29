@@ -1,0 +1,17 @@
+:host {
+  li {
+    list-style-type: circle;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: 100px auto 100px;
+    column-gap: var(--basic-indent);
+    margin-top: var(--basic-indent);
+
+
+    &__delete {
+      width: 100px;
+    }
+  }
+}

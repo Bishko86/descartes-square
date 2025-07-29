@@ -1,10 +1,12 @@
 <header>
   <div class="right-section">
-  <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto"/>
+    <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto"/>
     @for (item of menuItems; track item.name) {
       <a class="menu-link" [routerLink]="item.route" routerLinkActive="active"
       >{{ item.name }}</a>
     }
   </div>
-  <button id="theme-toggle" class="btn-outline open-sans-regular" (click)="changeTheme()">🌓 Change theme</button>
+  <button id="theme-toggle" matButton="elevated" class="open-sans-regular" (click)="changeTheme()">
+    🌓 Change theme
+  </button>
 </header>
