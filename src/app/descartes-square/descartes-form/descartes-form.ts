@@ -1,4 +1,4 @@
-import {Component, inject, input, OnInit, signal} from '@angular/core';
+import {Component, inject, input, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {IDescartesForm, TFormNames} from '../definitions/interfaces/descartes-form.interface';
 import {NgTemplateOutlet} from '@angular/common';
@@ -11,6 +11,8 @@ import {Router} from '@angular/router';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ConfirmService} from '@core/services/confirm.service';
 import {filter, first, tap} from 'rxjs';
+import {IFormStateTracker} from '../definitions/interfaces/descartes-form-state-tracker.interface';
+import {FormStateTracker} from '../definitions/models/form-state-tracker.model';
 
 @Component({
   selector: 'app-descartes-form',
@@ -31,13 +33,11 @@ export class DescartesForm implements OnInit {
 
   form: FormGroup<IDescartesForm>;
 
-  formEditTracker = new Map<TFormNames, Maybe<number>>()
-    .set('q1', null)
-    .set('q2', null)
-    .set('q3', null)
-    .set('q4', null);
-
-  isAddingArgument = signal(false);
+  formEditTracker = new Map<TFormNames, IFormStateTracker>()
+    .set('q1', new FormStateTracker())
+    .set('q2', new FormStateTracker())
+    .set('q3', new FormStateTracker())
+    .set('q4', new FormStateTracker());
 
   readonly #snackBar = inject(MatSnackBar);
 
@@ -52,8 +52,8 @@ export class DescartesForm implements OnInit {
 
     if (formArray.valid) {
       formArray.push(new FormControl('', Validators.required));
-      this.formEditTracker.set(key, formArray.length - 1);
-      this.isAddingArgument.set(true);
+      const tracker = new FormStateTracker(formArray.length - 1, true);
+      this.formEditTracker.set(key, tracker);
     }
   }
 
@@ -61,8 +61,7 @@ export class DescartesForm implements OnInit {
     const formArray = this.#getArgumentForm(key);
 
     if (index === formArray.length - 1) {
-      this.formEditTracker.set(key, null);
-      this.isAddingArgument.set(false);
+      this.formEditTracker.set(key, new FormStateTracker());
     }
 
     formArray.removeAt(index);
@@ -70,10 +69,12 @@ export class DescartesForm implements OnInit {
   }
 
   cancelArgument(index: number, key: TFormNames): void {
-    if (this.isAddingArgument()) {
+    if (this.formEditTracker.get(key)?.isCreating) {
       this.deleteArgument(index, key);
     } else {
-      this.formEditTracker.set(key, null);
+      const formArray = this.#getArgumentForm(key);
+      formArray.at(index)?.setValue(this.formEditTracker.get(key)?.value);
+      this.formEditTracker.set(key, new FormStateTracker());
     }
   }
 
@@ -81,15 +82,16 @@ export class DescartesForm implements OnInit {
     const formArray = this.#getArgumentForm(key);
 
     if (formArray.valid) {
-      this.formEditTracker.set(key, index);
+      const value = formArray.at(index)?.value;
+      const tracker = (<IFormStateTracker>this.formEditTracker.get(key)).setIndex(index).setValue(value);
+      this.formEditTracker.set(key, tracker);
     }
   }
 
   saveArgument(key: TFormNames): void {
     const formArray = this.#getArgumentForm(key);
     if (formArray.valid) {
-      this.formEditTracker.set(key, null);
-      this.isAddingArgument.set(false);
+      this.formEditTracker.set(key, new FormStateTracker());
     }
   }
 
@@ -141,7 +143,7 @@ export class DescartesForm implements OnInit {
 
 
   #mapFormArrayControls(collection: Maybe<string[]>): FormControl<Maybe<string>>[] {
-    return (collection || []).map((item: string) => new FormControl(item))
+    return (collection || []).map((item: string) => new FormControl(item, Validators.required))
   }
 
   #create(): void {

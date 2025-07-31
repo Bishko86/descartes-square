@@ -76,7 +76,7 @@
         @for (control of formArray;
           let index = $index;
           track index; ) {
-          @if (formEditTracker.get(key) === index) {
+          @if (formEditTracker.get(key)?.index === index) {
             <li class="arg-list input-container">
               <input
                 class="roboto-regular"
@@ -140,7 +140,7 @@
           }
         }
 
-        @if (formEditTracker.get(key) === null) {
+        @if (!formEditTracker.get(key)?.isCreating) {
           <li class="roboto-regular add-btn-container">
             <div
               class="btn add-btn open-sans-regular"
@@ -159,7 +159,6 @@
         }
       </ul>
     </ng-container>
-
   </ng-container>
 </ng-template>
 
