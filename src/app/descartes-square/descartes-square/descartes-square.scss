@@ -3,11 +3,6 @@
   height: 100%;
 
   .descartes-section {
-    .descartes-header {
-      display: flex;
-      align-items: center;
-      justify-content: right;
-      column-gap: var(--basic-indent);
-    }
+    margin: 0 auto;
   }
 }

@@ -1,5 +1,7 @@
 :host {
   display: block;
+  width: 70%;
+  margin: 0 auto;
   transition: all 2.5s ease;
   padding: var(--basic-indent);
 
@@ -10,11 +12,41 @@
 
     ul {
       margin: 0;
+      border-bottom: 1px solid var(--border);
     }
 
     li {
       list-style-type: circle;
-      padding-bottom: var(--small-indent);
+      position: relative;
+
+      &:not(:last-child) {
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: 0;
+          width: 90%;
+          height: 1px;
+          background-color: var(--border);
+        }
+      }
+
+      &.add-btn-container {
+        padding-top: var(--basic-indent);
+        list-style-type: none;
+      }
+
+      &.arg-list {
+        display: grid;
+        grid-template-columns: 90% 1fr 1fr;
+        align-items: baseline;
+        column-gap: var(--basic-indent);
+      }
+
+      &.input-container {
+        align-self: center;
+        padding: var(--small-indent) 0;
+      }
     }
 
     .add-arg {
@@ -28,19 +60,10 @@
     outline: none;
     box-shadow: none;
     appearance: none;
-    width: 50%;
     padding: var(--small-indent);
     color: var(--text-secondary);
     border-color: var(--border);
     background-color: var(--surface);
-  }
-
-  .btn-group,
-  .arg-input {
-    position: relative;
-    left: -40px;
-    width: calc(50% + 20px);
-    margin-bottom: var(--basic-indent);
   }
 
   label {
@@ -68,9 +91,16 @@
   .btn-group,
   .add-btn {
     padding-bottom: var(--basic-indent);
-    border-bottom: 1px solid var(--border);
-    width: calc(50% + 20px);
+    width: calc(100% + 20px);
   }
+
+  .add-btn {
+    width: inherit;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: var(--x-small-indent);
+  }
+
   .action-btn {
     display: inline-block;
     height: 14px;
@@ -95,10 +125,6 @@
     &.add-arg {
       color: var(--primary);
       border-color: var(--primary);
-    }
-
-    &.edit-arg {
-      margin-left: var(--small-indent);
     }
   }
 

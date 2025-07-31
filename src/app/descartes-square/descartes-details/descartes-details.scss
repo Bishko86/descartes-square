@@ -1,6 +1,15 @@
 :host {
-  li {
-    list-style-type: circle;
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+
+  ul {
+    li {
+      list-style-type: circle;
+      padding-bottom: var(--small-indent);
+      width: 50%;
+      line-height: 1.5;
+    }
   }
 
   .controls {

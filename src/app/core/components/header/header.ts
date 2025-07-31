@@ -10,7 +10,7 @@ import {MatButton} from '@angular/material/button';
   imports: [
     RouterLink,
     RouterLinkActive,
-    MatButton
+    MatButton,
   ],
   templateUrl: './header.html',
   styleUrl: './header.scss'

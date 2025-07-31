@@ -1,3 +1,6 @@
+@let delay = 400;
+@let position = 'above';
+
 <form [formGroup]="form">
   <label class="open-sans-regular" for="title">Title</label>
   <input class="align-input" id="title" type="text" formControlName="title">
@@ -72,68 +75,90 @@
       <ul>
         @for (control of formArray;
           let index = $index;
-          track index;
-          let last = $last) {
+          track index; ) {
           @if (formEditTracker.get(key) === index) {
-            <input
-              class="roboto-regular arg-input"
-              [id]="key"
-              type="text"
-              [formControl]="control"
-              autocomplete="off"
-            >
+            <li class="arg-list input-container">
+              <input
+                class="roboto-regular"
+                [id]="key"
+                type="text"
+                [formControl]="control"
+                autocomplete="off"
+              >
 
-            <div class="btn-group">
-              <span class="btn open-sans-regular" (click)="cancelArgument(index, key)">
-                <span class="action-btn cancel-arg">&#x2715;</span>
-                Cancel
-              </span>
-              <span class="btn open-sans-regular" (click)="saveArgument(key)">
-              <span class="action-btn save-arg">&#x2713;</span>
-                Save
-               </span>
-            </div>
-          } @else {
-            <li class="roboto-regular">
-              {{ control.value }}
-              <span
+              <div
                 class="btn open-sans-regular"
-                matTooltip="Remove"
-                [matTooltipPosition]="'above'"
+                [matTooltip]="'Cancel'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+                (click)="cancelArgument(index, key)"
+              >
+                <div class="action-btn cancel-arg">&#x2715;</div>
+
+              </div>
+              <div
+                class="btn open-sans-regular"
+                [matTooltip]="'Save'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+                (click)="saveArgument(key)"
+              >
+                <div class="action-btn save-arg">&#x2713;</div>
+              </div>
+            </li>
+          } @else {
+            <li class="roboto-regular arg-list">
+              <p>{{ control.value }}</p>
+              <div
+                class="btn open-sans-regular"
+                [matTooltip]="'Remove'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
                 (click)="deleteArgument(index, key)"
               >
-                <span
+                <div
                   class="action-btn remove-arg"
                 >
                   &#x2715;
-                </span>
-              </span>
+                </div>
+              </div>
 
-              <span
+              <div
                 class="btn open-sans-regular"
-                matTooltip="Edit"
-                [matTooltipPosition]="'above'"
+                [matTooltip]="'Edit'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
                 (click)="editArgument(index, key)"
               >
-                <span
+                <div
                   class="action-btn edit-arg"
                 >
                   &#9998;
-                </span>
-              </span>
+                </div>
+              </div>
             </li>
-
           }
+        }
+
+        @if (formEditTracker.get(key) === null) {
+          <li class="roboto-regular add-btn-container">
+            <div
+              class="btn add-btn open-sans-regular"
+              (click)="addArgument(key)"
+            >
+              <div
+                class="action-btn add-arg"
+                [matTooltip]="'Add Argument'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+              >
+                &#x2715;
+              </div>
+            </div>
+          </li>
         }
       </ul>
     </ng-container>
-
-    @if (formEditTracker.get(key) === null) {
-      <span class="btn add-btn open-sans-regular" (click)="addArgument(key)">
-        <span class="action-btn add-arg">&#x2715;</span>
-        Add Argument
-      </span>
-    }
 
   </ng-container>
 </ng-template>
