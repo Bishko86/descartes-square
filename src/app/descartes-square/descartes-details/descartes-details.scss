@@ -1,13 +1,31 @@
 :host {
-  li {
-    list-style-type: circle;
+  display: block;
+  width: 70%;
+  margin: 0 auto;
+
+  .descartes-overview {
+    border-bottom: 1px solid var(--border);
+
+    ul {
+      li {
+        list-style-type: circle;
+        padding-bottom: var(--small-indent);
+        width: 50%;
+        line-height: 1.5;
+      }
+    }
+
+    .conclusion {
+      padding-left: var(--large-indent);
+      margin-bottom: var(--large-indent);
+    }
   }
 
   .controls {
     display: grid;
     grid-template-columns: 100px auto 100px;
     column-gap: var(--basic-indent);
-    margin-top: var(--basic-indent);
+    margin-top: var(--large-indent);
 
 
     &__delete {

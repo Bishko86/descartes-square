@@ -1,6 +1,6 @@
-import {Maybe} from '@core/types/maybe.type';
-import {FormArray, FormControl} from '@angular/forms';
-import {TFormControl} from '@core/types/form-utility.type';
+import { Maybe } from '@core/types/maybe.type';
+import { FormArray, FormControl } from '@angular/forms';
+import { TFormControl } from '@core/types/form-utility.type';
 
 export type TFormNames = 'q1' | 'q2' | 'q3' | 'q4';
 
@@ -13,8 +13,8 @@ export interface IDescartesFormValues {
   conclusion: Maybe<string>;
 }
 
-
-export interface IDescartesForm extends Omit<TFormControl<IDescartesFormValues>, TFormNames> {
+export interface IDescartesForm
+  extends Omit<TFormControl<IDescartesFormValues>, TFormNames> {
   q1: FormArray<FormControl<Maybe<string>>>;
   q2: FormArray<FormControl<Maybe<string>>>;
   q3: FormArray<FormControl<Maybe<string>>>;

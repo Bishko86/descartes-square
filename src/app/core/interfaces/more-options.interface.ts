@@ -1,4 +1,4 @@
-import {MoreOptionAction} from '@core/enums/more-options-action.enum';
+import { MoreOptionAction } from '@core/enums/more-options-action.enum';
 
 export interface IMoreOptions {
   icon: string;

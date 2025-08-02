@@ -4,5 +4,5 @@ export enum MoreOptionAction {
   Delete,
   Open,
   Close,
-  ShowUp
+  ShowUp,
 }
