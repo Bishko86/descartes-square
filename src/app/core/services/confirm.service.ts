@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Subject, Observable } from 'rxjs';
 import { Confirm } from '@core/components/confirm/confirm';
@@ -7,12 +7,11 @@ import { Confirm } from '@core/components/confirm/confirm';
   providedIn: 'root',
 })
 export class ConfirmService {
-  readonly #isAllowed: Subject<boolean> = new Subject();
-
-  constructor(private readonly dialog: MatDialog) {}
+  readonly #isAllowed = new Subject<boolean>();
+  readonly #dialog = inject(MatDialog);
 
   confirm(message: string): Observable<boolean> {
-    this.dialog
+    this.#dialog
       .open(Confirm, {
         data: message,
         width: 'auto',

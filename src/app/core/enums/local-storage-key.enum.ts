@@ -1,3 +1,3 @@
 export enum LocalStorageKeys {
-  LIST = 'descartes-square-list'
+  LIST = 'descartes-square-list',
 }

@@ -1,25 +1,18 @@
-import {Component, EventEmitter, input, Input, output, Output} from '@angular/core';
-import {MoreOptionAction} from '@core/enums/more-options-action.enum';
-import {MatIcon} from '@core/enums/mat-icon.enum';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatIconButton} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {IMoreOptions} from '@core/interfaces/more-options.interface';
+import { Component, EventEmitter, input, output, Output } from '@angular/core';
+import { MoreOptionAction } from '@core/enums/more-options-action.enum';
+import { MatIcon } from '@core/enums/mat-icon.enum';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIconButton } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { IMoreOptions } from '@core/interfaces/more-options.interface';
 
 @Component({
   selector: 'app-more-options',
-  imports: [
-    MatMenuTrigger,
-    MatMenu,
-    MatMenuItem,
-    MatIconButton,
-    MatIconModule,
-  ],
+  imports: [MatMenuTrigger, MatMenu, MatMenuItem, MatIconButton, MatIconModule],
   templateUrl: './more-options.html',
-  styleUrl: './more-options.scss'
+  styleUrl: './more-options.scss',
 })
 export class MoreOptions {
-
   public moreOptions = input<IMoreOptions[]>();
 
   test = output();

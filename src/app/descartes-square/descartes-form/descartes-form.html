@@ -1,44 +1,54 @@
 @let delay = 400;
-@let position = 'above';
+@let position = "above";
 
 <form [formGroup]="form">
   <label class="open-sans-regular" for="title">Title</label>
-  <input class="align-input" id="title" type="text" formControlName="title">
+  <input class="align-input" id="title" type="text" formControlName="title" />
 
   <ng-container
-    *ngTemplateOutlet="controlTemplate;
-    context: {key: 'q1', question: 'What will happen if it happens?'}"
+    *ngTemplateOutlet="
+      controlTemplate;
+      context: { key: 'q1', question: 'What will happen if it happens?' }
+    "
   >
   </ng-container>
 
   <ng-container
-    *ngTemplateOutlet="controlTemplate;
-    context: {key: 'q2', question: 'What will happen if it doesn\'t happen?'}"
+    *ngTemplateOutlet="
+      controlTemplate;
+      context: {
+        key: 'q2',
+        question: 'What will happen if it doesn\'t happen?',
+      }
+    "
   >
   </ng-container>
 
   <ng-container
-    *ngTemplateOutlet="controlTemplate;
-    context: {key: 'q3', question: 'What won\'t happen if it happens?'}"
+    *ngTemplateOutlet="
+      controlTemplate;
+      context: { key: 'q3', question: 'What won\'t happen if it happens?' }
+    "
   >
   </ng-container>
 
   <ng-container
-    *ngTemplateOutlet="controlTemplate;
-    context: {key: 'q4', question: 'What won\'t happen if it doesn\'t happen?'}"
+    *ngTemplateOutlet="
+      controlTemplate;
+      context: {
+        key: 'q4',
+        question: 'What won\'t happen if it doesn\'t happen?',
+      }
+    "
   >
   </ng-container>
 
   <label class="open-sans-regular" for="conclusion">Conclusion</label>
-  <input class="align-input" type="text" formControlName="conclusion">
+  <input class="align-input" type="text" formControlName="conclusion" />
 </form>
 
 <div class="controls">
-  <button
-    class="controls__cancel"
-    matButton="tonal"
-    (click)="cancelForm()"
-  >
+  <button class="controls__cancel" matButton="tonal" (click)="cancelForm()">
     Cancel
   </button>
 
@@ -57,25 +67,18 @@
     [disabled]="form.pristine"
     (click)="saveForm()"
   >
-    {{ id() ? 'Update' : 'Save' }}
+    {{ id() ? "Update" : "Save" }}
   </button>
 </div>
 
-
-<ng-template
-  #controlTemplate
-  let-key=key;
-  let-question=question;
->
+<ng-template #controlTemplate let-key="key;" let-question="question;">
   <ng-container [formGroup]="form">
     @let formArray = getFormArrayControls(key);
-    <label class="open-sans-regular">{{ question }}</label>
+    <p class="open-sans-regular">{{ question }}</p>
 
     <ng-container [formArrayName]="key">
       <ul>
-        @for (control of formArray;
-          let index = $index;
-          track index; ) {
+        @for (control of formArray; let index = $index; track index) {
           @if (formEditTracker.get(key)?.index === index) {
             <li class="arg-list input-container">
               <input
@@ -84,24 +87,27 @@
                 type="text"
                 [formControl]="control"
                 autocomplete="off"
-              >
+              />
 
               <div
                 class="btn open-sans-regular"
+                tabindex="0"
                 [matTooltip]="'Cancel'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="cancelArgument(index, key)"
+                (keydown.enter)="cancelArgument(index, key)"
               >
                 <div class="action-btn cancel-arg">&#x2715;</div>
-
               </div>
               <div
                 class="btn open-sans-regular"
+                tabindex="1"
                 [matTooltip]="'Save'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="saveArgument(key)"
+                (keydown.enter)="saveArgument(key)"
               >
                 <div class="action-btn save-arg">&#x2713;</div>
               </div>
@@ -111,30 +117,26 @@
               <p>{{ control.value }}</p>
               <div
                 class="btn open-sans-regular"
+                tabindex="0"
                 [matTooltip]="'Remove'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="deleteArgument(index, key)"
+                (keydown.enter)="deleteArgument(index, key)"
               >
-                <div
-                  class="action-btn remove-arg"
-                >
-                  &#x2715;
-                </div>
+                <div class="action-btn remove-arg">&#x2715;</div>
               </div>
 
               <div
                 class="btn open-sans-regular"
+                tabindex="1"
                 [matTooltip]="'Edit'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="editArgument(index, key)"
+                (keydown.enter)="editArgument(index, key)"
               >
-                <div
-                  class="action-btn edit-arg"
-                >
-                  &#9998;
-                </div>
+                <div class="action-btn edit-arg">&#9998;</div>
               </div>
             </li>
           }
@@ -144,7 +146,9 @@
           <li class="roboto-regular add-btn-container">
             <div
               class="btn add-btn open-sans-regular"
+              tabindex="0"
               (click)="addArgument(key)"
+              (keydown.enter)="addArgument(key)"
             >
               <div
                 class="action-btn add-arg"
@@ -161,4 +165,3 @@
     </ng-container>
   </ng-container>
 </ng-template>
-

@@ -1,29 +1,29 @@
-import {DOCUMENT, Inject, Injectable, Renderer2, RendererFactory2} from '@angular/core';
+import {
+  DOCUMENT,
+  inject,
+  Injectable,
+  Renderer2,
+  RendererFactory2,
+} from '@angular/core';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ThemeService {
-  private _renderer: Renderer2;
-
-  constructor(
-    @Inject(DOCUMENT) private readonly _document: Document,
-    private readonly _rendererFactory: RendererFactory2,
-  ) {
-    this._renderer = this._rendererFactory.createRenderer(null, null);
-  }
+  readonly #document: Document = inject(DOCUMENT);
+  readonly #rendererFactory: RendererFactory2 = inject(RendererFactory2);
+  readonly #renderer: Renderer2 = this.#rendererFactory.createRenderer(
+    null,
+    null,
+  );
 
   public toggleTheme(): void {
-    const currentTheme = this._document.body.classList.contains('light') ? 'light' : 'dark';
+    const currentTheme = this.#document.body.classList.contains('light')
+      ? 'light'
+      : 'dark';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-    this._renderer.removeClass(
-      this._document.body,
-      currentTheme
-    );
+    this.#renderer.removeClass(this.#document.body, currentTheme);
 
-    this._renderer.addClass(
-      this._document.body,
-      newTheme,
-    );
+    this.#renderer.addClass(this.#document.body, newTheme);
 
     localStorage.setItem('theme', newTheme);
   }

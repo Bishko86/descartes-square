@@ -1,4 +1,4 @@
-import {Maybe} from '@core/types/maybe.type';
+import { Maybe } from '@core/types/maybe.type';
 
 export interface IFormStateTracker {
   index: Maybe<number>;

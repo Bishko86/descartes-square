@@ -1,4 +1,4 @@
 export enum MenuTitle {
   HOME = 'Home',
-  DESCARTES_SQUARE = 'Descartes Square'
+  DESCARTES_SQUARE = 'Descartes Square',
 }

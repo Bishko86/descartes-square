@@ -1,5 +1,5 @@
-import {IFormStateTracker} from '../interfaces/descartes-form-state-tracker.interface';
-import {Maybe} from '@core/types/maybe.type';
+import { IFormStateTracker } from '../interfaces/descartes-form-state-tracker.interface';
+import { Maybe } from '@core/types/maybe.type';
 
 export class FormStateTracker implements IFormStateTracker {
   #index: Maybe<number> = null;
@@ -8,7 +8,11 @@ export class FormStateTracker implements IFormStateTracker {
 
   #value: Maybe<string> = null;
 
-  constructor(index?: Maybe<number>, isCreating?: boolean, value?: Maybe<string>) {
+  constructor(
+    index?: Maybe<number>,
+    isCreating?: boolean,
+    value?: Maybe<string>,
+  ) {
     this.setIndex(index ?? null);
     this.setIsCreating(isCreating ?? false);
     this.setValue(value ?? null);
