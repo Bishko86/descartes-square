@@ -38,7 +38,7 @@
 
       &.arg-list {
         display: grid;
-        grid-template-columns: 90% 1fr 1fr;
+        grid-template-columns: auto 20px 20px;
         align-items: baseline;
         column-gap: var(--basic-indent);
       }
@@ -90,6 +90,7 @@
 
   .btn {
     cursor: pointer;
+    justify-self: end;
   }
 
   .btn-group,
@@ -102,7 +103,6 @@
     width: inherit;
     display: flex;
     justify-content: flex-end;
-    margin-right: var(--x-small-indent);
   }
 
   .action-btn {
