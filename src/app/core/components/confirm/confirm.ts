@@ -15,11 +15,11 @@ export class Confirm {
   readonly title: string = inject(MAT_DIALOG_DATA);
 
 
-  confirmed(): void {
+  confirm(): void {
     this.dialog.close(true);
   }
 
-  cancelled(): void {
+  cancel(): void {
     this.dialog.close(false);
   }
 }
