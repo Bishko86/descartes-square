@@ -1,10 +1,4 @@
 :host {
-  display: block;
-  width: 70%;
-  margin: 0 auto;
-  transition: all 2.5s ease;
-  padding: var(--basic-indent);
-
   form {
     display: grid;
     grid-template-columns: 1fr;
@@ -21,7 +15,7 @@
 
       &:not(:last-child) {
         &:after {
-          content: '';
+          content: "";
           display: block;
           position: absolute;
           bottom: 0;
@@ -32,8 +26,10 @@
       }
 
       &.add-btn-container {
-        padding-top: var(--basic-indent);
+        padding: var(--basic-indent) 0;
         list-style-type: none;
+        display: flex;
+        justify-content: flex-end;
       }
 
       &.arg-list {
@@ -47,11 +43,6 @@
         align-self: center;
         padding: var(--small-indent) 0;
       }
-    }
-
-    .add-arg {
-      display: inline-block;
-      transform: rotate(45deg) !important;
     }
   }
 
@@ -75,44 +66,35 @@
     font-weight: 600;
   }
 
-  .align-input {
-    margin-left: 0;
-  }
-
   input[id="title"] {
     height: 40px;
     font-size: 18px;
   }
 
-  .argument-btn {
-    width: fit-content;
-  }
-
   .btn {
-    cursor: pointer;
-    justify-self: end;
-  }
-
-  .btn-group,
-  .add-btn {
-    padding-bottom: var(--basic-indent);
-    width: calc(100% + 20px);
-  }
-
-  .add-btn {
-    width: inherit;
-    display: flex;
-    justify-content: flex-end;
-  }
-
-  .action-btn {
-    display: inline-block;
-    height: 14px;
-    width: 14px;
-    text-align: center;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
-    padding: var(--extra-small-indent);
-    border: 1px solid;
+    border-width: 1px;
+    border-style: solid;
+    background-color: var(--background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.8;
+    transition: 0.2s;
+
+    &.edit-arg,
+    &.add-arg {
+      color: var(--primary);
+      border-color: var(--primary);
+
+      .plus {
+        padding-left: 1px;
+      }
+    }
 
     &.cancel-arg,
     &.remove-arg {
@@ -130,11 +112,10 @@
       color: var(--primary);
       border-color: var(--primary);
     }
-  }
 
-  .btn-group {
-    display: flex;
-    column-gap: var(--basic-indent);
+    &:hover {
+      opacity: 1;
+    }
   }
 
   .controls {
@@ -142,7 +123,6 @@
     grid-template-columns: 100px auto 100px;
     column-gap: var(--basic-indent);
     margin-top: var(--basic-indent);
-
 
     &__clear {
       width: 100px;
