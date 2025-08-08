@@ -3,12 +3,15 @@
 
 <form [formGroup]="form">
   <label class="open-sans-regular" for="title">Title</label>
-  <input class="align-input" id="title" type="text" formControlName="title" />
+  <input id="title" type="text" formControlName="title" />
 
   <ng-container
     *ngTemplateOutlet="
       controlTemplate;
-      context: { key: 'q1', question: 'What will happen if it happens?' }
+      context: {
+        key: 'q1',
+        question: 'What will happen if it happens?',
+      }
     "
   >
   </ng-container>
@@ -27,7 +30,10 @@
   <ng-container
     *ngTemplateOutlet="
       controlTemplate;
-      context: { key: 'q3', question: 'What won\'t happen if it happens?' }
+      context: {
+        key: 'q3',
+        question: 'What won\'t happen if it happens?',
+      }
     "
   >
   </ng-container>
@@ -44,7 +50,7 @@
   </ng-container>
 
   <label class="open-sans-regular" for="conclusion">Conclusion</label>
-  <input class="align-input" type="text" formControlName="conclusion" />
+  <input type="text" formControlName="conclusion" />
 </form>
 
 <div class="controls">
@@ -82,83 +88,70 @@
           @if (formEditTracker.get(key)?.index === index) {
             <li class="arg-list input-container">
               <input
+                appAutoFocus
+                type="text"
+                autocomplete="off"
                 class="roboto-regular"
                 [id]="key"
-                type="text"
                 [formControl]="control"
-                autocomplete="off"
               />
 
-              <div
-                class="btn open-sans-regular"
-                tabindex="0"
+              <button
+                class="btn cancel-arg"
                 [matTooltip]="'Cancel'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="cancelArgument(index, key)"
-                (keydown.enter)="cancelArgument(index, key)"
               >
-                <div class="action-btn cancel-arg">&#x2715;</div>
-              </div>
-              <div
-                class="btn open-sans-regular"
-                tabindex="1"
+                &#x2715;
+              </button>
+              <button
+                class="btn save-arg"
                 [matTooltip]="'Save'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="saveArgument(key)"
-                (keydown.enter)="saveArgument(key)"
               >
-                <div class="action-btn save-arg">&#x2713;</div>
-              </div>
+                &#x2713;
+              </button>
             </li>
           } @else {
             <li class="roboto-regular arg-list">
               <p>{{ control.value }}</p>
-              <div
-                class="btn open-sans-regular"
-                tabindex="0"
+              <button
+                class="btn remove-arg"
                 [matTooltip]="'Remove'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="deleteArgument(index, key)"
-                (keydown.enter)="deleteArgument(index, key)"
               >
-                <div class="action-btn remove-arg">&#x2715;</div>
-              </div>
+                &#x2715;
+              </button>
 
-              <div
-                class="btn open-sans-regular"
-                tabindex="1"
+              <button
+                class="btn edit-arg"
                 [matTooltip]="'Edit'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="editArgument(index, key)"
-                (keydown.enter)="editArgument(index, key)"
               >
-                <div class="action-btn edit-arg">&#9998;</div>
-              </div>
+                &#9998;
+              </button>
             </li>
           }
         }
 
         @if (!formEditTracker.get(key)?.isCreating) {
           <li class="roboto-regular add-btn-container">
-            <div
-              class="btn add-btn open-sans-regular"
-              tabindex="0"
+            <button
+              class="btn add-arg"
+              [matTooltip]="'Add Argument'"
+              [matTooltipPosition]="position"
+              [matTooltipShowDelay]="delay"
               (click)="addArgument(key)"
-              (keydown.enter)="addArgument(key)"
             >
-              <div
-                class="action-btn add-arg"
-                [matTooltip]="'Add Argument'"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-              >
-                &#x2715;
-              </div>
-            </div>
+              <span class="plus">&#65291;</span>
+            </button>
           </li>
         }
       </ul>

@@ -22,6 +22,7 @@ import { ConfirmService } from '@core/services/confirm.service';
 import { filter, first, tap } from 'rxjs';
 import { IFormStateTracker } from '../definitions/interfaces/descartes-form-state-tracker.interface';
 import { FormStateTracker } from '../definitions/models/form-state-tracker.model';
+import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
 
 @Component({
   selector: 'app-descartes-form',
@@ -31,6 +32,7 @@ import { FormStateTracker } from '../definitions/models/form-state-tracker.model
     MatSnackBarModule,
     MatButton,
     MatTooltipModule,
+    AutoFocus,
   ],
   templateUrl: './descartes-form.html',
   styleUrl: './descartes-form.scss',
@@ -67,14 +69,23 @@ export class DescartesForm implements OnInit {
   }
 
   deleteArgument(index: number, key: TFormNames): void {
-    const formArray = this.#getArgumentForm(key);
+    this.#confirmService
+      .confirm('Are you sure you want to delete this record?')
+      .pipe(
+        first(),
+        filter(Boolean),
+        tap(() => {
+          const formArray = this.#getArgumentForm(key);
 
-    if (index === formArray.length - 1) {
-      this.formEditTracker.set(key, new FormStateTracker());
-    }
+          if (index === formArray.length - 1) {
+            this.formEditTracker.set(key, new FormStateTracker());
+          }
 
-    formArray.removeAt(index);
-    formArray.markAsDirty();
+          formArray.removeAt(index);
+          formArray.markAsDirty();
+        }),
+      )
+      .subscribe();
   }
 
   cancelArgument(index: number, key: TFormNames): void {

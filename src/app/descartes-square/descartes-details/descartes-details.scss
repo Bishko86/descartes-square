@@ -1,8 +1,4 @@
 :host {
-  display: block;
-  width: 70%;
-  margin: 0 auto;
-
   .descartes-overview {
     border-bottom: 1px solid var(--border);
 
@@ -10,7 +6,6 @@
       li {
         list-style-type: circle;
         padding-bottom: var(--small-indent);
-        width: 50%;
         line-height: 1.5;
       }
     }
@@ -26,7 +21,6 @@
     grid-template-columns: 100px auto 100px;
     column-gap: var(--basic-indent);
     margin-top: var(--large-indent);
-
 
     &__delete {
       width: 100px;
