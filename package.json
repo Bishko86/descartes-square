@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "nx serve",
-    "build": "nx build",
-    "watch": "nx build --watch --configuration development",
-    "test": "nx test",
-    "lint": "nx lint"
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "ng lint"
   },
   "prettier": {
     "overrides": [
@@ -33,14 +33,9 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
-    "@angular-devkit/core": "^20.0.5",
-    "@angular-devkit/schematics": "^20.0.5",
     "@angular/build": "^20.0.5",
     "@angular/cli": "^20.0.5",
     "@angular/compiler-cli": "^20.0.0",
-    "@nx/angular": "21.3.11",
-    "@nx/workspace": "21.3.11",
-    "@schematics/angular": "^20.0.5",
     "@types/jasmine": "~5.1.0",
     "angular-eslint": "20.1.1",
     "eslint": "^9.29.0",
@@ -52,7 +47,6 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "nx": "21.3.11",
     "prettier": "^3.6.2",
     "typescript": "~5.8.2",
     "typescript-eslint": "8.34.1"
