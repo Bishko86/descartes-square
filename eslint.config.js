@@ -1,45 +1,53 @@
-// @ts-check
-const eslint = require("@eslint/js");
-const tseslint = require("typescript-eslint");
-const angular = require("angular-eslint");
-const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
+const nx = require("@nx/eslint-plugin");
 
-module.exports = tseslint.config(
-  {
-    files: ["**/*.ts"],
-    extends: [
-      eslint.configs.recommended,
-      ...tseslint.configs.recommended,
-      ...tseslint.configs.stylistic,
-      ...angular.configs.tsRecommended,
-      eslintPluginPrettierRecommended,
-    ],
-    processor: angular.processInlineTemplates,
-    rules: {
-      "@angular-eslint/directive-selector": [
-        "error",
-        {
-          type: "attribute",
-          prefix: "app",
-          style: "camelCase",
-        },
-      ],
-      "@angular-eslint/component-selector": [
-        "error",
-        {
-          type: "element",
-          prefix: "app",
-          style: "kebab-case",
-        },
-      ],
+module.exports = [
+    ...nx.configs["flat/base"],
+    ...nx.configs["flat/typescript"],
+    ...nx.configs["flat/javascript"],
+    {
+        ignores: [
+            "**/dist"
+        ]
     },
-  },
-  {
-    files: ["**/*.html"],
-    extends: [
-      ...angular.configs.templateRecommended,
-      ...angular.configs.templateAccessibility,
-    ],
-    rules: {},
-  }
-);
+    {
+        files: [
+            "**/*.ts",
+            "**/*.tsx",
+            "**/*.js",
+            "**/*.jsx"
+        ],
+        rules: {
+            "@nx/enforce-module-boundaries": [
+                "error",
+                {
+                    enforceBuildableLibDependency: true,
+                    allow: [
+                        "^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$"
+                    ],
+                    depConstraints: [
+                        {
+                            sourceTag: "*",
+                            onlyDependOnLibsWithTags: [
+                                "*"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    {
+        files: [
+            "**/*.ts",
+            "**/*.tsx",
+            "**/*.cts",
+            "**/*.mts",
+            "**/*.js",
+            "**/*.jsx",
+            "**/*.cjs",
+            "**/*.mjs"
+        ],
+        // Override or add rules here
+        rules: {}
+    },
+];
