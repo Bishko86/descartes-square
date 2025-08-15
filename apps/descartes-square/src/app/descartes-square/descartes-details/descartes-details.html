@@ -1,0 +1,60 @@
+<section class="descartes-overview">
+  <h2>{{ overviewedEntity()?.title }}</h2>
+
+  <h3 class="sub-title">What will happen if it happens?</h3>
+  <ul>
+    @for (arg of overviewedEntity()?.q1; track arg) {
+      <li class="roboto-regular">{{ arg }}</li>
+    }
+  </ul>
+
+  <h3 class="sub-title">What will happen if it doesn't happen?</h3>
+  <ul>
+    @for (arg of overviewedEntity()?.q2; track arg) {
+      <li class="roboto-regular">{{ arg }}</li>
+    }
+  </ul>
+
+  <h3 class="sub-title">What won't happen if it happens?</h3>
+  <ul>
+    @for (arg of overviewedEntity()?.q3; track arg) {
+      <li class="roboto-regular">{{ arg }}</li>
+    }
+  </ul>
+
+  <h3 class="sub-title">What won't happen if it doesn't happen?</h3>
+  <ul>
+    @for (arg of overviewedEntity()?.q4; track arg) {
+      <li class="roboto-regular">{{ arg }}</li>
+    }
+  </ul>
+
+  <h3 class="sub-title">Conclusion</h3>
+  <p class="roboto-regular conclusion">{{ overviewedEntity()?.conclusion }}</p>
+</section>
+
+<div class="controls">
+  <button
+    class="controls__back"
+    matButton="outlined"
+    (click)="back()"
+  >
+    Back
+  </button>
+
+  <button
+    class="controls__delete"
+    matButton="outlined"
+    (click)="delete()"
+  >
+    Delete
+  </button>
+
+  <button
+    class="controls__edit"
+    matButton="outlined"
+    (click)="edit()"
+  >
+    Edit
+  </button>
+</div>

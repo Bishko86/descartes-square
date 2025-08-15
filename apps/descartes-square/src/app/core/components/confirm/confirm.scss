@@ -1,0 +1,24 @@
+.confirm {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--surface);
+  color: var(--text-secondary);
+  padding: var(--basic-indent);
+  max-width: 400px;
+
+  &__title {
+    color: var(--text-secondary);
+  }
+
+  &__dialog {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__btn {
+    color: var(--text-secondary);
+    font-size: 18px;
+    margin-top: var(--large-indent);
+  }
+}
