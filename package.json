@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "nx serve descartes-square",
+    "start:api": "nx serve api",
     "build": "nx build descartes-square",
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
@@ -30,6 +31,11 @@
     "@angular/material": "^20.1.2",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "axios": "^1.6.0",
+    "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -40,11 +46,22 @@
     "@angular/cli": "^20.0.5",
     "@angular/compiler-cli": "^20.0.0",
     "@eslint/js": "~8.57.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.0",
     "@nx/angular": "21.3.11",
     "@nx/eslint-plugin": "21.3.11",
+    "@nx/js": "21.4.0",
+    "@nx/nest": "^21.4.0",
+    "@nx/node": "21.4.0",
+    "@nx/web": "21.3.11",
+    "@nx/webpack": "21.4.0",
     "@nx/workspace": "21.3.11",
     "@schematics/angular": "^20.0.5",
+    "@swc-node/register": "~1.9.1",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
     "@types/jasmine": "~5.1.0",
+    "@types/node": "~18.16.9",
     "angular-eslint": "20.1.1",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "^10.1.8",
@@ -58,6 +75,7 @@
     "nx": "21.3.11",
     "prettier": "^3.6.2",
     "typescript": "~5.8.2",
-    "typescript-eslint": "8.34.1"
+    "typescript-eslint": "8.34.1",
+    "webpack-cli": "^5.1.4"
   }
 }
