@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { MatTableModule } from '@angular/material/table';
-import { MoreOptions } from '@core/components/more-options/more-options';
 import { IMoreOptions } from '@core/interfaces/more-options.interface';
 import { MatIcon } from '@core/enums/mat-icon.enum';
 import { MoreOptionAction } from '@core/enums/more-options-action.enum';
@@ -9,6 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 import { IDescartesSolution } from '../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
 import { filter, first, tap } from 'rxjs';
+import { MoreOptions } from '@core/components/more-options/more-options';
 import { ConfirmService } from '@core/services/confirm.service';
 
 @Component({

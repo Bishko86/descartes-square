@@ -1,12 +1,19 @@
 <section class="descartes-list">
   <div class="descartes-list__header">
-    <button matButton="elevated" class="descartes-list__add-data" (click)="addData()">
+    <button
+      matButton="elevated"
+      class="descartes-list__add-data"
+      (click)="addData()"
+    >
       Add data
     </button>
   </div>
 
-
-  <table mat-table [dataSource]="dataSource()" class="mat-elevation-z8 demo-table">
+  <table
+    mat-table
+    [dataSource]="dataSource()"
+    class="mat-elevation-z8 demo-table"
+  >
     <!-- Id Column -->
     <ng-container matColumnDef="id">
       <th mat-header-cell *matHeaderCellDef>ID:</th>
@@ -42,6 +49,6 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </section>

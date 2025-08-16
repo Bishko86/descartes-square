@@ -9,7 +9,7 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    @for(option of moreOptions(); track option.text){
+    @for (option of moreOptions(); track option.text) {
       <button mat-menu-item (click)="emitAction(option.action)">
         <mat-icon>{{ option.icon }}</mat-icon>
         <span>{{ option.text }}</span>
