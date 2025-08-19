@@ -39,7 +39,13 @@
               "maximumError": "8kB"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "fileReplacements": [
+            {
+              "replace": "apps/descartes-square/src/environments/environment.ts",
+              "with": "apps/descartes-square/src/environments/environment.production.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,

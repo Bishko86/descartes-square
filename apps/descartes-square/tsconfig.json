@@ -7,9 +7,10 @@
     "noFallthroughCasesInSwitch": true,
     "strictPropertyInitialization": false,
     "isolatedModules": true,
-        "paths": {
-          "@core/*": ["apps/descartes-square/src/app/core/*"]
-        }
+    "paths": {
+      "@core/*": ["apps/descartes-square/src/app/core/*"],
+      "@environment/*": ["apps/descartes-square/src/environments/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
