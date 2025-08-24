@@ -10,7 +10,7 @@ export class User {
   @Prop({ required: true })
   username: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })
@@ -18,6 +18,9 @@ export class User {
 
   @Prop({ default: Date.now })
   createdAt: Date;
+
+  @Prop()
+  refreshToken: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

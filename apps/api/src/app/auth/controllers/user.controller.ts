@@ -1,42 +1,15 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Delete,
-  Param,
-  Body,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Delete, Param, UseGuards } from '@nestjs/common';
 import { UsersService } from '@auth/services/users.service';
-import { User } from '@auth/schema/user.schema';
-import { AuthGuardJwt } from '@auth/guards/auth-jwt.guard';
+import { AccessTokenGuard } from '@auth/guards/access-token.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UsersService) {}
-
-  @Post('create')
-  async createTestUser(@Body() userBody: User) {
-    try {
-      const user = await this.userService.createUser(userBody);
-      return {
-        success: true,
-        message: 'User created successfully',
-        user: user,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: `Failed to create user: ${error.message}`,
-      };
-    }
-  }
-
   @Get()
-  @UseGuards(AuthGuardJwt)
+  @UseGuards(AccessTokenGuard)
   async getAllUsers() {
     try {
-      const users = await this.userService.getAllUsers();
+      const users = await this.userService.findAllUsers();
       return {
         success: true,
         message: `Found ${users.length} users`,
@@ -51,14 +24,14 @@ export class UserController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuardJwt)
+  @UseGuards(AccessTokenGuard)
   async deleteUserById(@Param('id') id: string) {
     try {
       const result = await this.userService.deleteUser(id);
 
       return {
         success: true,
-        message: `Deleted ${result.deletedCount} user(s)`,
+        message: `Deleted ${result.id} user`,
       };
     } catch (error) {
       return {

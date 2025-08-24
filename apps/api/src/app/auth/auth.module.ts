@@ -6,21 +6,22 @@ import { User, UserSchema } from '@auth/schema/user.schema';
 import { AuthController } from '@auth/controllers/auth.controller';
 import { AuthService } from '@auth/services/auth.service';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from '@auth/strategies/jwt.strategy';
+import { AccessTokenStrategy } from '@auth/strategies/access-token.strategy';
+import { RefreshTokenStrategy } from '@auth/strategies/refresh-token.strategy';
+import { AccessTokenGuard } from '@auth/guards/access-token.guard';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    JwtModule.registerAsync({
-      useFactory: () => ({
-        secret: process.env.JWT_SECRET,
-        signOptions: {
-          expiresIn: '60m',
-        },
-      }),
-    }),
+    JwtModule.register({}),
   ],
   controllers: [UserController, AuthController],
-  providers: [UsersService, AuthService, JwtStrategy],
+  providers: [
+    UsersService,
+    AuthService,
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
+    AccessTokenGuard,
+  ],
 })
 export class AuthModule {}
