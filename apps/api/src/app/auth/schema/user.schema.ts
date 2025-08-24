@@ -13,13 +13,13 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true })
+  @Prop({ required: true, select: false })
   password: string;
 
   @Prop({ default: Date.now })
   createdAt: Date;
 
-  @Prop()
+  @Prop({ select: false })
   refreshToken: string;
 }
 

@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -65,6 +66,26 @@ export class AuthService {
 
   async signOut(userId: string): Promise<UserDocument> {
     return this.usersService.updateUser(userId, { refreshToken: null });
+  }
+
+  async refreshTokens(userId: string, refreshToken: string) {
+    const user = await this.usersService.findUserById(userId);
+    if (!user || !user.refreshToken) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const isRefreshTokenValid = await bcrypt.compare(
+      refreshToken,
+      user.refreshToken,
+    );
+
+    if (!isRefreshTokenValid) {
+      throw new ForbiddenException('Access Denied');
+    }
+
+    const tokens = await this.getTokens(userId, user.username);
+    await this.updateRefreshToken(userId, tokens.refreshToken);
+    return tokens;
   }
 
   private async getTokens(
