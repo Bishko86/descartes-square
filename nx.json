@@ -47,5 +47,19 @@
         "targetName": "eslint:lint"
       }
     }
-  ]
+  ],
+  "generators": {
+    "@nx/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "none"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "none"
+    },
+    "@nx/angular:component": {
+      "style": "scss"
+    }
+  }
 }
