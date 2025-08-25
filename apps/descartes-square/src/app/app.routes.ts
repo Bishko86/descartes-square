@@ -53,4 +53,14 @@ export const routes: Routes = [
     path: MenuRoutes.HOME,
     loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
   },
+  {
+    path: MenuRoutes.SIGN_IN,
+    loadComponent: () =>
+      import('@shared-ui/src/lib/sign-in/sign-in').then((mod) => mod.SignIn),
+  },
+  {
+    path: MenuRoutes.SIGN_UP,
+    loadComponent: () =>
+      import('@shared-ui/src/lib/sign-up/sign-up').then((mod) => mod.SignUp),
+  },
 ];

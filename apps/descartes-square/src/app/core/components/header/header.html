@@ -16,12 +16,30 @@
       >
     }
   </div>
-  <button
-    id="theme-toggle"
-    matButton="elevated"
-    class="open-sans-regular"
-    (click)="changeTheme()"
-  >
-    🌓 Change theme
-  </button>
+  <div class="left-section">
+    <button
+      id="theme-toggle"
+      matButton="elevated"
+      class="open-sans-regular"
+      [routerLink]="['/sign-in']"
+    >
+      Sign In
+    </button>
+    <button
+      id="theme-toggle"
+      matButton="elevated"
+      class="open-sans-regular"
+      [routerLink]="['/sign-up']"
+    >
+      Sign Up
+    </button>
+    <button
+      id="theme-toggle"
+      matButton="elevated"
+      class="open-sans-regular"
+      (click)="changeTheme()"
+    >
+      🌓 Change theme
+    </button>
+  </div>
 </header>

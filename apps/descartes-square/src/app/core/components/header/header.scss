@@ -11,6 +11,11 @@ header {
     column-gap: var(--basic-indent);
   }
 
+  .left-section {
+    display: flex;
+    column-gap: var(--basic-indent);
+  }
+
 
   .menu-link {
     font-size: 22px;
