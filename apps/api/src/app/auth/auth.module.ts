@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { AccessTokenStrategy } from '@auth/strategies/access-token.strategy';
 import { RefreshTokenStrategy } from '@auth/strategies/refresh-token.strategy';
 import { AccessTokenGuard } from '@auth/guards/access-token.guard';
+import { RefreshTokenGuard } from '@auth/guards/refresh-token.guard';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { AccessTokenGuard } from '@auth/guards/access-token.guard';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     AccessTokenGuard,
+    RefreshTokenGuard,
   ],
 })
 export class AuthModule {}

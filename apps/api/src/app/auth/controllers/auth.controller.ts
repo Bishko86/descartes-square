@@ -6,6 +6,7 @@ import { AuthDto } from '@auth/dtos/auth.dto';
 import { Request } from 'express';
 import { IAuthTokens } from '@auth/interfaces/auth-tokens.interface';
 import { AccessTokenGuard } from '@auth/guards/access-token.guard';
+import { RefreshTokenGuard } from '@auth/guards/refresh-token.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -27,6 +28,16 @@ export class AuthController {
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   logout(@Req() req: Request): Promise<UserDocument> {
-    return this.authService.signOut(req['user']['userId']);
+    const userId = req['user']['userId'];
+    return this.authService.signOut(userId);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  async refreshTokens(@Req() req: Request): Promise<IAuthTokens> {
+    const userId = req['user']['userId'];
+    const refreshToken = req['user']['refreshToken'];
+
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }

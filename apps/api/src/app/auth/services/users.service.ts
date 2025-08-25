@@ -25,7 +25,7 @@ export class UsersService {
   }
 
   async findUserById(id: string): Promise<UserDocument> {
-    return this.userModel.findOne({ _id: id }).exec();
+    return this.userModel.findOne({ _id: id }).select('+refreshToken').exec();
   }
 
   async findUserByEmail(email: string): Promise<UserDocument> {
