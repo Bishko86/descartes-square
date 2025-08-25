@@ -1,0 +1,78 @@
+<div class="sign-in-container">
+  <form [formGroup]="form" class="sign-in-form" (ngSubmit)="submit()">
+    <h2>Sign In</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        placeholder="Enter your email"
+        [formControlName]="formKeys.EMAIL"
+      />
+    </mat-form-field>
+
+    @if (isSignUp()) {
+      <mat-form-field appearance="fill">
+        <mat-label>Username</mat-label>
+        <input
+          matInput
+          type="text"
+          placeholder="Enter your name"
+          [formControlName]="formKeys.USERNAME"
+        />
+      </mat-form-field>
+    }
+
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        placeholder="Enter your password"
+        [type]="hidePassword ? 'password' : 'text'"
+        [autocomplete]="isSignUp() ? 'new-password' : 'on'"
+        [formControlName]="formKeys.PASSWORD"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="hidePassword = !hidePassword"
+      >
+        <mat-icon>{{
+          hidePassword ? "visibility_off" : "visibility"
+        }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    @if (isSignUp()) {
+      <mat-form-field>
+        <mat-label>Confirm Password</mat-label>
+        <input
+          matInput
+          placeholder="Confirm your password"
+          [type]="hidePassword ? 'password' : 'text'"
+          [formControlName]="formKeys.CONFIRM_PASSWORD"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="hidePassword = !hidePassword"
+        >
+          <mat-icon>{{
+            hidePassword ? "visibility_off" : "visibility"
+          }}</mat-icon>
+        </button>
+      </mat-form-field>
+    }
+
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="form.invalid"
+    >
+      {{ isSignUp() ? "Sign Up" : "Sign In" }}
+    </button>
+  </form>
+</div>

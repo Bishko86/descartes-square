@@ -9,7 +9,7 @@ import { CreateUserDto } from '@auth/dtos/create-user.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(user: CreateUserDto): Promise<UserDocument> {
+  async createUser(user: CreateUserDto): Promise<{ id: string }> {
     const userModel = new this.userModel({
       username: user.username,
       email: user.email,
@@ -17,7 +17,9 @@ export class UsersService {
       createdAt: user.createdAt,
     });
 
-    return userModel.save();
+    return userModel.save().then((user) => ({
+      id: user._id.toString(),
+    }));
   }
 
   async findAllUsers(): Promise<UserDocument[]> {

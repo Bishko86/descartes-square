@@ -25,7 +25,7 @@ export class AuthService {
     email,
     password,
     createdAt,
-  }: CreateUserDto): Promise<User> {
+  }: CreateUserDto): Promise<{ id: string }> {
     const existedUser = await this.usersService.findUserByEmail(email);
 
     if (existedUser) {

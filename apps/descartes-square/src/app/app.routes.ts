@@ -55,12 +55,11 @@ export const routes: Routes = [
   },
   {
     path: MenuRoutes.SIGN_IN,
-    loadComponent: () =>
-      import('@shared-ui/src/lib/sign-in/sign-in').then((mod) => mod.SignIn),
+    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
   },
   {
     path: MenuRoutes.SIGN_UP,
-    loadComponent: () =>
-      import('@shared-ui/src/lib/sign-up/sign-up').then((mod) => mod.SignUp),
+    data: { isSignUp: true },
+    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
   },
 ];
