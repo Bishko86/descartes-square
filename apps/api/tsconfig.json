@@ -10,7 +10,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "paths": {
-      "@auth/*": ["apps/api/src/app/auth/*"]
+      "@auth/*": ["apps/api/src/app/auth/*"],
+      "@shared/*": ["libs/shared/*"]
     }
   }
 }
