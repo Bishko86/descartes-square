@@ -11,7 +11,7 @@ import {
   TFormNames,
 } from '../definitions/interfaces/descartes-form.interface';
 import { NgTemplateOutlet } from '@angular/common';
-import { Maybe } from '@core/types/maybe.type';
+import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { IDescartesSolution } from '../definitions/interfaces/descartes-solution.interface';

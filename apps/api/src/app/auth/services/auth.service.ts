@@ -5,12 +5,14 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '@auth/services/users.service';
-import { User, UserDocument } from '@auth/schema/user.schema';
+import { UserDocument } from '@auth/schema/user.schema';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '@auth/dtos/create-user.dto';
 import { AuthDto } from '@auth/dtos/auth.dto';
+import { IAuthResponse } from '@auth/interfaces/auth-response.interface';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -42,10 +44,7 @@ export class AuthService {
     });
   }
 
-  async signIn({
-    email,
-    password,
-  }: AuthDto): Promise<{ accessToken: string; refreshToken: string }> {
+  async signIn({ email, password }: AuthDto): Promise<IAuthResponse> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
@@ -68,7 +67,8 @@ export class AuthService {
     return this.usersService.updateUser(userId, { refreshToken: null });
   }
 
-  async refreshTokens(userId: string, refreshToken: string) {
+  async refreshTokens(req: Request, userId: string): Promise<IAuthResponse> {
+    const refreshToken = req['user']['refreshToken'];
     const user = await this.usersService.findUserById(userId);
     if (!user || !user.refreshToken) {
       throw new ForbiddenException('Access Denied');
@@ -91,7 +91,7 @@ export class AuthService {
   private async getTokens(
     userId: string,
     username: string,
-  ): Promise<{ accessToken: string; refreshToken: string }> {
+  ): Promise<IAuthResponse> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
@@ -100,7 +100,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-          expiresIn: '15m',
+          expiresIn: '15s',
         },
       ),
       this.jwtService.signAsync(
@@ -116,6 +116,8 @@ export class AuthService {
     ]);
 
     return {
+      userId,
+      username,
       accessToken,
       refreshToken,
     };

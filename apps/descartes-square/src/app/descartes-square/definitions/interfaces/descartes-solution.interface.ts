@@ -1,4 +1,4 @@
-import { Maybe } from '@core/types/maybe.type';
+import { Maybe } from '@shared/src/lib/types/maybe.type';
 
 export interface IDescartesSolution {
   id: string;

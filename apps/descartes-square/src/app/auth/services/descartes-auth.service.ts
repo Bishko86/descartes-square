@@ -7,7 +7,7 @@ import {
   ISignInPayload,
   ISignUpPayload,
 } from '@shared-ui/src/lib/auth/interfaces/submit-payload.interface';
-import { IAuthLogin } from '@core/interfaces/auth-login.interface';
+import { IUserDto, IAuthLogin } from '@shared/src';
 
 @Injectable()
 export class DescartesAuthService extends AuthService {
@@ -21,10 +21,21 @@ export class DescartesAuthService extends AuthService {
     );
   }
 
-  signUp(payload: ISignUpPayload): Observable<{ id: string }> {
-    return this.#httpClient.post<{ id: string }>(
+  signUp(payload: ISignUpPayload): Observable<IAuthLogin> {
+    return this.#httpClient.post<IAuthLogin>(
       `${this.#baseUrl}/auth/signup`,
       payload,
     );
+  }
+
+  refreshTokens(): Observable<IAuthLogin> {
+    return this.#httpClient.get<IAuthLogin>(
+      `${this.#baseUrl}/auth/refresh`,
+      {},
+    );
+  }
+
+  getUserById(userId: string): Observable<IUserDto> {
+    return this.#httpClient.get<IUserDto>(`${this.#baseUrl}/users/${userId}`);
   }
 }

@@ -24,6 +24,7 @@ import {
   ISignInPayload,
   ISignUpPayload,
 } from './interfaces/submit-payload.interface';
+import { Maybe } from '@shared/src';
 
 @Component({
   selector: 'lib-auth',
@@ -48,7 +49,7 @@ export class AuthComponent implements OnInit {
   hidePassword = true;
   isSignUp = signal(false);
 
-  submitEvent = output<void>();
+  submitEvent = output<Maybe<string>>();
 
   #authService = inject(AuthService);
   #activatedRoute = inject(ActivatedRoute);
@@ -70,8 +71,9 @@ export class AuthComponent implements OnInit {
 
     action$
       .pipe(
-        tap(() => {
-          this.submitEvent.emit();
+        tap(({ userId }) => {
+          const id = this.isSignUp() ? null : userId;
+          this.submitEvent.emit(id);
         }),
       )
       .subscribe();

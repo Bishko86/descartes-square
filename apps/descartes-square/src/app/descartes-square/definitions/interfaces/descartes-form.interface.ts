@@ -1,4 +1,4 @@
-import { Maybe } from '@core/types/maybe.type';
+import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { FormArray, FormControl } from '@angular/forms';
 import { TFormControl } from '@core/types/form-utility.type';
 

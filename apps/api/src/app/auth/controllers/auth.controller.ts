@@ -1,12 +1,19 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '@auth/services/auth.service';
-import { User, UserDocument } from '@auth/schema/user.schema';
 import { CreateUserDto } from '@auth/dtos/create-user.dto';
 import { AuthDto } from '@auth/dtos/auth.dto';
-import { Request } from 'express';
-import { IAuthTokens } from '@auth/interfaces/auth-tokens.interface';
+import { Request, Response } from 'express';
 import { AccessTokenGuard } from '@auth/guards/access-token.guard';
 import { RefreshTokenGuard } from '@auth/guards/refresh-token.guard';
+import { AuthUtils } from '@auth/utils/auth.utils';
 
 @Controller('auth')
 export class AuthController {
@@ -20,26 +27,50 @@ export class AuthController {
   }
 
   @Post('login')
-  async login(@Body() data: AuthDto): Promise<{
-    accessToken: string;
-    refreshToken: string;
+  async login(
+    @Body() data: AuthDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{
+    userId: string;
   }> {
-    return this.authService.signIn(data);
+    const { accessToken, refreshToken, userId } =
+      await this.authService.signIn(data);
+    AuthUtils.attachAuthCookies(res, accessToken, refreshToken);
+
+    return { userId };
   }
 
   @UseGuards(AccessTokenGuard)
   @Get('logout')
-  logout(@Req() req: Request): Promise<UserDocument> {
+  async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ logout: boolean; userId: string }> {
     const userId = req['user']['userId'];
-    return this.authService.signOut(userId);
+
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+
+    const user = await this.authService.signOut(userId);
+
+    return { logout: true, userId: user.id };
   }
 
   @UseGuards(RefreshTokenGuard)
   @Get('refresh')
-  async refreshTokens(@Req() req: Request): Promise<IAuthTokens> {
+  async refreshTokens(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{
+    userId: string;
+  }> {
     const userId = req['user']['userId'];
-    const refreshToken = req['user']['refreshToken'];
 
-    return this.authService.refreshTokens(userId, refreshToken);
+    const { accessToken, refreshToken } = await this.authService.refreshTokens(
+      req,
+      userId,
+    );
+    AuthUtils.attachAuthCookies(res, accessToken, refreshToken);
+    return { userId };
   }
 }
