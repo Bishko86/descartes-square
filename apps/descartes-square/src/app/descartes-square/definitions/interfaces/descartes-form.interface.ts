@@ -1,6 +1,6 @@
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { FormArray, FormControl } from '@angular/forms';
-import { TFormControl } from '@core/types/form-utility.type';
+import { TFormControl } from '@shared/src';
 
 export type TFormNames = 'q1' | 'q2' | 'q3' | 'q4';
 

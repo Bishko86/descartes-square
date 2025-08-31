@@ -4,7 +4,6 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from '@core/interfaces/menu-item.interface';
 import { ThemeService } from '@core/services/theme.service';
 import { MatButton } from '@angular/material/button';
-import { ApiService } from '@core/services/api/api';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { take } from 'rxjs';
 import { IUserDto, Maybe } from '@shared/src';
@@ -23,7 +22,6 @@ export class Header implements OnInit {
   currentUser: WritableSignal<Maybe<IUserDto>>;
 
   readonly #themeService = inject(ThemeService);
-  readonly #apiService = inject(ApiService);
   readonly #authService = inject(DescartesAuthService);
 
   ngOnInit(): void {
@@ -33,10 +31,6 @@ export class Header implements OnInit {
 
   changeTheme(): void {
     this.#themeService.toggleTheme();
-  }
-
-  home(): void {
-    this.#apiService.getAllUsers().subscribe((test) => console.log(test));
   }
 
   signOut(): void {

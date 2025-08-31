@@ -17,7 +17,7 @@ import {
 } from '@angular/forms';
 import { AuthFormKeys } from './enums/auth-form-keys.enum';
 import { IAuthForm } from './interfaces/auth-form-interface';
-import { TFormControl } from './types/form-utility.type';
+import { TFormControl } from '@shared/src/lib/types/form-utility.type';
 import { IAuthSubmit } from './interfaces/submit-payload.interface';
 
 @Component({

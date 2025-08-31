@@ -14,6 +14,7 @@ import { Request, Response } from 'express';
 import { AccessTokenGuard } from '@auth/guards/access-token.guard';
 import { RefreshTokenGuard } from '@auth/guards/refresh-token.guard';
 import { AuthUtils } from '@auth/utils/auth.utils';
+import { IAuthLogout } from '@shared/src';
 
 @Controller('auth')
 export class AuthController {
@@ -45,7 +46,7 @@ export class AuthController {
   async logout(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ logout: boolean; userId: string }> {
+  ): Promise<IAuthLogout> {
     const userId = req['user']['userId'];
 
     res.clearCookie('accessToken');

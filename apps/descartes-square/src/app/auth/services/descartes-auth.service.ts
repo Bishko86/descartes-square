@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '@environment/environment';
-import { IUserDto, IAuthLogin, Maybe } from '@shared/src';
+import { IUserDto, IAuthLogin, Maybe, IAuthLogout } from '@shared/src';
 import { IAuthForm } from '@shared-ui/src/lib/auth/interfaces/auth-form-interface';
 
 @Injectable({ providedIn: 'root' })
@@ -26,12 +26,14 @@ export class DescartesAuthService {
     );
   }
 
-  signOut(): Observable<void> {
-    return this.#httpClient.get<void>(`${this.#baseUrl}/auth/logout`).pipe(
-      tap(() => {
-        this.currentUser.set(null);
-      }),
-    );
+  signOut(): Observable<IAuthLogout> {
+    return this.#httpClient
+      .get<IAuthLogout>(`${this.#baseUrl}/auth/logout`)
+      .pipe(
+        tap(() => {
+          this.currentUser.set(null);
+        }),
+      );
   }
 
   refreshTokens(): Observable<IAuthLogin> {
