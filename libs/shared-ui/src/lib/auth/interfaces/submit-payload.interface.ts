@@ -1,12 +1,5 @@
-export interface ISignInPayload {
-  userId: string;
-  email: string;
-  password: string;
-}
-
-export interface ISignUpPayload {
-  userId: string;
-  email: string;
-  password: string;
-  username: string;
+import { IAuthForm } from './auth-form-interface';
+export interface IAuthSubmit {
+  isSignUp: boolean;
+  payload: IAuthForm;
 }

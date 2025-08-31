@@ -8,7 +8,6 @@ import {
 } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { AuthService } from './services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import {
   FormControl,
@@ -19,12 +18,7 @@ import {
 import { AuthFormKeys } from './enums/auth-form-keys.enum';
 import { IAuthForm } from './interfaces/auth-form-interface';
 import { TFormControl } from './types/form-utility.type';
-import { tap } from 'rxjs';
-import {
-  ISignInPayload,
-  ISignUpPayload,
-} from './interfaces/submit-payload.interface';
-import { Maybe } from '@shared/src';
+import { IAuthSubmit } from './interfaces/submit-payload.interface';
 
 @Component({
   selector: 'lib-auth',
@@ -44,14 +38,13 @@ import { Maybe } from '@shared/src';
   styleUrl: './auth.scss',
 })
 export class AuthComponent implements OnInit {
-  form!: FormGroup<TFormControl<IAuthForm>>;
+  form: FormGroup<TFormControl<IAuthForm>>;
   formKeys = AuthFormKeys;
   hidePassword = true;
   isSignUp = signal(false);
 
-  submitEvent = output<Maybe<string>>();
+  submitEvent = output<IAuthSubmit>();
 
-  #authService = inject(AuthService);
   #activatedRoute = inject(ActivatedRoute);
 
   ngOnInit(): void {
@@ -65,18 +58,7 @@ export class AuthComponent implements OnInit {
       ? { email, password, username }
       : { email, password };
 
-    const action$ = this.isSignUp()
-      ? this.#authService.signUp(<ISignUpPayload>payload)
-      : this.#authService.signIn(<ISignInPayload>payload);
-
-    action$
-      .pipe(
-        tap(({ userId }) => {
-          const id = this.isSignUp() ? null : userId;
-          this.submitEvent.emit(id);
-        }),
-      )
-      .subscribe();
+    this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
   }
 
   #initForm(): void {

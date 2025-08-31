@@ -1,29 +1,25 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '@shared-ui/src/lib/auth/services/auth.service';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from '@environment/environment';
-import {
-  ISignInPayload,
-  ISignUpPayload,
-} from '@shared-ui/src/lib/auth/interfaces/submit-payload.interface';
 import { IUserDto, IAuthLogin, Maybe } from '@shared/src';
+import { IAuthForm } from '@shared-ui/src/lib/auth/interfaces/auth-form-interface';
 
-@Injectable()
-export class DescartesAuthService extends AuthService {
+@Injectable({ providedIn: 'root' })
+export class DescartesAuthService {
   currentUser = signal<Maybe<IUserDto>>(null);
 
   #httpClient = inject(HttpClient);
   #baseUrl = environment.apiUrl;
 
-  signIn(payload: ISignInPayload): Observable<IAuthLogin> {
+  signIn(payload: IAuthForm): Observable<IAuthLogin> {
     return this.#httpClient.post<IAuthLogin>(
       `${this.#baseUrl}/auth/login`,
       payload,
     );
   }
 
-  signUp(payload: ISignUpPayload): Observable<IAuthLogin> {
+  signUp(payload: IAuthForm): Observable<IAuthLogin> {
     return this.#httpClient.post<IAuthLogin>(
       `${this.#baseUrl}/auth/signup`,
       payload,
