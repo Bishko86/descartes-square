@@ -17,19 +17,10 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   validate(req: Request, payload: Record<string, unknown>) {
-    // Prefer cookie (cookieExtractor is already used by passport to read the token),
-    // but handle fallback to Authorization header just in case.
-    const cookieToken =
+    const refreshToken =
       (req.cookies &&
         (req.cookies as Record<string, string>)['refreshToken']) ??
       null;
-    const headerAuth =
-      req.get('authorization') ?? req.get('Authorization') ?? null;
-    const headerToken = headerAuth
-      ? headerAuth.replace(/^Bearer\s+/i, '').trim()
-      : null;
-
-    const refreshToken = cookieToken ?? headerToken;
 
     if (!refreshToken) {
       // Throwing here signals an auth failure instead of letting a runtime TypeError happen
