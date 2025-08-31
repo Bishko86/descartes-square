@@ -5,10 +5,12 @@ import {
   Param,
   UseGuards,
   BadRequestException,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from '@auth/services/users.service';
 import { AccessTokenGuard } from '@auth/guards/access-token.guard';
 import { IUserDto } from '@shared/src';
+import { Request } from 'express';
 
 @Controller('users')
 export class UserController {
@@ -29,6 +31,19 @@ export class UserController {
         message: `Failed to fetch users: ${error.message}`,
       };
     }
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('me')
+  async getCurrUser(@Req() req: Request): Promise<IUserDto> {
+    const userId = req['user']['userId'];
+    const user = await this.userService.findUserById(userId);
+    if (!user) {
+      throw new BadRequestException('User with such email already in use');
+    }
+    const { username, email } = user;
+
+    return { username, email };
   }
 
   @Get(':id')

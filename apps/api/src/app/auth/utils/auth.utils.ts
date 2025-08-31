@@ -12,16 +12,14 @@ export abstract class AuthUtils {
       httpOnly: true,
       sameSite: 'lax',
       secure: process.env.DEV_MODE !== 'true',
-      domain: '.localhost',
     });
 
     res.cookie('refreshToken', refreshToken, {
-      path: '/',
+      path: '/api/auth/refresh',
       maxAge: 15 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
       sameSite: 'lax',
       secure: process.env.DEV_MODE !== 'true',
-      domain: '.localhost',
     });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, input, output, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { MoreOptionAction } from '@core/enums/more-options-action.enum';
 import { MatIcon } from '@core/enums/mat-icon.enum';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -15,14 +15,12 @@ import { IMoreOptions } from '@core/interfaces/more-options.interface';
 export class MoreOptions {
   public moreOptions = input<IMoreOptions[]>();
 
-  test = output();
-
-  @Output() public add = new EventEmitter<void>();
-  @Output() public openAction = new EventEmitter<void>();
-  @Output() public closeAction = new EventEmitter<void>();
-  @Output() public update = new EventEmitter<void>();
-  @Output() public delete = new EventEmitter<void>();
-  @Output() public showUp = new EventEmitter<void>();
+  public add = output<void>();
+  public openAction = output<void>();
+  public closeAction = output<void>();
+  public update = output<void>();
+  public delete = output<void>();
+  public showUp = output<void>();
 
   public readonly moreOptionsIcon = MatIcon.MORE_OPTIONS;
 

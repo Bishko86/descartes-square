@@ -17,22 +17,41 @@
     }
   </div>
   <div class="left-section">
-    <button
-      id="theme-toggle"
-      matButton="elevated"
-      class="open-sans-regular"
-      [routerLink]="['/sign-in']"
-    >
-      Sign In
-    </button>
-    <button
-      id="theme-toggle"
-      matButton="elevated"
-      class="open-sans-regular"
-      [routerLink]="['/sign-up']"
-    >
-      Sign Up
-    </button>
+    @let user = currentUser();
+
+    @if (user) {
+      <div class="user-info">
+        <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
+        <span class="user-email">{{ user.email }}</span>
+        <span>{{ user.username }}</span>
+      </div>
+
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        (click)="signOut()"
+      >
+        Sign Out
+      </button>
+    } @else {
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        [routerLink]="['/sign-in']"
+      >
+        Sign In
+      </button>
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        [routerLink]="['/sign-up']"
+      >
+        Sign Up
+      </button>
+    }
     <button
       id="theme-toggle"
       matButton="elevated"
