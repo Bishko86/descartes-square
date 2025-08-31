@@ -8,6 +8,10 @@
     }
   ],
   "compilerOptions": {
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@auth/*": ["apps/api/src/app/auth/*"],
+      "@shared/*": ["libs/shared/*"]
+    }
   }
 }

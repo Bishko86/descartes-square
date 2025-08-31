@@ -9,7 +9,10 @@
     "isolatedModules": true,
     "paths": {
       "@core/*": ["apps/descartes-square/src/app/core/*"],
-      "@environment/*": ["apps/descartes-square/src/environments/*"]
+      "@environment/*": ["apps/descartes-square/src/environments/*"],
+      "@shared-ui/*": ["libs/shared-ui/*"],
+      "@shared/*": ["libs/shared/*"],
+      "@auth/*": ["apps/descartes-square/src/app/auth/*"]
     }
   },
   "angularCompilerOptions": {

@@ -1,7 +1,7 @@
 import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { IDescartesSolution } from '../definitions/interfaces/descartes-solution.interface';
 import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
-import { Maybe } from '@core/types/maybe.type';
+import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';

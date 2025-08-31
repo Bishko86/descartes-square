@@ -6,7 +6,11 @@
     "target": "ES2022",
     "module": "preserve",
     "skipLibCheck": true,
+    "strictPropertyInitialization": false,
     "baseUrl": ".",
-
+    "paths": {
+      "shared": ["shared/src/index.ts"],
+      "shared-ui": ["libs/shared-ui/src/index.ts"]
+    }
   }
 }

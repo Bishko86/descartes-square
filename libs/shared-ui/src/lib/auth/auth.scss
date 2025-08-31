@@ -1,0 +1,71 @@
+:host {
+  .sign-in-container {
+    display: flex;
+    justify-content: center;
+    padding: var(--medium-indent);
+  }
+
+  .sign-in-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+
+    h2 {
+      margin-bottom: var(--medium-indent);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    mat-form-field {
+      width: 100%;
+      margin-bottom: var(--basic-indent);
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: var(--basic-indent);
+      padding: var(--small-indent);
+      font-size: 16px;
+    }
+  }
+
+  mat-form-field {
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      // For filled appearance - match the background
+      -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+      -webkit-text-fill-color: var(--text) !important;
+      background-color: var(--surface);
+    }
+
+    ::ng-deep {
+      .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+        background-color: var(--surface);
+      }
+
+      .mat-mdc-form-field-focus-overlay {
+        background-color: transparent;
+      }
+
+      .mdc-text-field__input {
+        color: var(--text) !important;
+      }
+    }
+  }
+
+  mat-label {
+    color: var(--text);
+  }
+
+  mat-icon {
+    color: var(--text-secondary);
+  }
+}

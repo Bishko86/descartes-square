@@ -1,5 +1,5 @@
 import { IFormStateTracker } from '../interfaces/descartes-form-state-tracker.interface';
-import { Maybe } from '@core/types/maybe.type';
+import { Maybe } from '@shared/src/lib/types/maybe.type';
 
 export class FormStateTracker implements IFormStateTracker {
   #index: Maybe<number> = null;

@@ -53,4 +53,13 @@ export const routes: Routes = [
     path: MenuRoutes.HOME,
     loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
   },
+  {
+    path: MenuRoutes.SIGN_IN,
+    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
+  },
+  {
+    path: MenuRoutes.SIGN_UP,
+    data: { isSignUp: true },
+    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
+  },
 ];

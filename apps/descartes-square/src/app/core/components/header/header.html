@@ -1,12 +1,59 @@
 <header>
   <div class="right-section">
-    <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto"/>
+    <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto" />
+
     @for (item of menuItems; track item.name) {
-      <a class="menu-link" [routerLink]="item.route" routerLinkActive="active"
-      >{{ item.name }}</a>
+      <a
+        class="menu-link"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        >{{ item.name }}</a
+      >
     }
   </div>
-  <button id="theme-toggle" matButton="elevated" class="open-sans-regular" (click)="changeTheme()">
-    🌓 Change theme
-  </button>
+  <div class="left-section">
+    @let user = currentUser();
+
+    @if (user) {
+      <div class="user-info">
+        <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
+        <span class="user-email">{{ user.email }}</span>
+        <span>{{ user.username }}</span>
+      </div>
+
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        (click)="signOut()"
+      >
+        Sign Out
+      </button>
+    } @else {
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        [routerLink]="['/sign-in']"
+      >
+        Sign In
+      </button>
+      <button
+        id="theme-toggle"
+        matButton="elevated"
+        class="open-sans-regular"
+        [routerLink]="['/sign-up']"
+      >
+        Sign Up
+      </button>
+    }
+    <button
+      id="theme-toggle"
+      matButton="elevated"
+      class="open-sans-regular"
+      (click)="changeTheme()"
+    >
+      🌓 Change theme
+    </button>
+  </div>
 </header>

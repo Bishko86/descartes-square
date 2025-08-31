@@ -12,3 +12,5 @@
 
 # Miscellaneous
 /.angular/cache
+
+.angular
