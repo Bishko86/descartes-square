@@ -3,28 +3,28 @@
 
   <h3 class="sub-title">What will happen if it happens?</h3>
   <ul>
-    @for (arg of overviewedEntity()?.q1; track arg) {
+    @for (arg of overviewedEntity()?.q1; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
   <h3 class="sub-title">What will happen if it doesn't happen?</h3>
   <ul>
-    @for (arg of overviewedEntity()?.q2; track arg) {
+    @for (arg of overviewedEntity()?.q2; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
   <h3 class="sub-title">What won't happen if it happens?</h3>
   <ul>
-    @for (arg of overviewedEntity()?.q3; track arg) {
+    @for (arg of overviewedEntity()?.q3; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
   <h3 class="sub-title">What won't happen if it doesn't happen?</h3>
   <ul>
-    @for (arg of overviewedEntity()?.q4; track arg) {
+    @for (arg of overviewedEntity()?.q4; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
@@ -34,27 +34,15 @@
 </section>
 
 <div class="controls">
-  <button
-    class="controls__back"
-    matButton="outlined"
-    (click)="back()"
-  >
+  <button class="controls__back" matButton="outlined" (click)="back()">
     Back
   </button>
 
-  <button
-    class="controls__delete"
-    matButton="outlined"
-    (click)="delete()"
-  >
+  <button class="controls__delete" matButton="outlined" (click)="delete()">
     Delete
   </button>
 
-  <button
-    class="controls__edit"
-    matButton="outlined"
-    (click)="edit()"
-  >
+  <button class="controls__edit" matButton="outlined" (click)="edit()">
     Edit
   </button>
 </div>

@@ -12,7 +12,8 @@
       "@environment/*": ["apps/descartes-square/src/environments/*"],
       "@shared-ui/*": ["libs/shared-ui/*"],
       "@shared/*": ["libs/shared/*"],
-      "@auth/*": ["apps/descartes-square/src/app/auth/*"]
+      "@auth/*": ["apps/descartes-square/src/app/auth/*"],
+      "@descartes/*": ["apps/descartes-square/src/app/descartes-square/*"]
     }
   },
   "angularCompilerOptions": {
