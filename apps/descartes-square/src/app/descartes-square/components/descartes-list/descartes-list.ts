@@ -5,7 +5,7 @@ import { IMoreOptions } from '@core/interfaces/more-options.interface';
 import { MatIcon } from '@core/enums/mat-icon.enum';
 import { MoreOptionAction } from '@core/enums/more-options-action.enum';
 import { Router, RouterLink } from '@angular/router';
-import { IDescartesSolution } from '../definitions/interfaces/descartes-solution.interface';
+import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
 import { filter, first, tap } from 'rxjs';
 import { MoreOptions } from '@core/components/more-options/more-options';

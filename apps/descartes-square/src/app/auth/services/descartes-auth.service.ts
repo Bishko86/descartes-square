@@ -9,8 +9,8 @@ import { IAuthForm } from '@shared-ui/src/lib/auth/interfaces/auth-form-interfac
 export class DescartesAuthService {
   currentUser = signal<Maybe<IUserDto>>(null);
 
-  #httpClient = inject(HttpClient);
   #baseUrl = environment.apiUrl;
+  #httpClient = inject(HttpClient);
 
   signIn(payload: IAuthForm): Observable<IAuthLogin> {
     return this.#httpClient.post<IAuthLogin>(

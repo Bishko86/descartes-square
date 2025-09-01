@@ -30,6 +30,7 @@
         list-style-type: none;
         display: flex;
         justify-content: flex-end;
+        column-gap: var(--basic-indent);
       }
 
       &.arg-list {
@@ -96,6 +97,20 @@
       }
     }
 
+    &.add-ai {
+      border: none;
+
+      .ai-icon {
+        margin-top: var(--x-small-indent);
+        font-size: 34px;
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
     &.cancel-arg,
     &.remove-arg {
       color: var(--error);
@@ -107,6 +122,7 @@
       border-color: var(--green);
     }
 
+    &.add-ai,
     &.edit-arg,
     &.add-arg {
       color: var(--primary);

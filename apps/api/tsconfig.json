@@ -11,6 +11,7 @@
     "esModuleInterop": true,
     "paths": {
       "@auth/*": ["apps/api/src/app/auth/*"],
+      "@ai/*": ["apps/api/src/app/ai/*"],
       "@shared/*": ["libs/shared/*"]
     }
   }

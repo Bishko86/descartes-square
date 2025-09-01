@@ -25,5 +25,6 @@ import { RefreshTokenGuard } from '@auth/guards/refresh-token.guard';
     AccessTokenGuard,
     RefreshTokenGuard,
   ],
+  exports: [AccessTokenGuard],
 })
 export class AuthModule {}

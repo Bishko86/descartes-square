@@ -10,9 +10,9 @@ export const routes: Routes = [
   {
     path: MenuRoutes.DESCARTES_SQUARE,
     loadComponent: () =>
-      import('./descartes-square/descartes-square/descartes-square').then(
-        (mod) => mod.DescartesSquare,
-      ),
+      import(
+        './descartes-square/components/descartes-square/descartes-square'
+      ).then((mod) => mod.DescartesSquare),
     children: [
       {
         path: '',
@@ -22,30 +22,30 @@ export const routes: Routes = [
       {
         path: 'create',
         loadComponent: () =>
-          import('./descartes-square/descartes-form/descartes-form').then(
-            (mod) => mod.DescartesForm,
-          ),
+          import(
+            './descartes-square/components/descartes-form/descartes-form'
+          ).then((mod) => mod.DescartesForm),
       },
       {
         path: 'list',
         loadComponent: () =>
-          import('./descartes-square/descartes-list/descartes-list').then(
-            (mod) => mod.DescartesList,
-          ),
+          import(
+            './descartes-square/components/descartes-list/descartes-list'
+          ).then((mod) => mod.DescartesList),
       },
       {
         path: 'list/:id/details',
         loadComponent: () =>
-          import('./descartes-square/descartes-details/descartes-details').then(
-            (mod) => mod.DescartesDetails,
-          ),
+          import(
+            './descartes-square/components/descartes-details/descartes-details'
+          ).then((mod) => mod.DescartesDetails),
       },
       {
         path: 'list/:id/edit',
         loadComponent: () =>
-          import('./descartes-square/descartes-form/descartes-form').then(
-            (mod) => mod.DescartesForm,
-          ),
+          import(
+            './descartes-square/components/descartes-form/descartes-form'
+          ).then((mod) => mod.DescartesForm),
       },
     ],
   },

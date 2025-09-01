@@ -1,5 +1,6 @@
 @let delay = 400;
 @let position = "above";
+@let user = currentUser();
 
 <form [formGroup]="form">
   <label class="open-sans-regular" for="title">Title</label>
@@ -9,8 +10,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q1',
-        question: 'What will happen if it happens?',
+        key: descartesQuestionsIds.Q1,
       }
     "
   >
@@ -20,8 +20,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q2',
-        question: 'What will happen if it doesn\'t happen?',
+        key: descartesQuestionsIds.Q2,
       }
     "
   >
@@ -31,8 +30,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q3',
-        question: 'What won\'t happen if it happens?',
+        key: descartesQuestionsIds.Q3,
       }
     "
   >
@@ -42,8 +40,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q4',
-        question: 'What won\'t happen if it doesn\'t happen?',
+        key: descartesQuestionsIds.Q4,
       }
     "
   >
@@ -77,10 +74,10 @@
   </button>
 </div>
 
-<ng-template #controlTemplate let-key="key;" let-question="question;">
+<ng-template #controlTemplate let-key="key;">
   <ng-container [formGroup]="form">
     @let formArray = getFormArrayControls(key);
-    <p class="open-sans-regular">{{ question }}</p>
+    <p class="open-sans-regular">{{ descartesQuestions.get(key) }}</p>
 
     <ng-container [formArrayName]="key">
       <ul>
@@ -152,6 +149,20 @@
             >
               <span class="plus">&#65291;</span>
             </button>
+
+            @if (user) {
+              @let isDisabled = !form.controls.title.value;
+              <button
+                class="btn add-ai"
+                [matTooltip]="isDisabled ? 'Add Title' : 'AI Suggestion'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+                [disabled]="isDisabled"
+                (click)="addAISuggestion(key)"
+              >
+                <span class="ai-icon">&#xFCC;</span>
+              </button>
+            }
           </li>
         }
       </ul>
