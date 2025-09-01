@@ -1,4 +1,11 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  input,
+  OnInit,
+  WritableSignal,
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -8,21 +15,30 @@ import {
 } from '@angular/forms';
 import {
   IDescartesForm,
+  IDescartesFormValues,
   TFormNames,
-} from '../definitions/interfaces/descartes-form.interface';
+} from '@descartes/definitions/interfaces/descartes-form.interface';
 import { NgTemplateOutlet } from '@angular/common';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { IDescartesSolution } from '../definitions/interfaces/descartes-solution.interface';
+import { IDescartesSolution } from '@descartes/definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfirmService } from '@core/services/confirm.service';
-import { filter, first, tap } from 'rxjs';
-import { IFormStateTracker } from '../definitions/interfaces/descartes-form-state-tracker.interface';
-import { FormStateTracker } from '../definitions/models/form-state-tracker.model';
+import { filter, first, take, tap } from 'rxjs';
+import { IFormStateTracker } from '@descartes/definitions/interfaces/descartes-form-state-tracker.interface';
+import { FormStateTracker } from '@descartes/definitions/models/form-state-tracker.model';
 import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
+import {
+  DescartesQuestionsIds,
+  DescartesQuestionsMap,
+  IAiSuggestionResponse,
+  IUserDto,
+} from '@shared/src';
+import { DescartesAuthService } from '@auth/services/descartes-auth.service';
+import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 
 @Component({
   selector: 'app-descartes-form',
@@ -34,13 +50,18 @@ import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
     MatTooltipModule,
     AutoFocus,
   ],
+  providers: [AiSuggestionService],
   templateUrl: './descartes-form.html',
   styleUrl: './descartes-form.scss',
 })
 export class DescartesForm implements OnInit {
   readonly id = input<string>();
 
-  readonly #confirmService = inject(ConfirmService);
+  readonly descartesQuestions = DescartesQuestionsMap;
+
+  readonly descartesQuestionsIds = DescartesQuestionsIds;
+
+  currentUser: WritableSignal<Maybe<IUserDto>>;
 
   form: FormGroup<IDescartesForm>;
 
@@ -50,12 +71,21 @@ export class DescartesForm implements OnInit {
     .set('q3', new FormStateTracker())
     .set('q4', new FormStateTracker());
 
+  readonly #confirmService = inject(ConfirmService);
+
   readonly #snackBar = inject(MatSnackBar);
 
   readonly #router = inject(Router);
 
+  readonly #authService = inject(DescartesAuthService);
+
+  readonly #aiSuggestionService = inject(AiSuggestionService);
+
+  readonly #cdr = inject(ChangeDetectorRef);
+
   ngOnInit(): void {
     this.#initForm();
+    this.#setCurrUser();
   }
 
   addArgument(key: TFormNames): void {
@@ -149,6 +179,21 @@ export class DescartesForm implements OnInit {
     this.#router.navigate(['descartes-square']).then();
   }
 
+  addAISuggestion(key: TFormNames): void {
+    this.#aiSuggestionService
+      .addAISuggestion(this.form.getRawValue() as IDescartesFormValues)
+      .pipe(
+        take(1),
+        tap((data: IAiSuggestionResponse) => {
+          const formArray = this.#getArgumentForm(key);
+          formArray.push(new FormControl(data.suggestion));
+
+          this.#cdr.markForCheck();
+        }),
+      )
+      .subscribe();
+  }
+
   #getArgumentForm(key: string): FormArray<FormControl<Maybe<string>>> {
     return this.form.get(key) as FormArray<FormControl<Maybe<string>>>;
   }
@@ -214,5 +259,9 @@ export class DescartesForm implements OnInit {
 
   #redirectToDescartesDetails(id: string): void {
     this.#router.navigate([`descartes-square/list/${id}/details`]).then();
+  }
+
+  #setCurrUser(): void {
+    this.currentUser = this.#authService.currentUser;
   }
 }
