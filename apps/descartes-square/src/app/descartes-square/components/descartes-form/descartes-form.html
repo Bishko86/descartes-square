@@ -1,5 +1,6 @@
 @let delay = 400;
 @let position = "above";
+@let user = currentUser();
 
 <form [formGroup]="form">
   <label class="open-sans-regular" for="title">Title</label>
@@ -148,6 +149,20 @@
             >
               <span class="plus">&#65291;</span>
             </button>
+
+            @if (user) {
+              @let isDisabled = !form.controls.title.value;
+              <button
+                class="btn add-ai"
+                [matTooltip]="isDisabled ? 'Add Title' : 'AI Suggestion'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+                [disabled]="isDisabled"
+                (click)="addAISuggestion(key)"
+              >
+                <span class="ai-icon">&#xFCC;</span>
+              </button>
+            }
           </li>
         }
       </ul>
