@@ -41,13 +41,52 @@
       }
 
       &.input-container {
+        position: relative;
         align-self: center;
         padding: var(--small-indent) 0;
+        margin-bottom: 1.5rem;
+
+        .error-tooltip {
+          position: absolute;
+          bottom: -25px;
+          left: 0;
+          width: calc(100% - 104px);
+          padding: var(--small-indent) var(--basic-indent);
+          background-color: var(--error);
+          color: var(--white);
+          border-radius: 4px;
+          font-size: 0.875rem;
+          font-weight: 500;
+          z-index: 10;
+          opacity: 0;
+          visibility: hidden;
+          transition:
+            opacity 0.3s ease-in-out,
+            visibility 0.3s ease-in-out;
+
+          // Small triangle on top
+          &::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 15px;
+            border-width: 0 5px 5px;
+            border-style: solid;
+            border-color: transparent transparent var(--error);
+          }
+        }
+
+        // Class to show the tooltip
+        .error-visible {
+          opacity: 1;
+          visibility: visible;
+        }
       }
     }
   }
 
-  input {
+  input,
+  textarea {
     border-style: solid;
     outline: none;
     box-shadow: none;
@@ -59,6 +98,53 @@
 
     &.ng-invalid {
       border-color: var(--error);
+    }
+  }
+
+  /*
+ * Loading animation for the textarea
+ */
+  textarea.loading {
+    // 1. Create a transparent border to make space for our gradient background.
+    border: 3px solid transparent;
+    border-radius: 6px;
+
+    // 2. Define the two background layers.
+    // The first (top) is the solid fill, the second (bottom) is the gradient.
+    background-image:
+      linear-gradient(var(--surface), var(--surface)),
+      linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+
+    // 3. Define the origin and clipping for the backgrounds.
+    background-origin: border-box; // Draw both backgrounds from the border's edge.
+    background-clip:
+      padding-box, border-box; // Clip the top layer to the inside, and the bottom layer to the border's outer edge.
+
+    // 4. Make the gradient oversized for the animation.
+    background-size: 400% 400%;
+
+    // 5. Apply the animation to create the movement.
+    animation: gradient-animation 3s ease infinite;
+  }
+
+  // Ensure the focus outline doesn't interfere with our new border.
+  textarea.loading:focus {
+    outline: none;
+  }
+
+  /*
+   * Keyframes that define the animation steps.
+   * We are animating the `background-position` property.
+   */
+  @keyframes gradient-animation {
+    0% {
+      background-position: 0 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0 50%;
     }
   }
 

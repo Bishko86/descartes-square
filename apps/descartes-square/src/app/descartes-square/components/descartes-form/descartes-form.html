@@ -81,17 +81,40 @@
 
     <ng-container [formArrayName]="key">
       <ul>
-        @for (control of formArray; let index = $index; track index) {
+        @for (control of formArray; let index = $index; track control) {
           @if (formEditTracker.get(key)?.index === index) {
             <li class="arg-list input-container">
-              <input
+              <textarea
                 appAutoFocus
-                type="text"
+                cdkTextareaAutosize
                 autocomplete="off"
                 class="roboto-regular"
-                [id]="key"
+                [class.loading]="isLoading()"
                 [formControl]="control"
-              />
+                [id]="key"
+                placeholder="Type your text here..."
+              ></textarea>
+
+              <!-- Error Tooltip -->
+              @if (control.invalid && (control.dirty || control.touched)) {
+                <div class="error-tooltip error-visible">
+                  @switch (true) {
+                    @case (control.hasError("required")) {
+                      This field is required.
+                    }
+
+                    @case (control.hasError("minlength")) {
+                      The minimum length of text should be
+                      {{ control?.errors?.['minlength']?.requiredLength }}.
+                    }
+
+                    @case (control.hasError("maxlength")) {
+                      The maximum length of text should not exceed
+                      {{ control?.errors?.['maxlength']?.requiredLength }} symbols..
+                    }
+                  }
+                </div>
+              }
 
               <button
                 class="btn cancel-arg"
@@ -107,6 +130,7 @@
                 [matTooltip]="'Save'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
+                [disabled]="isLoading()"
                 (click)="saveArgument(key)"
               >
                 &#x2713;
@@ -130,6 +154,7 @@
                 [matTooltip]="'Edit'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
+                [disabled]="isLoading()"
                 (click)="editArgument(index, key)"
               >
                 &#9998;

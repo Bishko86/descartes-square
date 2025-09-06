@@ -4,6 +4,7 @@ import {
   inject,
   input,
   OnInit,
+  signal,
   WritableSignal,
 } from '@angular/core';
 import {
@@ -27,7 +28,16 @@ import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ConfirmService } from '@core/services/confirm.service';
-import { filter, first, take, tap } from 'rxjs';
+import {
+  filter,
+  finalize,
+  first,
+  interval,
+  map,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs';
 import { IFormStateTracker } from '@descartes/definitions/interfaces/descartes-form-state-tracker.interface';
 import { FormStateTracker } from '@descartes/definitions/models/form-state-tracker.model';
 import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
@@ -39,6 +49,7 @@ import {
 } from '@shared/src';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
   selector: 'app-descartes-form',
@@ -49,6 +60,7 @@ import { AiSuggestionService } from '@descartes/services/ai-suggestion';
     MatButton,
     MatTooltipModule,
     AutoFocus,
+    CdkTextareaAutosize,
   ],
   providers: [AiSuggestionService],
   templateUrl: './descartes-form.html',
@@ -62,6 +74,8 @@ export class DescartesForm implements OnInit {
   readonly descartesQuestionsIds = DescartesQuestionsIds;
 
   currentUser: WritableSignal<Maybe<IUserDto>>;
+
+  isLoading = signal<boolean>(false);
 
   form: FormGroup<IDescartesForm>;
 
@@ -92,7 +106,7 @@ export class DescartesForm implements OnInit {
     const formArray = this.#getArgumentForm(key);
 
     if (formArray.valid) {
-      formArray.push(new FormControl('', Validators.required));
+      formArray.push(this.#createFormControl(''));
       const tracker = new FormStateTracker(formArray.length - 1, true);
       this.formEditTracker.set(key, tracker);
     }
@@ -144,6 +158,7 @@ export class DescartesForm implements OnInit {
     const formArray = this.#getArgumentForm(key);
     if (formArray.valid) {
       this.formEditTracker.set(key, new FormStateTracker());
+      formArray.markAsDirty();
     }
   }
 
@@ -180,15 +195,36 @@ export class DescartesForm implements OnInit {
   }
 
   addAISuggestion(key: TFormNames): void {
+    const typingSpeed = 10;
+
+    this.isLoading.set(true);
+    this.addArgument(key);
+
     this.#aiSuggestionService
-      .addAISuggestion(this.form.getRawValue() as IDescartesFormValues)
+      .addAISuggestion({
+        ...this.form.getRawValue(),
+        key,
+      } as IDescartesFormValues)
       .pipe(
         take(1),
-        tap((data: IAiSuggestionResponse) => {
+        switchMap((data: IAiSuggestionResponse) => {
           const formArray = this.#getArgumentForm(key);
-          formArray.push(new FormControl(data.suggestion));
+          const newControl = formArray.at(formArray.length - 1);
 
+          const tracker = new FormStateTracker(formArray.length - 1, true);
+          this.formEditTracker.set(key, tracker);
           this.#cdr.markForCheck();
+
+          return interval(typingSpeed).pipe(
+            take(data.suggestion.length),
+            tap((i) => {
+              newControl.setValue(data.suggestion.substring(0, i + 1));
+              this.#cdr.markForCheck();
+            }),
+          );
+        }),
+        finalize(() => {
+          this.isLoading.set(false);
         }),
       )
       .subscribe();
@@ -225,9 +261,7 @@ export class DescartesForm implements OnInit {
   #mapFormArrayControls(
     collection: Maybe<string[]>,
   ): FormControl<Maybe<string>>[] {
-    return (collection || []).map(
-      (item: string) => new FormControl(item, Validators.required),
-    );
+    return (collection || []).map(this.#createFormControl);
   }
 
   #create(): void {
@@ -263,5 +297,13 @@ export class DescartesForm implements OnInit {
 
   #setCurrUser(): void {
     this.currentUser = this.#authService.currentUser;
+  }
+
+  #createFormControl(value: Maybe<string>): FormControl<Maybe<string>> {
+    return new FormControl(value, [
+      Validators.required,
+      Validators.maxLength(255),
+      Validators.minLength(3),
+    ]);
   }
 }
