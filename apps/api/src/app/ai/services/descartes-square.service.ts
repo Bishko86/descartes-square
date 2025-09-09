@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   DescartesQuestionsMap,
   IAiSuggestionRequest,
@@ -14,54 +14,76 @@ export class DescartesSquareService {
     payload: IAiSuggestionRequest,
   ): Promise<IAiSuggestionResponse> {
     const prompt = this.#getPrompt(payload);
-    const response =
+    const responseJson =
       await this._aiSuggestionsService.generateSuggestions(prompt);
-    const cleanedResponse = response
+    const cleanedResponse = responseJson
       .replace(/```json/g, '')
       .replace(/```/g, '');
 
-    return JSON.parse(cleanedResponse.trim()) as IAiSuggestionResponse;
+    try {
+      return JSON.parse(cleanedResponse.trim()) as IAiSuggestionResponse;
+    } catch (error) {
+      throw new BadRequestException(error.message || 'Invalid response');
+    }
   }
 
   #getPrompt(req: IAiSuggestionRequest): string {
     return `
-      You are an assistant helping users make better decisions using the Descartes Square method.
+      You are a function that returns ONLY raw JSON. Do not include code fences or any text outside JSON.
 
-      The user is analyzing a decision with the following context:
+      Context for a Descartes Square decision:
+      - Decision title: "${req.title}"
+      - Q1 (What will happen if it happens?): ${req.q1.join('; ')}
+      - Q2 (What will happen if it doesn't happen?): ${req.q2.join('; ')}
+      - Q3 (What won't happen if it happens?): ${req.q3.join('; ')}
+      - Q4 (What won't happen if it doesn't happen?): ${req.q4.join('; ')}
+      - User conclusion: ${req.conclusion || '(not provided)'}
 
-      Decision title: "${req.title}"
+      Target question to answer: "${DescartesQuestionsMap.get(req.key)}"
 
-      Answers so far:
-      - What will happen if it happens? (Q1): ${req.q1.join('; ')}
-      - What will happen if it doesn't happen? (Q2): ${req.q2.join('; ')}
-      - What won't happen if it happens? (Q3): ${req.q3.join('; ')}
-      - What won't happen if it doesn't happen? (Q4): ${req.q4.join('; ')}
+      Your job:
+      1) If the decision title is UNCLEAR, return no suggestion and ask the user to clarify the title.
+         Treat the title as UNCLEAR if ANY of the following are true:
+         Very short (< 8 characters after trimming) OR mostly punctuation/digits.
+         Placeholder/generic (e.g., "test", "title", "todo", "not sure", "idk", "help", "???", "random", "asdf", "12345").
+         Any nonsensical or meaningless string (e.g., random letters like "testc", "qwerty", "loremipsum").
+         Lacks a concrete decision/action (no clear action like change/move/accept/buy/start/quit/invest/learn/hire; or it’s just a single generic noun like "job", "life", "decision").
+         Ambiguous scope with no object (e.g., "change", "improve", "do it", "move" without a destination/target).
+         When in doubt, ALWAYS treat as UNCLEAR.
+         IMPORTANT: If the title is UNCLEAR, you MUST ignore Q1–Q4 completely and return null suggestion.
 
-      User's conclusion so far: ${req.conclusion || '(not provided)'}
+      2) If the title is CLEAR, produce exactly ONE new, helpful suggestion for the target question:
+         - Focus on Decision title: "${req.title}" and target question ${req.key}.
+         - Must be NEW (do not repeat or rephrase anything already in Q1–Q4).
+         - Make it practical: what user can gain or lose from making or not making a decision.
+         - Neutral, supportive tone; do not tell the user what to do.
+         - Length: 1–2 sentences, max 255 characters.
 
-      Your task:
-      1. Focus only on the question: "${DescartesQuestionsMap.get(req.key)}".
-      2. Provide exactly ONE helpful, hypothetical consequence or perspective that is not already mentioned above.
-      3. Where possible, phrase it as something practical that the user could gain or lose from making or not making a decision.
-      4. Keep it concise: 1–2 sentences, maximum 255 symbols.
-      5. Be neutral and supportive — do not make the decision for the user.
-      6. Do not repeat or rephrase what the user has already written in Q1–Q4.
-      7. If the decision title is unclear, vague, or meaningless (e.g., "test", "not sure", "???"), return no suggestion. Instead, set the \`unclearTitle\` field with the message:
-         "Your decision title is unclear. Please restate it as a specific decision, e.g., 'Should I move to another city?' or 'Should I start my own business?'"
-
-      Output format:
-      Return the result strictly in valid JSON following this TypeScript interface:
-
-      export interface IAiSuggestionResponse {
-        suggestion: string | null;
-        unclearTitle: string | null;
+      Output format (strict):
+      Return ONLY valid JSON matching this interface:
+      {
+        "suggestion": string | null,
+        "isUnclearTitle": boolean
       }
 
-      If the title is valid, fill only \`suggestion\`.
-      If the title is unclear, set \`suggestion: null\` and fill \`unclearTitle\`.
-      Do not include any other fields.
+      Rules:
+      - If title is CLEAR: set "suggestion" with your single suggestion; set "isUnclearTitle": false.
+      - If title is UNCLEAR: set "suggestion": null; set "isUnclearTitle": true
+      - Do not include any extra fields, explanations, or markdown. No code fences.
 
-      Now, generate the response for ${req.key}.
+      Examples to follow exactly:
+
+      Unclear title example:
+      INPUT title: "test"
+      OUTPUT:
+      {"suggestion": null, "isUnclearTitle": true"}
+
+      Clear title example:
+      INPUT title: "Should I change my job?"
+      OUTPUT:
+      {"suggestion": "Estimate total compensation and growth over 2–3 years (salary, bonus, equity, learning) and compare against staying put with realistic promotion timelines.", "isUnclearTitle": false}
+
+      Now produce the JSON response for the target question key ${req.key}.
     `;
   }
 }
