@@ -39,49 +39,6 @@
         align-items: baseline;
         column-gap: var(--basic-indent);
       }
-
-      &.input-container {
-        position: relative;
-        align-self: center;
-        padding: var(--small-indent) 0;
-        margin-bottom: 1.5rem;
-
-        .error-tooltip {
-          position: absolute;
-          bottom: -25px;
-          left: 0;
-          width: calc(100% - 104px);
-          padding: var(--small-indent) var(--basic-indent);
-          background-color: var(--error);
-          color: var(--white);
-          border-radius: 4px;
-          font-size: 0.875rem;
-          font-weight: 500;
-          z-index: 10;
-          opacity: 0;
-          visibility: hidden;
-          transition:
-            opacity 0.3s ease-in-out,
-            visibility 0.3s ease-in-out;
-
-          // Small triangle on top
-          &::before {
-            content: "";
-            position: absolute;
-            top: -5px;
-            left: 15px;
-            border-width: 0 5px 5px;
-            border-style: solid;
-            border-color: transparent transparent var(--error);
-          }
-        }
-
-        // Class to show the tooltip
-        .error-visible {
-          opacity: 1;
-          visibility: visible;
-        }
-      }
     }
   }
 
@@ -229,6 +186,55 @@
     &__clear {
       width: 100px;
       justify-self: right;
+    }
+  }
+
+  .input-container {
+    position: relative;
+    align-self: center;
+    padding: var(--small-indent) 0;
+    margin-bottom: 1.5rem;
+
+    &.title-container {
+      display: flex;
+      flex-direction: column;
+      row-gap: var(--basic-indent);
+    }
+
+    .error-tooltip {
+      position: absolute;
+      bottom: -25px;
+      left: 0;
+      width: calc(100% - 104px);
+      padding: var(--small-indent) var(--basic-indent);
+      background-color: var(--error);
+      color: var(--white);
+      border-radius: 4px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transition:
+        opacity 0.3s ease-in-out,
+        visibility 0.3s ease-in-out;
+
+      // Small triangle on top
+      &::before {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: 15px;
+        border-width: 0 5px 5px;
+        border-style: solid;
+        border-color: transparent transparent var(--error);
+      }
+    }
+
+    // Class to show the tooltip
+    .error-visible {
+      opacity: 1;
+      visibility: visible;
     }
   }
 }

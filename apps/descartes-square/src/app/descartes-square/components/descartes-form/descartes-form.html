@@ -3,8 +3,27 @@
 @let user = currentUser();
 
 <form [formGroup]="form">
-  <label class="open-sans-regular" for="title">Title</label>
-  <input id="title" type="text" formControlName="title" />
+  <div class="input-container title-container">
+    <label class="open-sans-regular" for="title">Title</label>
+    <input id="title" type="text" formControlName="title" />
+    @let titleControl = form.controls.title;
+
+    <!-- Error Tooltip -->
+    @if (titleControl.invalid) {
+      <div class="error-tooltip error-visible">
+        @switch (true) {
+          @case (titleControl.hasError("required")) {
+            This field is required.
+          }
+          @case (titleControl.hasError("unclearTitle")) {
+            Your decision title is unclear. Please restate it as a specific
+            decision, e.g., 'Should I move to another city?' or 'Should I start
+            my own business?'
+          }
+        }
+      </div>
+    }
+  </div>
 
   <ng-container
     *ngTemplateOutlet="
@@ -105,12 +124,13 @@
 
                     @case (control.hasError("minlength")) {
                       The minimum length of text should be
-                      {{ control?.errors?.['minlength']?.requiredLength }}.
+                      {{ control?.errors?.["minlength"]?.requiredLength }}.
                     }
 
                     @case (control.hasError("maxlength")) {
                       The maximum length of text should not exceed
-                      {{ control?.errors?.['maxlength']?.requiredLength }} symbols..
+                      {{ control?.errors?.["maxlength"]?.requiredLength }}
+                      symbols..
                     }
                   }
                 </div>

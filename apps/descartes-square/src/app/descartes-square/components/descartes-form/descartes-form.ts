@@ -33,7 +33,7 @@ import {
   finalize,
   first,
   interval,
-  map,
+  of,
   switchMap,
   take,
   tap,
@@ -209,6 +209,12 @@ export class DescartesForm implements OnInit {
         take(1),
         switchMap((data: IAiSuggestionResponse) => {
           const formArray = this.#getArgumentForm(key);
+
+          if (data.isUnclearTitle) {
+            this.#setUnclearTitleError(formArray, key);
+            return of(0);
+          }
+
           const newControl = formArray.at(formArray.length - 1);
 
           const tracker = new FormStateTracker(formArray.length - 1, true);
@@ -216,9 +222,9 @@ export class DescartesForm implements OnInit {
           this.#cdr.markForCheck();
 
           return interval(typingSpeed).pipe(
-            take(data.suggestion.length),
+            take(data.suggestion?.length || 0),
             tap((i) => {
-              newControl.setValue(data.suggestion.substring(0, i + 1));
+              newControl.setValue(data.suggestion?.substring(0, i + 1));
               this.#cdr.markForCheck();
             }),
           );
@@ -241,7 +247,7 @@ export class DescartesForm implements OnInit {
     const editedEntity = list.find((form) => form.id === this.id());
 
     this.form = new FormGroup<IDescartesForm>({
-      title: new FormControl(editedEntity?.title || null),
+      title: new FormControl(editedEntity?.title || null, Validators.required),
       q1: new FormArray<FormControl<Maybe<string>>>(
         this.#mapFormArrayControls(editedEntity?.q1),
       ),
@@ -305,5 +311,18 @@ export class DescartesForm implements OnInit {
       Validators.maxLength(255),
       Validators.minLength(3),
     ]);
+  }
+
+  #setUnclearTitleError(
+    formArray: FormArray<FormControl<Maybe<string>>>,
+    key: TFormNames,
+  ): void {
+    this.form.controls.title.setErrors({
+      unclearTitle: true,
+    });
+
+    this.formEditTracker.set(key, new FormStateTracker());
+
+    formArray.removeAt(formArray.length - 1);
   }
 }
