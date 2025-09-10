@@ -119,14 +119,7 @@ export class DescartesForm implements OnInit {
         first(),
         filter(Boolean),
         tap(() => {
-          const formArray = this.#getArgumentForm(key);
-
-          if (index === formArray.length - 1) {
-            this.formEditTracker.set(key, new FormStateTracker());
-          }
-
-          formArray.removeAt(index);
-          formArray.markAsDirty();
+          this.#deleteFormControl(key, index);
         }),
       )
       .subscribe();
@@ -236,6 +229,25 @@ export class DescartesForm implements OnInit {
       .subscribe();
   }
 
+  onBlur(event: FocusEvent, key: TFormNames, index: number): void {
+    const target = event.target as HTMLInputElement;
+    const relatedTarget = event.relatedTarget as HTMLElement;
+
+    // Skip blur handling if focus moved to an element within the same row
+    if (this.#isFocusWithinSameRow(relatedTarget, index)) {
+      return;
+    }
+
+    // Auto-save if there's content in the input
+    if (target.value.trim()) {
+      this.saveArgument(key);
+      return;
+    }
+
+    // Clean up empty new entries
+    this.#handleEmptyNewEntry(key);
+  }
+
   #getArgumentForm(key: string): FormArray<FormControl<Maybe<string>>> {
     return this.form.get(key) as FormArray<FormControl<Maybe<string>>>;
   }
@@ -324,5 +336,31 @@ export class DescartesForm implements OnInit {
     this.formEditTracker.set(key, new FormStateTracker());
 
     formArray.removeAt(formArray.length - 1);
+  }
+
+  #deleteFormControl(key: TFormNames, index: number): void {
+    const formArray = this.#getArgumentForm(key);
+
+    if (index === formArray.length - 1) {
+      this.formEditTracker.set(key, new FormStateTracker());
+    }
+
+    formArray.removeAt(index);
+    formArray.markAsDirty();
+  }
+
+  #isFocusWithinSameRow(
+    relatedTarget: Maybe<HTMLElement>,
+    currentIndex: number,
+  ): boolean {
+    return relatedTarget?.dataset?.['index'] === currentIndex.toString();
+  }
+
+  #handleEmptyNewEntry(key: TFormNames): void {
+    const tracker = this.formEditTracker.get(key);
+
+    if (tracker?.isCreating && !tracker.value) {
+      this.#deleteFormControl(key, tracker.index ?? 0);
+    }
   }
 }

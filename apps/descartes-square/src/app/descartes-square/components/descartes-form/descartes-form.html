@@ -108,10 +108,11 @@
                 cdkTextareaAutosize
                 autocomplete="off"
                 class="roboto-regular"
+                placeholder="Type your text here..."
                 [class.loading]="isLoading()"
                 [formControl]="control"
                 [id]="key"
-                placeholder="Type your text here..."
+                (blur)="onBlur($event, key, index)"
               ></textarea>
 
               <!-- Error Tooltip -->
@@ -138,6 +139,7 @@
 
               <button
                 class="btn cancel-arg"
+                [attr.data-index]="index"
                 [matTooltip]="'Cancel'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
@@ -147,6 +149,7 @@
               </button>
               <button
                 class="btn save-arg"
+                [attr.data-index]="index"
                 [matTooltip]="'Save'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
