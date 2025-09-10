@@ -1,16 +1,35 @@
 @let delay = 400;
 @let position = "above";
+@let user = currentUser();
 
 <form [formGroup]="form">
-  <label class="open-sans-regular" for="title">Title</label>
-  <input id="title" type="text" formControlName="title" />
+  <div class="input-container title-container">
+    <label class="open-sans-regular" for="title">Title</label>
+    <input id="title" type="text" formControlName="title" />
+    @let titleControl = form.controls.title;
+
+    <!-- Error Tooltip -->
+    @if (titleControl.invalid) {
+      <div class="error-tooltip error-visible">
+        @switch (true) {
+          @case (titleControl.hasError("required")) {
+            This field is required.
+          }
+          @case (titleControl.hasError("unclearTitle")) {
+            Your decision title is unclear. Please restate it as a specific
+            decision, e.g., 'Should I move to another city?' or 'Should I start
+            my own business?'
+          }
+        }
+      </div>
+    }
+  </div>
 
   <ng-container
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q1',
-        question: 'What will happen if it happens?',
+        key: descartesQuestionsIds.Q1,
       }
     "
   >
@@ -20,8 +39,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q2',
-        question: 'What will happen if it doesn\'t happen?',
+        key: descartesQuestionsIds.Q2,
       }
     "
   >
@@ -31,8 +49,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q3',
-        question: 'What won\'t happen if it happens?',
+        key: descartesQuestionsIds.Q3,
       }
     "
   >
@@ -42,8 +59,7 @@
     *ngTemplateOutlet="
       controlTemplate;
       context: {
-        key: 'q4',
-        question: 'What won\'t happen if it doesn\'t happen?',
+        key: descartesQuestionsIds.Q4,
       }
     "
   >
@@ -77,27 +93,53 @@
   </button>
 </div>
 
-<ng-template #controlTemplate let-key="key;" let-question="question;">
+<ng-template #controlTemplate let-key="key;">
   <ng-container [formGroup]="form">
     @let formArray = getFormArrayControls(key);
-    <p class="open-sans-regular">{{ question }}</p>
+    <p class="open-sans-regular">{{ descartesQuestions.get(key) }}</p>
 
     <ng-container [formArrayName]="key">
       <ul>
-        @for (control of formArray; let index = $index; track index) {
+        @for (control of formArray; let index = $index; track control) {
           @if (formEditTracker.get(key)?.index === index) {
             <li class="arg-list input-container">
-              <input
+              <textarea
                 appAutoFocus
-                type="text"
+                cdkTextareaAutosize
                 autocomplete="off"
                 class="roboto-regular"
-                [id]="key"
+                placeholder="Type your text here..."
+                [class.loading]="isLoading()"
                 [formControl]="control"
-              />
+                [id]="key"
+                (blur)="onBlur($event, key, index)"
+              ></textarea>
+
+              <!-- Error Tooltip -->
+              @if (control.invalid && (control.dirty || control.touched)) {
+                <div class="error-tooltip error-visible">
+                  @switch (true) {
+                    @case (control.hasError("required")) {
+                      This field is required.
+                    }
+
+                    @case (control.hasError("minlength")) {
+                      The minimum length of text should be
+                      {{ control?.errors?.["minlength"]?.requiredLength }}.
+                    }
+
+                    @case (control.hasError("maxlength")) {
+                      The maximum length of text should not exceed
+                      {{ control?.errors?.["maxlength"]?.requiredLength }}
+                      symbols..
+                    }
+                  }
+                </div>
+              }
 
               <button
                 class="btn cancel-arg"
+                [attr.data-index]="index"
                 [matTooltip]="'Cancel'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
@@ -107,9 +149,11 @@
               </button>
               <button
                 class="btn save-arg"
+                [attr.data-index]="index"
                 [matTooltip]="'Save'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
+                [disabled]="isLoading()"
                 (click)="saveArgument(key)"
               >
                 &#x2713;
@@ -133,6 +177,7 @@
                 [matTooltip]="'Edit'"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
+                [disabled]="isLoading()"
                 (click)="editArgument(index, key)"
               >
                 &#9998;
@@ -152,6 +197,20 @@
             >
               <span class="plus">&#65291;</span>
             </button>
+
+            @if (user) {
+              @let isDisabled = !form.controls.title.value;
+              <button
+                class="btn add-ai"
+                [matTooltip]="isDisabled ? 'Add Title' : 'AI Suggestion'"
+                [matTooltipPosition]="position"
+                [matTooltipShowDelay]="delay"
+                [disabled]="isDisabled"
+                (click)="addAISuggestion(key)"
+              >
+                <span class="ai-icon">&#xFCC;</span>
+              </button>
+            }
           </li>
         }
       </ul>
