@@ -22,9 +22,12 @@ export const apiInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       const isUnauthorized = error.status === 401;
-
-      // Don't try to refresh if the request was already the refresh call
-      if (authReq.url.includes('/auth/refresh') || !isUnauthorized) {
+      // Don't try to refresh if the request was already the refresh or login call
+      if (
+        authReq.url.includes('/auth/refresh') ||
+        authReq.url.includes('/auth/login') ||
+        !isUnauthorized
+      ) {
         return throwError(() => error);
       }
 

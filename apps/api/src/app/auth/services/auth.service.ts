@@ -47,12 +47,12 @@ export class AuthService {
   async signIn({ email, password }: AuthDto): Promise<IAuthResponse> {
     const user = await this.usersService.findUserByEmail(email);
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email or password is incorrect');
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Email or password is incorrect');
     }
 
     const id = user._id.toString();
@@ -100,7 +100,7 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-          expiresIn: '15s',
+          expiresIn: '15m',
         },
       ),
       this.jwtService.signAsync(
