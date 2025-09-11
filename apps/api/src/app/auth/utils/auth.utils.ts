@@ -6,9 +6,11 @@ export abstract class AuthUtils {
     accessToken: string,
     refreshToken: string,
   ): void {
+    const cookieAge = 7 * 24 * 60 * 60 * 1000; // 7 days
+
     res.cookie('accessToken', accessToken, {
       path: '/',
-      maxAge: 15 * 60 * 1000, // 15 min
+      maxAge: cookieAge,
       httpOnly: true,
       sameSite: 'lax',
       secure: process.env.DEV_MODE !== 'true',
@@ -16,7 +18,7 @@ export abstract class AuthUtils {
 
     res.cookie('refreshToken', refreshToken, {
       path: '/api/auth/refresh',
-      maxAge: 15 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: cookieAge,
       httpOnly: true,
       sameSite: 'lax',
       secure: process.env.DEV_MODE !== 'true',
