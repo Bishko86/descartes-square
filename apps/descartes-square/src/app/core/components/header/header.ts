@@ -9,10 +9,17 @@ import { take } from 'rxjs';
 import { IUserDto, Maybe } from '@shared/src';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIcon } from '@core/enums/mat-icon.enum';
+import { LangSwitchComponent } from '@shared-ui/src';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, MatButton, MatIconModule],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    MatButton,
+    MatIconModule,
+    LangSwitchComponent,
+  ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
