@@ -50,6 +50,7 @@ import {
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-descartes-form',
@@ -76,6 +77,8 @@ export class DescartesForm implements OnInit {
   currentUser: WritableSignal<Maybe<IUserDto>>;
 
   isLoading = signal<boolean>(false);
+
+  errorMessage = signal<Maybe<string>>(null);
 
   form: FormGroup<IDescartesForm>;
 
@@ -192,6 +195,10 @@ export class DescartesForm implements OnInit {
 
     this.isLoading.set(true);
     this.addArgument(key);
+    const formArray = this.#getArgumentForm(key);
+    const index = formArray.length - 1;
+    const newControl = formArray.at(index);
+    const tracker = new FormStateTracker(index, true);
 
     this.#aiSuggestionService
       .addAISuggestion({
@@ -201,16 +208,11 @@ export class DescartesForm implements OnInit {
       .pipe(
         take(1),
         switchMap((data: IAiSuggestionResponse) => {
-          const formArray = this.#getArgumentForm(key);
-
           if (data.isUnclearTitle) {
             this.#setUnclearTitleError(formArray, key);
             return of(0);
           }
 
-          const newControl = formArray.at(formArray.length - 1);
-
-          const tracker = new FormStateTracker(formArray.length - 1, true);
           this.formEditTracker.set(key, tracker);
           this.#cdr.markForCheck();
 
@@ -221,6 +223,16 @@ export class DescartesForm implements OnInit {
               this.#cdr.markForCheck();
             }),
           );
+        }),
+        tap({
+          error: (error: HttpErrorResponse) => {
+            this.errorMessage.set(
+              error.error?.message ||
+                'Something went wrong. Please try again later',
+            );
+            newControl.setErrors({ serviceUnavailable: true });
+            newControl.markAsTouched();
+          },
         }),
         finalize(() => {
           this.isLoading.set(false);
@@ -233,8 +245,8 @@ export class DescartesForm implements OnInit {
     const target = event.target as HTMLInputElement;
     const relatedTarget = event.relatedTarget as HTMLElement;
 
-    // Skip blur handling if focus moved to an element within the same row
-    if (this.#isFocusWithinSameRow(relatedTarget, index)) {
+    // Skip blur handling if focus moved to an element within the same row or AI suggestion request is in progress
+    if (this.#isFocusWithinSameRow(relatedTarget, index) || this.isLoading()) {
       return;
     }
 

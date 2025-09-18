@@ -131,7 +131,11 @@
                     @case (control.hasError("maxlength")) {
                       The maximum length of text should not exceed
                       {{ control?.errors?.["maxlength"]?.requiredLength }}
-                      symbols..
+                      symbols.
+                    }
+
+                    @case (control.hasError("serviceUnavailable")) {
+                      {{ errorMessage() }}
                     }
                   }
                 </div>
