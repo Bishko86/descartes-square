@@ -1,8 +1,10 @@
 <div class="language-switcher">
   @let lang = currentLanguage();
+
   <button class="current-language">
     {{ languageMap.get(lang)?.flag }}
   </button>
+
   <ul class="language-menu">
     @for (language of languages; track language.code) {
       <li

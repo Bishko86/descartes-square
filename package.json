@@ -11,7 +11,8 @@
     "test": "nx test",
     "lint": "nx lint descartes-square",
     "lint:api": "nx lint api",
-    "serve:dist": "npx serve dist/descartes-square/browser"
+    "serve:dist": "npx serve dist/descartes-square/browser",
+    "locale": "nx extract-i18n descartes-square --format json --out-file locale.en.json --output-path apps/descartes-square/src/i18n"
   },
   "prettier": {
     "overrides": [
@@ -62,7 +63,7 @@
     "@eslint/js": "~8.57.0",
     "@nestjs/schematics": "^11.0.0",
     "@nestjs/testing": "^11.0.0",
-    "@nx/angular": "21.3.11",
+    "@nx/angular": "^21.5.3",
     "@nx/eslint-plugin": "21.3.11",
     "@nx/js": "21.4.0",
     "@nx/nest": "^21.4.0",

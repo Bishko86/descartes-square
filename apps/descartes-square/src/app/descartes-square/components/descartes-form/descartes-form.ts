@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   inject,
   input,
   OnInit,
@@ -51,6 +52,10 @@ import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { HttpErrorResponse } from '@angular/common/http';
+import {
+  ButtonsText,
+  CommonText,
+} from '@descartes/definitions/consts/buttons-text.const';
 
 @Component({
   selector: 'app-descartes-form',
@@ -70,6 +75,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class DescartesForm implements OnInit {
   readonly id = input<string>();
 
+  readonly buttonText = ButtonsText;
+
   readonly descartesQuestions = DescartesQuestionsMap;
 
   readonly descartesQuestionsIds = DescartesQuestionsIds;
@@ -79,6 +86,10 @@ export class DescartesForm implements OnInit {
   isLoading = signal<boolean>(false);
 
   errorMessage = signal<Maybe<string>>(null);
+
+  applyButtonText = computed(() =>
+    this.id() ? $localize`:@@updateBtn:Update` : $localize`:@@saveBtn:Save`,
+  );
 
   form: FormGroup<IDescartesForm>;
 
@@ -117,7 +128,7 @@ export class DescartesForm implements OnInit {
 
   deleteArgument(index: number, key: TFormNames): void {
     this.#confirmService
-      .confirm('Are you sure you want to delete this record?')
+      .confirm()
       .pipe(
         first(),
         filter(Boolean),
@@ -165,9 +176,7 @@ export class DescartesForm implements OnInit {
 
   clearForm(): void {
     this.#confirmService
-      .confirm(
-        'Are you sure you want to clear this form? All unsaved changes will be lost.',
-      )
+      .confirm(CommonText.get('unsavedChanges'))
       .pipe(
         first(),
         filter(Boolean),
@@ -228,7 +237,7 @@ export class DescartesForm implements OnInit {
           error: (error: HttpErrorResponse) => {
             this.errorMessage.set(
               error.error?.message ||
-                'Something went wrong. Please try again later',
+                $localize`:@@unknownError:Something went wrong. Please try again later`,
             );
             newControl.setErrors({ serviceUnavailable: true });
             newControl.markAsTouched();

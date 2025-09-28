@@ -4,7 +4,7 @@
 
 <form [formGroup]="form">
   <div class="input-container title-container">
-    <label class="open-sans-regular" for="title">Title</label>
+    <label class="open-sans-regular" for="title" i18n="@@title">Title</label>
     <input id="title" type="text" formControlName="title" />
     @let titleControl = form.controls.title;
 
@@ -13,12 +13,14 @@
       <div class="error-tooltip error-visible">
         @switch (true) {
           @case (titleControl.hasError("required")) {
-            This field is required.
+            <span i18n="@@required">This field is required</span>
           }
           @case (titleControl.hasError("unclearTitle")) {
-            Your decision title is unclear. Please restate it as a specific
-            decision, e.g., 'Should I move to another city?' or 'Should I start
-            my own business?'
+            <span i18n="@@unclearTitle">
+              Your decision title is unclear. Please restate it as a specific
+              decision, e.g., 'Should I move to another city?' or 'Should I
+              start my own business?'
+            </span>
           }
         }
       </div>
@@ -65,18 +67,26 @@
   >
   </ng-container>
 
-  <label class="open-sans-regular" for="conclusion">Conclusion</label>
+  <label class="open-sans-regular" for="conclusion" i18n="@@conclusionTitle"
+    >Conclusion</label
+  >
   <input type="text" formControlName="conclusion" />
 </form>
 
 <div class="controls">
-  <button class="controls__cancel" matButton="tonal" (click)="cancelForm()">
+  <button
+    class="controls__cancel"
+    matButton="tonal"
+    (click)="cancelForm()"
+    i18n="@@cancelBtn"
+  >
     Cancel
   </button>
 
   <button
     class="controls__clear"
     matButton="outlined"
+    i18n="@@clearBtn"
     [disabled]="form.pristine"
     (click)="clearForm()"
   >
@@ -89,7 +99,7 @@
     [disabled]="form.pristine"
     (click)="saveForm()"
   >
-    {{ id() ? "Update" : "Save" }}
+    {{ applyButtonText() }}
   </button>
 </div>
 
@@ -108,6 +118,7 @@
                 cdkTextareaAutosize
                 autocomplete="off"
                 class="roboto-regular"
+                i18n-placeholder="@@placeholder-question"
                 placeholder="Type your text here..."
                 [class.loading]="isLoading()"
                 [formControl]="control"
@@ -120,18 +131,22 @@
                 <div class="error-tooltip error-visible">
                   @switch (true) {
                     @case (control.hasError("required")) {
-                      This field is required.
+                      <span i18n="@@required">This field is required</span>
                     }
 
                     @case (control.hasError("minlength")) {
-                      The minimum length of text should be
-                      {{ control?.errors?.["minlength"]?.requiredLength }}.
+                      <span i18n="@@minlength">
+                        The minimum length of text should be
+                        {{ control?.errors?.["minlength"]?.requiredLength }}.
+                      </span>
                     }
 
                     @case (control.hasError("maxlength")) {
-                      The maximum length of text should not exceed
-                      {{ control?.errors?.["maxlength"]?.requiredLength }}
-                      symbols.
+                      <span i18n="@@maxlength">
+                        The maximum length of text should not exceed
+                        {{ control?.errors?.["maxlength"]?.requiredLength }}
+                        symbols.
+                      </span>
                     }
 
                     @case (control.hasError("serviceUnavailable")) {
@@ -144,7 +159,7 @@
               <button
                 class="btn cancel-arg"
                 [attr.data-index]="index"
-                [matTooltip]="'Cancel'"
+                [matTooltip]="buttonText.get('cancel')"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="cancelArgument(index, key)"
@@ -154,7 +169,7 @@
               <button
                 class="btn save-arg"
                 [attr.data-index]="index"
-                [matTooltip]="'Save'"
+                [matTooltip]="buttonText.get('save')"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 [disabled]="isLoading()"
@@ -168,7 +183,7 @@
               <p>{{ control.value }}</p>
               <button
                 class="btn remove-arg"
-                [matTooltip]="'Remove'"
+                [matTooltip]="buttonText.get('remove')"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 (click)="deleteArgument(index, key)"
@@ -178,7 +193,7 @@
 
               <button
                 class="btn edit-arg"
-                [matTooltip]="'Edit'"
+                [matTooltip]="buttonText.get('edit')"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 [disabled]="isLoading()"
@@ -194,7 +209,7 @@
           <li class="roboto-regular add-btn-container">
             <button
               class="btn add-arg"
-              [matTooltip]="'Add Argument'"
+              [matTooltip]="buttonText.get('add')"
               [matTooltipPosition]="position"
               [matTooltipShowDelay]="delay"
               (click)="addArgument(key)"
@@ -204,9 +219,10 @@
 
             @if (user) {
               @let isDisabled = !form.controls.title.value;
+              @let tooltip = isDisabled ? "addTitle" : "aiSuggestion";
               <button
                 class="btn add-ai"
-                [matTooltip]="isDisabled ? 'Add Title' : 'AI Suggestion'"
+                [matTooltip]="buttonText.get(tooltip)"
                 [matTooltipPosition]="position"
                 [matTooltipShowDelay]="delay"
                 [disabled]="isDisabled"

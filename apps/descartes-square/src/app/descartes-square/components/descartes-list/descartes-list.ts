@@ -21,12 +21,12 @@ export class DescartesList implements OnInit {
   readonly moreOptions: IMoreOptions[] = [
     {
       icon: MatIcon.EDIT,
-      text: 'Edit',
+      text: $localize`:@@editBtn: Edit `,
       action: MoreOptionAction.Update,
     },
     {
       icon: MatIcon.DELETE,
-      text: 'Delete',
+      text: $localize`:@@deleteBtn: Delete `,
       action: MoreOptionAction.Delete,
     },
   ];
@@ -52,7 +52,7 @@ export class DescartesList implements OnInit {
 
   delete(id: string): void {
     this.#confirmService
-      .confirm('Are you sure you want to delete this record?')
+      .confirm()
       .pipe(
         first(),
         filter(Boolean),
