@@ -59,13 +59,20 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "localize": false
         },
         "uk": {
           "optimization": false,
           "extractLicenses": false,
           "sourceMap": true,
           "localize": ["uk"]
+        },
+        "en": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "localize": ["en"]
         }
       },
       "defaultConfiguration": "production",
@@ -82,6 +89,9 @@
         },
         "uk": {
           "buildTarget": "descartes-square:build:uk"
+        },
+        "en": {
+          "buildTarget": "descartes-square:build:en"
         }
       },
       "defaultConfiguration": "development"

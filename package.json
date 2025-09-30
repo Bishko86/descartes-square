@@ -7,12 +7,17 @@
     "start:ua": "nx serve descartes-square --configuration=uk",
     "start:api": "nx serve api",
     "build": "nx build descartes-square",
+    "build:prod": "nx build descartes-square --configuration=production",
     "watch": "nx build --watch --configuration development",
     "test": "nx test",
     "lint": "nx lint descartes-square",
     "lint:api": "nx lint api",
     "serve:dist": "npx serve dist/descartes-square/browser",
-    "locale": "nx extract-i18n descartes-square --format json --out-file locale.en.json --output-path apps/descartes-square/src/i18n"
+    "locale": "nx extract-i18n descartes-square --format json --out-file locale.en.json --output-path apps/descartes-square/src/i18n",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:dev": "docker-compose up --build",
+    "docker:down": "docker-compose down"
   },
   "prettier": {
     "overrides": [

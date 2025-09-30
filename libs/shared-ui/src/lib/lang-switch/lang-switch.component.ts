@@ -22,8 +22,20 @@ export class LangSwitchComponent {
   }
 
   switchLanguage(languageCode: LangCode): void {
+    if (languageCode === this.currentLanguage()) {
+      return;
+    }
+
     this.currentLanguage.set(languageCode);
     localStorage.setItem('language', languageCode);
+
+    // Build the target URL
+    const targetUrl = this.#buildTargetUrl(languageCode);
+
+    console.log(targetUrl)
+
+    // Redirect to the appropriate build
+    // window.location.href = targetUrl;
   }
 
   #setLangFromLocaleStorage(): void {
@@ -32,5 +44,37 @@ export class LangSwitchComponent {
     if (savedLanguage) {
       this.currentLanguage.set(savedLanguage as LangCode);
     }
+  }
+
+  #buildTargetUrl(languageCode: LangCode): string {
+    const currentUrl = window.location;
+
+    console.log(currentUrl)
+    const { protocol, host, pathname, search, hash } = currentUrl;
+
+    // Remove current locale from path if present
+    const pathWithoutLocale = this.#removeLocaleFromPath(pathname);
+
+    // Build new path with target locale
+    let newPath = pathWithoutLocale;
+    if (languageCode !== LangCode.EN) {
+      newPath = `/${languageCode}${pathWithoutLocale}`;
+    }
+
+    // Ensure path starts with /
+    if (!newPath.startsWith('/')) {
+      newPath = '/' + newPath;
+    }
+
+    return `${protocol}//${host}${newPath}${search}${hash}`;
+  }
+
+  #removeLocaleFromPath(pathname: string): string {
+    // Remove locale codes from the beginning of the path
+    // This handles cases like /uk/some/path or /en/some/path
+    const localePattern = new RegExp(
+      `^/(${Object.values(LangCode).join('|')})(\/|$)`,
+    );
+    return pathname.replace(localePattern, '/').replace(/\/+/g, '/');
   }
 }
