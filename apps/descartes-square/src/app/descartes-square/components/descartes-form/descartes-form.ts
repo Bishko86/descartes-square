@@ -44,10 +44,10 @@ import { FormStateTracker } from '@descartes/definitions/models/form-state-track
 import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
 import {
   DescartesQuestionsIds,
-  DescartesQuestionsMap,
   IAiSuggestionResponse,
   IUserDto,
 } from '@shared/src';
+import { DescartesQuestionsMap } from '@shared/src/lib/consts/descartes-questions-map.const';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
