@@ -9,6 +9,14 @@
       "style": "scss"
     }
   },
+  "i18n": {
+    "sourceLocale": "en",
+    "locales": {
+      "uk": {
+        "translation": "apps/descartes-square/src/i18n/locale.ua.json"
+      }
+    }
+  },
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -27,10 +35,11 @@
       },
       "configurations": {
         "production": {
+          "localize": true,
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kB",
+              "maximumWarning": "600kB",
               "maximumError": "1MB"
             },
             {
@@ -50,7 +59,20 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "localize": false
+        },
+        "uk": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "localize": ["uk"]
+        },
+        "en": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "localize": ["en"]
         }
       },
       "defaultConfiguration": "production",
@@ -64,12 +86,21 @@
         },
         "development": {
           "buildTarget": "descartes-square:build:development"
+        },
+        "uk": {
+          "buildTarget": "descartes-square:build:uk"
+        },
+        "en": {
+          "buildTarget": "descartes-square:build:en"
         }
       },
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular/build:extract-i18n"
+      "executor": "@angular/build:extract-i18n",
+      "options": {
+        "outputPath": "apps/descartes-square/src/i18n"
+      }
     },
     "test": {
       "executor": "@angular/build:karma",
@@ -94,6 +125,7 @@
         ]
       },
       "outputs": ["{options.outputFile}"]
-    }
+    },
+    "polyfills": ["@angular/localize/init"]
   }
 }

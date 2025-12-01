@@ -1,4 +1,11 @@
-import { Component, inject, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatFormField,
@@ -42,6 +49,8 @@ export class AuthComponent implements OnInit {
   formKeys = AuthFormKeys;
   hidePassword = true;
   isSignUp = signal(false);
+
+  authTitle = computed(() => (this.isSignUp() ? $localize`:@@signUp: Sign Up ` : $localize`:@@signIn: Sign In `));
 
   submitEvent = output<IAuthSubmit>();
 

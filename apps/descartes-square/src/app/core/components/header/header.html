@@ -22,35 +22,38 @@
       </div>
 
       <button
-        id="theme-toggle"
         matButton="elevated"
         class="open-sans-regular"
+        i18n="@@signOut"
         (click)="signOut()"
       >
         Sign Out
       </button>
     } @else {
       <button
-        id="theme-toggle"
         matButton="elevated"
         class="open-sans-regular"
+        i18n="@@signIn"
         [routerLink]="['/sign-in']"
       >
         Sign In
       </button>
       <button
-        id="theme-toggle"
         matButton="elevated"
         class="open-sans-regular"
+        i18n="@@signUp"
         [routerLink]="['/sign-up']"
       >
         Sign Up
       </button>
     }
+
+    <lib-lang-switch></lib-lang-switch>
+
     <button
-      id="theme-toggle"
       matButton="elevated"
       class="open-sans-regular"
+      i18n="@@themeBtn"
       (click)="changeTheme()"
     >
       🌓 Change theme

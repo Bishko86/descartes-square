@@ -9,8 +9,9 @@ import { Confirm } from '@core/components/confirm/confirm';
 export class ConfirmService {
   readonly #isAllowed = new Subject<boolean>();
   readonly #dialog = inject(MatDialog);
+  readonly #defaultMessage = $localize`:@@confirm.defaultMessage:Are you sure you want to delete this record?`;
 
-  confirm(message: string): Observable<boolean> {
+  confirm(message = this.#defaultMessage): Observable<boolean> {
     this.#dialog
       .open(Confirm, {
         data: message,

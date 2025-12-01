@@ -1,0 +1,43 @@
+.language-switcher {
+  position: relative;
+  z-index: 2;
+
+  .current-language {
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .language-menu {
+    display: none;
+    position: absolute;
+    top: var(--large-indent);
+    left: 0;
+    list-style: none;
+    background: var(--background);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: var(--small-indent) 0;
+    margin: 0;
+    box-shadow: 0 4px 6px rgba(var(--shadow-rgb), 0.25);
+
+    li {
+      padding: var(--basic-indent);
+      cursor: pointer;
+      min-width: max-content;
+
+      &:hover {
+        background-color: var(--surface);
+      }
+
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+
+  &:hover .language-menu {
+    display: block;
+  }
+}

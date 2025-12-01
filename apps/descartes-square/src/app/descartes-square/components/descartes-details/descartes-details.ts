@@ -39,7 +39,7 @@ export class DescartesDetails implements OnInit {
 
   delete(): void {
     this.#confirmService
-      .confirm('Are you sure you want to delete this record?')
+      .confirm()
       .pipe(
         first(),
         filter(Boolean),

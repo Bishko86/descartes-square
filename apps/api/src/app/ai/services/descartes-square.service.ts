@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import {
-  DescartesQuestionsMap,
   IAiSuggestionRequest,
   IAiSuggestionResponse,
 } from '@shared/src';
@@ -39,7 +38,7 @@ export class DescartesSquareService {
       - Q4 (What won't happen if it doesn't happen?): ${req.q4.join('; ')}
       - User conclusion: ${req.conclusion || '(not provided)'}
 
-      Target question to answer: "${DescartesQuestionsMap.get(req.key)}"
+      Target question to answer: "${req.key}"
 
       Your job:
       1) If the decision title is UNCLEAR, return no suggestion and ask the user to clarify the title.

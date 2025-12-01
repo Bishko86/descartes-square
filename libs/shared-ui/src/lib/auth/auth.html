@@ -1,15 +1,12 @@
 <div class="sign-in-container">
-  <form
-    [formGroup]="form"
-    class="sign-in-form"
-    (ngSubmit)="submit()"
-  >
-    <h2>Sign In</h2>
+  <form [formGroup]="form" class="sign-in-form" (ngSubmit)="submit()">
+    <h2>{{ authTitle() }}</h2>
     <mat-form-field appearance="fill">
-      <mat-label>Email</mat-label>
+      <mat-label i18n="@@email">Email</mat-label>
       <input
         matInput
         type="email"
+        i18n-placeholder="@@emailPlaceholder"
         placeholder="Enter your email"
         [autocomplete]="'email'"
         [formControlName]="formKeys.EMAIL"
@@ -18,10 +15,11 @@
 
     @if (isSignUp()) {
       <mat-form-field appearance="fill">
-        <mat-label>Username</mat-label>
+        <mat-label i18n="@@username">Username</mat-label>
         <input
           matInput
           type="text"
+          i18n-placeholder="@@usernamePlaceholder"
           placeholder="Enter your name"
           [formControlName]="formKeys.USERNAME"
         />
@@ -29,9 +27,10 @@
     }
 
     <mat-form-field>
-      <mat-label>Password</mat-label>
+      <mat-label i18n="@@password">Password</mat-label>
       <input
         matInput
+        i18n-placeholder="@@passwordPlaceholder"
         placeholder="Enter your password"
         [type]="hidePassword ? 'password' : 'text'"
         [autocomplete]="'new-password'"
@@ -51,9 +50,10 @@
 
     @if (isSignUp()) {
       <mat-form-field>
-        <mat-label>Confirm Password</mat-label>
+        <mat-label i18n="@@confirm-password">Confirm Password</mat-label>
         <input
           matInput
+          i18n-placeholder="@@confirm-passwordPlaceholder"
           placeholder="Confirm your password"
           autocomplete="off"
           [type]="hidePassword ? 'password' : 'text'"
@@ -78,7 +78,7 @@
       type="submit"
       [disabled]="form.invalid"
     >
-      {{ isSignUp() ? "Sign Up" : "Sign In" }}
+      {{ authTitle() }}
     </button>
   </form>
 </div>

@@ -1,48 +1,48 @@
 <section class="descartes-overview">
   <h2>{{ overviewedEntity()?.title }}</h2>
 
-  <h3 class="sub-title">What will happen if it happens?</h3>
+  <h3 class="sub-title" i18n="@@question1">What will happen if it happens?</h3>
   <ul>
     @for (arg of overviewedEntity()?.q1; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
-  <h3 class="sub-title">What will happen if it doesn't happen?</h3>
+  <h3 class="sub-title" i18n="@@question2">What will happen if it doesn't happen?</h3>
   <ul>
     @for (arg of overviewedEntity()?.q2; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
-  <h3 class="sub-title">What won't happen if it happens?</h3>
+  <h3 class="sub-title" i18n="@@question3">What won't happen if it happens?</h3>
   <ul>
     @for (arg of overviewedEntity()?.q3; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
-  <h3 class="sub-title">What won't happen if it doesn't happen?</h3>
+  <h3 class="sub-title" i18n="@@question4">What won't happen if it doesn't happen?</h3>
   <ul>
     @for (arg of overviewedEntity()?.q4; track $index) {
       <li class="roboto-regular">{{ arg }}</li>
     }
   </ul>
 
-  <h3 class="sub-title">Conclusion</h3>
+  <h3 class="sub-title" i18n="@@conclusionTitle">Conclusion</h3>
   <p class="roboto-regular conclusion">{{ overviewedEntity()?.conclusion }}</p>
 </section>
 
 <div class="controls">
-  <button class="controls__back" matButton="outlined" (click)="back()">
+  <button class="controls__back" matButton="outlined" (click)="back()" i18n="@@backBtn">
     Back
   </button>
 
-  <button class="controls__delete" matButton="outlined" (click)="delete()">
+  <button class="controls__delete" matButton="outlined" (click)="delete()" i18n="@@deleteBtn">
     Delete
   </button>
 
-  <button class="controls__edit" matButton="outlined" (click)="edit()">
+  <button class="controls__edit" matButton="outlined" (click)="edit()" i18n="@@editBtn">
     Edit
   </button>
 </div>
