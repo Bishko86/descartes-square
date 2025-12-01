@@ -36,6 +36,7 @@ export class LangSwitchComponent {
 
     // Redirect to the appropriate build
     // window.location.href = targetUrl;
+    // window.location.reload();
   }
 
   #setLangFromLocaleStorage(): void {
