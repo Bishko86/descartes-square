@@ -6,41 +6,54 @@
   "hook_event_name": "PostToolUse",
   "tool_name": "Edit",
   "tool_input": {
-    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
-    "old_string": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
-    "new_string": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/.github/workflows/deploy.yml",
+    "old_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
+    "new_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          no-cache: true\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          no-cache: true",
     "replace_all": false
   },
   "tool_response": {
-    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
-    "oldString": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
-    "newString": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
-    "originalFile": "# ── Stage 1: Build ───────────────────────────────────────────────────────────\nFROM node:22-alpine AS builder\n\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY . .\n\n# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────\nFROM nginx:1.27-alpine\n\nCOPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf\n\nCOPY --from=builder /app/dist/descartes-square/en/browser /usr/share/nginx/html/en\nCOPY --from=builder /app/dist/descartes-square/uk/browser /usr/share/nginx/html/uk\n\nEXPOSE 80\n\nCMD [\"nginx\", \"-g\", \"daemon off;\"]\n",
+    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/.github/workflows/deploy.yml",
+    "oldString": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
+    "newString": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          no-cache: true\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          no-cache: true",
+    "originalFile": "name: Deploy\n\non:\n  push:\n    branches: [master]\n\nenv:\n  REGISTRY: ghcr.io\n\njobs:\n  build-and-push:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: read\n      packages: write\n\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n\n      - name: Set lowercase image names\n        run: |\n          OWNER=$(echo \"${{ github.repository_owner }}\" | tr '[:upper:]' '[:lower:]')\n          echo \"FRONTEND_IMAGE=ghcr.io/${OWNER}/descartes-square-frontend\" >> $GITHUB_ENV\n          echo \"API_IMAGE=ghcr.io/${OWNER}/descartes-square-api\" >> $GITHUB_ENV\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Log in to GitHub Container Registry\n        uses: docker/login-action@v3\n        with:\n          registry: ${{ env.REGISTRY }}\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max\n\n  deploy:\n    needs: build-and-push\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Deploy to production server\n        uses: appleboy/ssh-action@v1\n        with:\n          host: ${{ secrets.SERVER_HOST }}\n          username: ${{ secrets.SERVER_USER }}\n          key: ${{ secrets.SERVER_SSH_KEY }}\n          script: |\n            cd /opt/descartes-square\n            echo \"${{ secrets.GITHUB_TOKEN }}\" | docker login ghcr.io -u ${{ github.actor }} --password-stdin\n            docker compose pull\n            docker compose up -d\n            docker image prune -f\n",
     "structuredPatch": [
       {
-        "oldStart": 8,
-        "oldLines": 9,
-        "newStart": 8,
-        "newLines": 12,
+        "oldStart": 41,
+        "oldLines": 8,
+        "newStart": 41,
+        "newLines": 7,
         "lines": [
+          "           file: Dockerfile.frontend",
+          "           push: true",
+          "           tags: ${{ env.FRONTEND_IMAGE }}:latest",
+          "-          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache",
+          "-          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max",
+          "+          no-cache: true",
           " ",
-          " COPY . .",
+          "       - name: Build and push API image",
+          "         uses: docker/build-push-action@v6"
+        ]
+      },
+      {
+        "oldStart": 51,
+        "oldLines": 8,
+        "newStart": 50,
+        "newLines": 7,
+        "lines": [
+          "           file: Dockerfile.api",
+          "           push: true",
+          "           tags: ${{ env.API_IMAGE }}:latest",
+          "-          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache",
+          "-          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
+          "+          no-cache: true",
           " ",
-          "-# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/",
-          "+# Produces locale-specific build folders",
-          " RUN npx nx build descartes-square --configuration=production",
-          " ",
-          "+# Show actual output structure so we can verify paths",
-          "+RUN find dist/descartes-square -maxdepth 4 -type d",
-          "+",
-          " # ── Stage 2: Serve ───────────────────────────────────────────────────────────",
-          " FROM nginx:1.27-alpine",
-          " "
+          "   deploy:",
+          "     needs: build-and-push"
         ]
       }
     ],
     "userModified": false,
     "replaceAll": false
   },
-  "tool_use_id": "toolu_01BxzW2ppSgM6ZBwUWG1kMGL"
+  "tool_use_id": "toolu_01MQy6GuCZi2wYK1fcFmCpUW"
 }

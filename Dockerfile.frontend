@@ -11,7 +11,7 @@ COPY . .
 # Produces locale-specific build folders
 RUN npx nx build descartes-square --configuration=production
 
-# Show actual output structure so we can verify paths
+# Show actual output so we can verify paths
 RUN find dist/descartes-square -maxdepth 4 -type d
 
 # ── Stage 2: Serve ───────────────────────────────────────────────────────────
@@ -19,8 +19,24 @@ FROM nginx:1.27-alpine
 
 COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/dist/descartes-square/en/browser /usr/share/nginx/html/en
-COPY --from=builder /app/dist/descartes-square/uk/browser /usr/share/nginx/html/uk
+# Copy entire dist folder and let shell detect the actual locale paths
+COPY --from=builder /app/dist/descartes-square /tmp/dist
+
+RUN set -e && \
+    find /tmp/dist -maxdepth 4 -type d && \
+    mkdir -p /usr/share/nginx/html/en /usr/share/nginx/html/uk && \
+    for locale in en uk; do \
+      if   [ -d "/tmp/dist/${locale}/browser" ]; then \
+        cp -r /tmp/dist/${locale}/browser/. /usr/share/nginx/html/${locale}/; \
+      elif [ -d "/tmp/dist/browser/${locale}" ]; then \
+        cp -r /tmp/dist/browser/${locale}/. /usr/share/nginx/html/${locale}/; \
+      elif [ -d "/tmp/dist/${locale}" ]; then \
+        cp -r /tmp/dist/${locale}/. /usr/share/nginx/html/${locale}/; \
+      else \
+        echo "ERROR: could not find build output for locale '${locale}'" && exit 1; \
+      fi; \
+    done && \
+    rm -rf /tmp/dist
 
 EXPOSE 80
 
