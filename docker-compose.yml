@@ -1,11 +1,13 @@
 services:
   frontend:
     image: ghcr.io/bishko86/descartes-square-frontend:latest
+    container_name: descartes-frontend
     restart: unless-stopped
     depends_on:
       - api
     networks:
       - app-network
+      - shared-proxy
 
   api:
     image: ghcr.io/bishko86/descartes-square-api:latest
@@ -27,20 +29,11 @@ services:
     networks:
       - app-network
 
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    environment:
-      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
-    depends_on:
-      - frontend
-    networks:
-      - app-network
-
 volumes:
   mongodb_data:
 
 networks:
   app-network:
     driver: bridge
+  shared-proxy:
+    external: true
