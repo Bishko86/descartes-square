@@ -2,8 +2,6 @@ services:
   frontend:
     image: ghcr.io/bishko86/descartes-square-frontend:latest
     restart: unless-stopped
-    ports:
-      - "80:80"
     depends_on:
       - api
     networks:
@@ -26,6 +24,17 @@ services:
     restart: unless-stopped
     volumes:
       - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - frontend
     networks:
       - app-network
 
