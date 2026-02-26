@@ -6,35 +6,41 @@
   "hook_event_name": "PostToolUse",
   "tool_name": "Edit",
   "tool_input": {
-    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/docker-compose.yml",
-    "old_string": "    image: ghcr.io/bishko86/descartes-square-frontend:latest\n",
-    "new_string": "    image: ghcr.io/bishko86/descartes-square-frontend:latest",
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
+    "old_string": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "new_string": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
     "replace_all": false
   },
   "tool_response": {
-    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/docker-compose.yml",
-    "oldString": "    image: ghcr.io/bishko86/descartes-square-frontend:latest\n",
-    "newString": "    image: ghcr.io/bishko86/descartes-square-frontend:latest",
-    "originalFile": "services:\n  frontend:\n    image: ghcr.io/bishko86/descartes-square-frontend:latest\n\n    restart: unless-stopped\n    ports:\n      - \"80:80\"\n    depends_on:\n      - api\n    networks:\n      - app-network\n\n  api:\n    image: ghcr.io/bishko86/descartes-square-api:latest\n    restart: unless-stopped\n    env_file: .env\n    environment:\n      DATABASE_CONNECTION: mongodb://mongodb:27017/descartes-square\n      PORT: 3000\n    depends_on:\n      - mongodb\n    networks:\n      - app-network\n\n  mongodb:\n    image: mongo:7\n    restart: unless-stopped\n    volumes:\n      - mongodb_data:/data/db\n    networks:\n      - app-network\n\nvolumes:\n  mongodb_data:\n\nnetworks:\n  app-network:\n    driver: bridge\n",
+    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
+    "oldString": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "newString": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "originalFile": "# ── Stage 1: Build ───────────────────────────────────────────────────────────\nFROM node:22-alpine AS builder\n\nWORKDIR /app\n\nCOPY package*.json ./\nRUN npm ci\n\nCOPY . .\n\n# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────\nFROM nginx:1.27-alpine\n\nCOPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf\n\nCOPY --from=builder /app/dist/descartes-square/en/browser /usr/share/nginx/html/en\nCOPY --from=builder /app/dist/descartes-square/uk/browser /usr/share/nginx/html/uk\n\nEXPOSE 80\n\nCMD [\"nginx\", \"-g\", \"daemon off;\"]\n",
     "structuredPatch": [
       {
-        "oldStart": 1,
-        "oldLines": 7,
-        "newStart": 1,
-        "newLines": 6,
+        "oldStart": 8,
+        "oldLines": 9,
+        "newStart": 8,
+        "newLines": 12,
         "lines": [
-          " services:",
-          "   frontend:",
-          "     image: ghcr.io/bishko86/descartes-square-frontend:latest",
-          "-",
-          "     restart: unless-stopped",
-          "     ports:",
-          "       - \"80:80\""
+          " ",
+          " COPY . .",
+          " ",
+          "-# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/",
+          "+# Produces locale-specific build folders",
+          " RUN npx nx build descartes-square --configuration=production",
+          " ",
+          "+# Show actual output structure so we can verify paths",
+          "+RUN find dist/descartes-square -maxdepth 4 -type d",
+          "+",
+          " # ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+          " FROM nginx:1.27-alpine",
+          " "
         ]
       }
     ],
     "userModified": false,
     "replaceAll": false
   },
-  "tool_use_id": "toolu_01MHgBcwyKeCiAJrWxriAekz"
+  "tool_use_id": "toolu_01BxzW2ppSgM6ZBwUWG1kMGL"
 }
