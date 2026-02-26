@@ -6,54 +6,32 @@
   "hook_event_name": "PostToolUse",
   "tool_name": "Edit",
   "tool_input": {
-    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/.github/workflows/deploy.yml",
-    "old_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
-    "new_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          no-cache: true\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          no-cache: true",
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/.env.example",
+    "old_string": "JWT_ACCESS_SECRET=replace_with_strong_random_secret\nJWT_REFRESH_SECRET=replace_with_another_strong_random_secret\nGOOGLE_API_KEY=your_google_generative_ai_api_key\nCORS_ORIGIN=https://descartes-square.bishko.site",
+    "new_string": "JWT_ACCESS_SECRET=replace_with_strong_random_secret\nJWT_REFRESH_SECRET=replace_with_another_strong_random_secret\nGOOGLE_API_KEY=your_google_generative_ai_api_key\nCORS_ORIGIN=https://descartes-square.bishko.site\nCLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token",
     "replace_all": false
   },
   "tool_response": {
-    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/.github/workflows/deploy.yml",
-    "oldString": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
-    "newString": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          no-cache: true\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          no-cache: true",
-    "originalFile": "name: Deploy\n\non:\n  push:\n    branches: [master]\n\nenv:\n  REGISTRY: ghcr.io\n\njobs:\n  build-and-push:\n    runs-on: ubuntu-latest\n    permissions:\n      contents: read\n      packages: write\n\n    steps:\n      - name: Checkout repository\n        uses: actions/checkout@v4\n\n      - name: Set lowercase image names\n        run: |\n          OWNER=$(echo \"${{ github.repository_owner }}\" | tr '[:upper:]' '[:lower:]')\n          echo \"FRONTEND_IMAGE=ghcr.io/${OWNER}/descartes-square-frontend\" >> $GITHUB_ENV\n          echo \"API_IMAGE=ghcr.io/${OWNER}/descartes-square-api\" >> $GITHUB_ENV\n\n      - name: Set up Docker Buildx\n        uses: docker/setup-buildx-action@v3\n\n      - name: Log in to GitHub Container Registry\n        uses: docker/login-action@v3\n        with:\n          registry: ${{ env.REGISTRY }}\n          username: ${{ github.actor }}\n          password: ${{ secrets.GITHUB_TOKEN }}\n\n      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max\n\n  deploy:\n    needs: build-and-push\n    runs-on: ubuntu-latest\n\n    steps:\n      - name: Deploy to production server\n        uses: appleboy/ssh-action@v1\n        with:\n          host: ${{ secrets.SERVER_HOST }}\n          username: ${{ secrets.SERVER_USER }}\n          key: ${{ secrets.SERVER_SSH_KEY }}\n          script: |\n            cd /opt/descartes-square\n            echo \"${{ secrets.GITHUB_TOKEN }}\" | docker login ghcr.io -u ${{ github.actor }} --password-stdin\n            docker compose pull\n            docker compose up -d\n            docker image prune -f\n",
+    "filePath": "/Users/romanbishko/Documents/Projects/descartes-square/.env.example",
+    "oldString": "JWT_ACCESS_SECRET=replace_with_strong_random_secret\nJWT_REFRESH_SECRET=replace_with_another_strong_random_secret\nGOOGLE_API_KEY=your_google_generative_ai_api_key\nCORS_ORIGIN=https://descartes-square.bishko.site",
+    "newString": "JWT_ACCESS_SECRET=replace_with_strong_random_secret\nJWT_REFRESH_SECRET=replace_with_another_strong_random_secret\nGOOGLE_API_KEY=your_google_generative_ai_api_key\nCORS_ORIGIN=https://descartes-square.bishko.site\nCLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token",
+    "originalFile": "# Copy this file to .env on the production server and fill in the values.\n# Never commit .env to the repository.\n\nJWT_ACCESS_SECRET=replace_with_strong_random_secret\nJWT_REFRESH_SECRET=replace_with_another_strong_random_secret\nGOOGLE_API_KEY=your_google_generative_ai_api_key\nCORS_ORIGIN=https://descartes-square.bishko.site\n",
     "structuredPatch": [
       {
-        "oldStart": 41,
-        "oldLines": 8,
-        "newStart": 41,
-        "newLines": 7,
+        "oldStart": 5,
+        "oldLines": 3,
+        "newStart": 5,
+        "newLines": 4,
         "lines": [
-          "           file: Dockerfile.frontend",
-          "           push: true",
-          "           tags: ${{ env.FRONTEND_IMAGE }}:latest",
-          "-          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache",
-          "-          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max",
-          "+          no-cache: true",
-          " ",
-          "       - name: Build and push API image",
-          "         uses: docker/build-push-action@v6"
-        ]
-      },
-      {
-        "oldStart": 51,
-        "oldLines": 8,
-        "newStart": 50,
-        "newLines": 7,
-        "lines": [
-          "           file: Dockerfile.api",
-          "           push: true",
-          "           tags: ${{ env.API_IMAGE }}:latest",
-          "-          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache",
-          "-          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
-          "+          no-cache: true",
-          " ",
-          "   deploy:",
-          "     needs: build-and-push"
+          " JWT_REFRESH_SECRET=replace_with_another_strong_random_secret",
+          " GOOGLE_API_KEY=your_google_generative_ai_api_key",
+          " CORS_ORIGIN=https://descartes-square.bishko.site",
+          "+CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token"
         ]
       }
     ],
     "userModified": false,
     "replaceAll": false
   },
-  "tool_use_id": "toolu_01MQy6GuCZi2wYK1fcFmCpUW"
+  "tool_use_id": "toolu_013BHZF4M3CZZg5anG3j2DDF"
 }

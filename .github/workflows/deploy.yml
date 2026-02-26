@@ -41,7 +41,8 @@ jobs:
           file: Dockerfile.frontend
           push: true
           tags: ${{ env.FRONTEND_IMAGE }}:latest
-          no-cache: true
+          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache
+          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max
 
       - name: Build and push API image
         uses: docker/build-push-action@v6
@@ -50,7 +51,8 @@ jobs:
           file: Dockerfile.api
           push: true
           tags: ${{ env.API_IMAGE }}:latest
-          no-cache: true
+          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache
+          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max
 
   deploy:
     needs: build-and-push
