@@ -102,6 +102,27 @@ Each question holds an array of user-supplied arguments. The AI service suggests
 
 Angular i18n with `@angular/localize`. Locale source files in `src/i18n/`. Run `npm run locale` to extract new translation units. Use `npm run start:ua` for the Ukrainian build during development.
 
+## Deployment
+
+**Production URL:** `https://descartes-square.bishko.site` (Cloudflare DNS → server port 80)
+
+**Docker images** are published to GHCR on every push to `master` via `.github/workflows/deploy.yml`:
+
+- `ghcr.io/bishko86/descartes-square-frontend:latest`
+- `ghcr.io/bishko86/descartes-square-api:latest`
+
+**Services:** `Dockerfile.frontend` (Nginx + Angular i18n builds), `Dockerfile.api` (NestJS + bcrypt native addons), `mongo:7` — orchestrated by `docker-compose.yml`.
+
+**Angular i18n build output** (production): `dist/descartes-square/{en,uk}/browser/`
+Nginx serves `/en/*` and `/uk/*` from those folders. `/` redirects to `/en/`. API requests to `/api/*` are proxied to the `api` container on port 3000.
+
+**On the production server** (`/opt/descartes-square/`):
+
+1. Place `docker-compose.yml` and a `.env` file with the secrets from `.env.example`
+2. Required GitHub Actions secrets: `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY`
+
+**CORS origin** is controlled by the `CORS_ORIGIN` env var (set in `.env`). Defaults to `http://localhost:4200` in dev.
+
 ## Claude Code Hooks
 
 This repo uses Claude Code hooks (`.claude/settings.local.json`) that run automatically:

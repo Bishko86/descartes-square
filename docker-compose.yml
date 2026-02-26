@@ -1,0 +1,37 @@
+services:
+  frontend:
+    image: ghcr.io/bishko86/descartes-square-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+  api:
+    image: ghcr.io/bishko86/descartes-square-api:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_CONNECTION: mongodb://mongodb:27017/descartes-square
+      PORT: 3000
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    image: mongo:7
+    restart: unless-stopped
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge
