@@ -1,0 +1,15 @@
+{
+  "session_id": "94511fce-36a0-48ff-badc-f8d57b9a2d01",
+  "transcript_path": "/Users/romanbishko/.claude/projects/-Users-romanbishko-Documents-Projects-descartes-square/94511fce-36a0-48ff-badc-f8d57b9a2d01.jsonl",
+  "cwd": "/Users/romanbishko/Documents/Projects/descartes-square",
+  "permission_mode": "acceptEdits",
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/CLAUDE.md",
+    "old_string": "## Claude Code Hooks",
+    "new_string": "## Deployment\n\n**Production URL:** `https://descartes-square.bishko.site` (Cloudflare DNS → server port 80)\n\n**Docker images** are published to GHCR on every push to `master` via `.github/workflows/deploy.yml`:\n- `ghcr.io/bishko86/descartes-square-frontend:latest`\n- `ghcr.io/bishko86/descartes-square-api:latest`\n\n**Services:** `Dockerfile.frontend` (Nginx + Angular i18n builds), `Dockerfile.api` (NestJS + bcrypt native addons), `mongo:7` — orchestrated by `docker-compose.yml`.\n\n**Angular i18n build output** (production): `dist/descartes-square/{en,uk}/browser/`\nNginx serves `/en/*` and `/uk/*` from those folders. `/` redirects to `/en/`. API requests to `/api/*` are proxied to the `api` container on port 3000.\n\n**On the production server** (`/opt/descartes-square/`):\n1. Place `docker-compose.yml` and a `.env` file with the secrets from `.env.example`\n2. Required GitHub Actions secrets: `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY`\n\n**CORS origin** is controlled by the `CORS_ORIGIN` env var (set in `.env`). Defaults to `http://localhost:4200` in dev.\n\n## Claude Code Hooks",
+    "replace_all": false
+  },
+  "tool_use_id": "toolu_01RcGbDRHmrmz7wQqCAiieRY"
+}

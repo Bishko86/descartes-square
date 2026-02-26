@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "setup": "npm install && node ./scripts/init-claude.js",
     "start": "nx serve descartes-square",
     "start:ua": "nx serve descartes-square --configuration=uk",
     "start:api": "nx serve api",
