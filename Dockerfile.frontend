@@ -8,8 +8,11 @@ RUN npm ci
 
 COPY . .
 
-# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/
+# Produces locale-specific build folders
 RUN npx nx build descartes-square --configuration=production
+
+# Show actual output structure so we can verify paths
+RUN find dist/descartes-square -maxdepth 4 -type d
 
 # ── Stage 2: Serve ───────────────────────────────────────────────────────────
 FROM nginx:1.27-alpine

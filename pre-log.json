@@ -6,10 +6,10 @@
   "hook_event_name": "PreToolUse",
   "tool_name": "Edit",
   "tool_input": {
-    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/docker-compose.yml",
-    "old_string": "    image: ghcr.io/bishko86/descartes-square-frontend:latest\n",
-    "new_string": "    image: ghcr.io/bishko86/descartes-square-frontend:latest",
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
+    "old_string": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "new_string": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
     "replace_all": false
   },
-  "tool_use_id": "toolu_01MHgBcwyKeCiAJrWxriAekz"
+  "tool_use_id": "toolu_01BxzW2ppSgM6ZBwUWG1kMGL"
 }
