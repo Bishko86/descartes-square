@@ -6,10 +6,10 @@
   "hook_event_name": "PreToolUse",
   "tool_name": "Edit",
   "tool_input": {
-    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/Dockerfile.frontend",
-    "old_string": "# Produces dist/descartes-square/en/browser/ and dist/descartes-square/uk/browser/\nRUN npx nx build descartes-square --configuration=production\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
-    "new_string": "# Produces locale-specific build folders\nRUN npx nx build descartes-square --configuration=production\n\n# Show actual output structure so we can verify paths\nRUN find dist/descartes-square -maxdepth 4 -type d\n\n# ── Stage 2: Serve ───────────────────────────────────────────────────────────",
+    "file_path": "/Users/romanbishko/Documents/Projects/descartes-square/.github/workflows/deploy.yml",
+    "old_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.FRONTEND_IMAGE }}:cache,mode=max\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          cache-from: type=registry,ref=${{ env.API_IMAGE }}:cache\n          cache-to: type=registry,ref=${{ env.API_IMAGE }}:cache,mode=max",
+    "new_string": "      - name: Build and push frontend image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.frontend\n          push: true\n          tags: ${{ env.FRONTEND_IMAGE }}:latest\n          no-cache: true\n\n      - name: Build and push API image\n        uses: docker/build-push-action@v6\n        with:\n          context: .\n          file: Dockerfile.api\n          push: true\n          tags: ${{ env.API_IMAGE }}:latest\n          no-cache: true",
     "replace_all": false
   },
-  "tool_use_id": "toolu_01BxzW2ppSgM6ZBwUWG1kMGL"
+  "tool_use_id": "toolu_01MQy6GuCZi2wYK1fcFmCpUW"
 }
