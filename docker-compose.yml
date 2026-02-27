@@ -8,9 +8,12 @@ services:
     networks:
       - app-network
       - shared-proxy
+    labels:
+      - "com.centurylinklabs.watchtower.scope=descartes"
 
   api:
     image: ghcr.io/bishko86/descartes-square-api:latest
+    container_name: descartes-api
     restart: unless-stopped
     env_file: .env
     environment:
@@ -20,9 +23,12 @@ services:
       - mongodb
     networks:
       - app-network
+    labels:
+      - "com.centurylinklabs.watchtower.scope=descartes"
 
   mongodb:
     image: mongo:7
+    container_name: descartes-mongodb
     restart: unless-stopped
     volumes:
       - mongodb_data:/data/db
