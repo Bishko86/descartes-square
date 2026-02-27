@@ -27,6 +27,8 @@ export class LangSwitchComponent {
   }
 
   switchLanguage(languageCode: LangCode): void {
+    //@ts-ignore
+    console.log(languageCode);
     if (languageCode === this.currentLanguage()) {
       return;
     }
