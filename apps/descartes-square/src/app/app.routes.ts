@@ -4,62 +4,71 @@ import { MenuRoutes } from '@core/enums/menu-routes.enum';
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'en/home',
     pathMatch: 'full',
   },
   {
-    path: MenuRoutes.DESCARTES_SQUARE,
-    loadComponent: () =>
-      import(
-        './descartes-square/components/descartes-square/descartes-square'
-      ).then((mod) => mod.DescartesSquare),
+    path: ':lang',
     children: [
       {
-        path: '',
-        redirectTo: 'list',
-        pathMatch: 'full',
-      },
-      {
-        path: 'create',
+        path: MenuRoutes.DESCARTES_SQUARE,
         loadComponent: () =>
           import(
-            './descartes-square/components/descartes-form/descartes-form'
-          ).then((mod) => mod.DescartesForm),
+            './descartes-square/components/descartes-square/descartes-square'
+          ).then((mod) => mod.DescartesSquare),
+        children: [
+          {
+            path: '',
+            redirectTo: 'list',
+            pathMatch: 'full',
+          },
+          {
+            path: 'create',
+            loadComponent: () =>
+              import(
+                './descartes-square/components/descartes-form/descartes-form'
+              ).then((mod) => mod.DescartesForm),
+          },
+          {
+            path: 'list',
+            loadComponent: () =>
+              import(
+                './descartes-square/components/descartes-list/descartes-list'
+              ).then((mod) => mod.DescartesList),
+          },
+          {
+            path: 'list/:id/details',
+            loadComponent: () =>
+              import(
+                './descartes-square/components/descartes-details/descartes-details'
+              ).then((mod) => mod.DescartesDetails),
+          },
+          {
+            path: 'list/:id/edit',
+            loadComponent: () =>
+              import(
+                './descartes-square/components/descartes-form/descartes-form'
+              ).then((mod) => mod.DescartesForm),
+          },
+        ],
       },
       {
-        path: 'list',
-        loadComponent: () =>
-          import(
-            './descartes-square/components/descartes-list/descartes-list'
-          ).then((mod) => mod.DescartesList),
+        path: MenuRoutes.HOME,
+        loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
       },
       {
-        path: 'list/:id/details',
-        loadComponent: () =>
-          import(
-            './descartes-square/components/descartes-details/descartes-details'
-          ).then((mod) => mod.DescartesDetails),
+        path: MenuRoutes.SIGN_IN,
+        loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
       },
       {
-        path: 'list/:id/edit',
-        loadComponent: () =>
-          import(
-            './descartes-square/components/descartes-form/descartes-form'
-          ).then((mod) => mod.DescartesForm),
+        path: MenuRoutes.SIGN_UP,
+        data: { isSignUp: true },
+        loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
       },
     ],
   },
   {
-    path: MenuRoutes.HOME,
-    loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
-  },
-  {
-    path: MenuRoutes.SIGN_IN,
-    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
-  },
-  {
-    path: MenuRoutes.SIGN_UP,
-    data: { isSignUp: true },
-    loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
+    path: '**',
+    redirectTo: 'en/home',
   },
 ];

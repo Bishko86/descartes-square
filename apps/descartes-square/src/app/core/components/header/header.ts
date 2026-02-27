@@ -3,6 +3,7 @@ import { MENU_ITEMS } from '@core/consts/menu-items.const';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from '@core/interfaces/menu-item.interface';
 import { ThemeService } from '@core/services/theme.service';
+import { LangService } from '@core/services/lang.service';
 import { MatButton } from '@angular/material/button';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { take } from 'rxjs';
@@ -24,6 +25,7 @@ import { LangSwitchComponent } from '@shared-ui/src';
   styleUrl: './header.scss',
 })
 export class Header implements OnInit {
+  readonly langService = inject(LangService);
   menuItems: MenuItem[] = MENU_ITEMS;
   userIcon = MatIcon.PROFILE;
   currentUser: WritableSignal<Maybe<IUserDto>>;

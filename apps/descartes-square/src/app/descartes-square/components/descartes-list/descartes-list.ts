@@ -7,6 +7,7 @@ import { MoreOptionAction } from '@core/enums/more-options-action.enum';
 import { Router, RouterLink } from '@angular/router';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
+import { LangService } from '@core/services/lang.service';
 import { filter, first, tap } from 'rxjs';
 import { MoreOptions } from '@core/components/more-options/more-options';
 import { ConfirmService } from '@core/services/confirm.service';
@@ -37,7 +38,9 @@ export class DescartesList implements OnInit {
 
   displayedColumns = ['id', 'title', 'conclusion', 'options'];
 
-  #router = inject(Router);
+  readonly #router = inject(Router);
+
+  readonly #langService = inject(LangService);
 
   ngOnInit(): void {
     const currList: IDescartesSolution[] = JSON.parse(
@@ -47,7 +50,9 @@ export class DescartesList implements OnInit {
   }
 
   update(id: string): void {
-    this.#router.navigate([`descartes-square/list/${id}/edit`]);
+    this.#router.navigate(
+      this.#langService.buildRoute('descartes-square', 'list', id, 'edit'),
+    );
   }
 
   delete(id: string): void {
@@ -69,6 +74,8 @@ export class DescartesList implements OnInit {
   }
 
   addData(): void {
-    this.#router.navigate(['descartes-square/create']).then();
+    this.#router
+      .navigate(this.#langService.buildRoute('descartes-square', 'create'))
+      .then();
   }
 }

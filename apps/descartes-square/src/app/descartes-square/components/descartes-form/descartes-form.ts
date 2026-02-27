@@ -28,6 +28,7 @@ import { IDescartesSolution } from '@descartes/definitions/interfaces/descartes-
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { LangService } from '@core/services/lang.service';
 import { ConfirmService } from '@core/services/confirm.service';
 import {
   filter,
@@ -104,6 +105,8 @@ export class DescartesForm implements OnInit {
   readonly #snackBar = inject(MatSnackBar);
 
   readonly #router = inject(Router);
+
+  readonly #langService = inject(LangService);
 
   readonly #authService = inject(DescartesAuthService);
 
@@ -196,7 +199,9 @@ export class DescartesForm implements OnInit {
   }
 
   cancelForm(): void {
-    this.#router.navigate(['descartes-square']).then();
+    this.#router
+      .navigate(this.#langService.buildRoute('descartes-square'))
+      .then();
   }
 
   addAISuggestion(key: TFormNames): void {
@@ -331,7 +336,11 @@ export class DescartesForm implements OnInit {
   }
 
   #redirectToDescartesDetails(id: string): void {
-    this.#router.navigate([`descartes-square/list/${id}/details`]).then();
+    this.#router
+      .navigate(
+        this.#langService.buildRoute('descartes-square', 'list', id, 'details'),
+      )
+      .then();
   }
 
   #setCurrUser(): void {

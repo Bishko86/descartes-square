@@ -5,7 +5,7 @@
     @for (item of menuItems; track item.name) {
       <a
         class="menu-link"
-        [routerLink]="item.route"
+        [routerLink]="langService.buildRoute(item.route)"
         routerLinkActive="active"
         >{{ item.name }}</a
       >
@@ -34,7 +34,7 @@
         matButton="elevated"
         class="open-sans-regular"
         i18n="@@signIn"
-        [routerLink]="['/sign-in']"
+        [routerLink]="langService.buildRoute('sign-in')"
       >
         Sign In
       </button>
@@ -42,7 +42,7 @@
         matButton="elevated"
         class="open-sans-regular"
         i18n="@@signUp"
-        [routerLink]="['/sign-up']"
+        [routerLink]="langService.buildRoute('sign-up')"
       >
         Sign Up
       </button>

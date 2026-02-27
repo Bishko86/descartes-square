@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { MenuRoutes } from '@core/enums/menu-routes.enum';
 import { switchMap, take } from 'rxjs';
 import { IAuthSubmit } from '@shared-ui/src/lib/auth/interfaces/submit-payload.interface';
+import { LangService } from '@core/services/lang.service';
 
 @Component({
   selector: 'app-auth',
@@ -13,8 +14,9 @@ import { IAuthSubmit } from '@shared-ui/src/lib/auth/interfaces/submit-payload.i
   templateUrl: './auth.html',
 })
 export class Auth {
-  #router = inject(Router);
-  #authService = inject(DescartesAuthService);
+  readonly #router = inject(Router);
+  readonly #langService = inject(LangService);
+  readonly #authService = inject(DescartesAuthService);
 
   submit({ isSignUp, payload }: IAuthSubmit): void {
     if (isSignUp) {
@@ -22,7 +24,11 @@ export class Auth {
         .signUp(payload)
         .pipe(
           take(1),
-          switchMap(() => this.#router.navigate([MenuRoutes.SIGN_IN])),
+          switchMap(() =>
+            this.#router.navigate(
+              this.#langService.buildRoute(MenuRoutes.SIGN_IN),
+            ),
+          ),
         )
         .subscribe();
     } else {
@@ -31,7 +37,11 @@ export class Auth {
         .pipe(
           take(1),
           switchMap(() => this.#authService.getCurrentUser()),
-          switchMap(() => this.#router.navigate([MenuRoutes.DESCARTES_SQUARE])),
+          switchMap(() =>
+            this.#router.navigate(
+              this.#langService.buildRoute(MenuRoutes.DESCARTES_SQUARE),
+            ),
+          ),
         )
         .subscribe();
     }

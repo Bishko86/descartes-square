@@ -6,6 +6,7 @@ import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmService } from '@core/services/confirm.service';
+import { LangService } from '@core/services/lang.service';
 import { tap, first, filter } from 'rxjs';
 
 @Component({
@@ -19,6 +20,8 @@ export class DescartesDetails implements OnInit {
   overviewedEntity = signal<Maybe<IDescartesSolution>>(null);
 
   readonly #router = inject(Router);
+
+  readonly #langService = inject(LangService);
 
   readonly #snackBar = inject(MatSnackBar);
 
@@ -34,7 +37,9 @@ export class DescartesDetails implements OnInit {
   }
 
   back(): void {
-    this.#router.navigate(['descartes-square']).then();
+    this.#router
+      .navigate(this.#langService.buildRoute('descartes-square'))
+      .then();
   }
 
   delete(): void {
@@ -54,7 +59,9 @@ export class DescartesDetails implements OnInit {
             JSON.stringify(updatedList),
           );
 
-          this.#router.navigate(['descartes-square']).then();
+          this.#router
+            .navigate(this.#langService.buildRoute('descartes-square'))
+            .then();
           this.#snackBar.open(`Record ${this.id()} is deleted`, 'Close', {});
         }),
       )
@@ -62,6 +69,15 @@ export class DescartesDetails implements OnInit {
   }
 
   edit(): void {
-    this.#router.navigate([`descartes-square/list/${this.id()}/edit`]).then();
+    this.#router
+      .navigate(
+        this.#langService.buildRoute(
+          'descartes-square',
+          'list',
+          this.id()!,
+          'edit',
+        ),
+      )
+      .then();
   }
 }
