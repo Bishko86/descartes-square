@@ -1,4 +1,4 @@
 export enum LangCode {
   EN = 'en',
-  UA = 'ua',
+  UK = 'uk',
 }

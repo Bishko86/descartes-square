@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  isDevMode,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangOptionsMap } from './definitions/consts/lang-options.const';
 import { LangCode } from './definitions/enums/lang-code.enum';
@@ -18,7 +23,7 @@ export class LangSwitchComponent {
   currentLanguage = signal(LangCode.EN);
 
   constructor() {
-    this.#setLangFromLocaleStorage();
+    this.#detectCurrentLanguage();
   }
 
   switchLanguage(languageCode: LangCode): void {
@@ -26,56 +31,50 @@ export class LangSwitchComponent {
       return;
     }
 
-    this.currentLanguage.set(languageCode);
-    localStorage.setItem('language', languageCode);
+    if (isDevMode()) {
+      this.currentLanguage.set(languageCode);
+      return;
+    }
 
-    // Build the target URL
-    const targetUrl = this.#buildTargetUrl(languageCode);
-
-    console.log(targetUrl)
-
-    // Redirect to the appropriate build
-    // window.location.href = targetUrl;
-    // window.location.reload();
+    window.location.href = this.#buildTargetUrl(languageCode);
   }
 
-  #setLangFromLocaleStorage(): void {
-    const savedLanguage = localStorage.getItem('language');
-
-    if (savedLanguage) {
-      this.currentLanguage.set(savedLanguage as LangCode);
+  #detectCurrentLanguage(): void {
+    if (isDevMode()) {
+      return;
     }
+
+    const localeFromPath = this.#extractLocaleFromPath(
+      window.location.pathname,
+    );
+
+    if (localeFromPath) {
+      this.currentLanguage.set(localeFromPath);
+    }
+  }
+
+  #extractLocaleFromPath(pathname: string): LangCode | null {
+    const localeCodes = Object.values(LangCode);
+    const match = pathname.match(
+      new RegExp(`^/(${localeCodes.join('|')})(/|$)`),
+    );
+
+    return match ? (match[1] as LangCode) : null;
   }
 
   #buildTargetUrl(languageCode: LangCode): string {
-    const currentUrl = window.location;
-
-    console.log(currentUrl)
-    const { protocol, host, pathname, search, hash } = currentUrl;
-
-    // Remove current locale from path if present
+    const { protocol, host, pathname, search, hash } = window.location;
     const pathWithoutLocale = this.#removeLocaleFromPath(pathname);
-
-    // Build new path with target locale
-    let newPath = pathWithoutLocale;
-    if (languageCode !== LangCode.EN) {
-      newPath = `/${languageCode}${pathWithoutLocale}`;
-    }
-
-    // Ensure path starts with /
-    if (!newPath.startsWith('/')) {
-      newPath = '/' + newPath;
-    }
+    const newPath = `/${languageCode}${pathWithoutLocale}`;
 
     return `${protocol}//${host}${newPath}${search}${hash}`;
   }
 
   #removeLocaleFromPath(pathname: string): string {
-    // Remove locale codes from the beginning of the path
-    // This handles cases like /uk/some/path or /en/some/path
     const localePattern = new RegExp(
-      `^/(${Object.values(LangCode).join('|')})(\/|$)`,
+      `^/(${Object.values(LangCode).join('|')})(/|$)`,
     );
+
     return pathname.replace(localePattern, '/').replace(/\/+/g, '/');
   }
 }
