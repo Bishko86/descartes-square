@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  isDevMode,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LangOptionsMap } from './definitions/consts/lang-options.const';
 import { LangCode } from './definitions/enums/lang-code.enum';
@@ -27,25 +22,15 @@ export class LangSwitchComponent {
   }
 
   switchLanguage(languageCode: LangCode): void {
-    //@ts-ignore
-    console.log(languageCode);
     if (languageCode === this.currentLanguage()) {
       return;
     }
 
-    if (isDevMode()) {
-      this.currentLanguage.set(languageCode);
-      return;
-    }
-
+    this.currentLanguage.set(languageCode);
     window.location.href = this.#buildTargetUrl(languageCode);
   }
 
   #detectCurrentLanguage(): void {
-    if (isDevMode()) {
-      return;
-    }
-
     const localeFromPath = this.#extractLocaleFromPath(
       window.location.pathname,
     );
