@@ -41,6 +41,10 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Claude Code hook logs
+pre-log.json
+post-log.json
+
 
 
 .nx/cache
