@@ -119,7 +119,7 @@ Nginx serves `/en/*` and `/uk/*` from those folders. `/` redirects to `/en/`. AP
 **On the production server** (`/opt/descartes-square/`):
 
 1. Place `docker-compose.yml` and a `.env` file with the secrets from `.env.example`
-2. Required GitHub Actions secrets: `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY`
+2. Deploy manually on the server: `docker compose pull && docker compose up -d --remove-orphans && docker image prune -f`
 
 **CORS origin** is controlled by the `CORS_ORIGIN` env var (set in `.env`). Defaults to `http://localhost:4200` in dev.
 
