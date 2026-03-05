@@ -48,7 +48,9 @@
       </button>
     }
 
-    <lib-lang-switch></lib-lang-switch>
+    @if (!isDevMode) {
+      <lib-lang-switch></lib-lang-switch>
+    }
 
     <button
       matButton="elevated"

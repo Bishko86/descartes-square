@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, WritableSignal } from '@angular/core';
+import {
+  Component,
+  inject,
+  isDevMode,
+  OnInit,
+  WritableSignal,
+} from '@angular/core';
 import { MENU_ITEMS } from '@core/consts/menu-items.const';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from '@core/interfaces/menu-item.interface';
@@ -27,6 +33,7 @@ export class Header implements OnInit {
   menuItems: MenuItem[] = MENU_ITEMS;
   userIcon = MatIcon.PROFILE;
   currentUser: WritableSignal<Maybe<IUserDto>>;
+  isDevMode = isDevMode();
 
   readonly #themeService = inject(ThemeService);
   readonly #authService = inject(DescartesAuthService);
