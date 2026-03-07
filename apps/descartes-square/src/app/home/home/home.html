@@ -1,1 +1,232 @@
-<div class="home"><span>No Data to show</span></div>
+<div class="home">
+  <!-- Hero Section -->
+  <section class="hero" #animatedSection>
+    <div class="hero__grid"></div>
+    <h1 class="hero__title" i18n="@@home.heroTitle">Descartes' Square</h1>
+    <p class="hero__tagline" i18n="@@home.heroTagline">
+      Make better decisions by seeing the full picture
+    </p>
+    <a
+      mat-flat-button
+      class="hero__cta"
+      routerLink="/descartes-square"
+      i18n="@@home.heroCta"
+    >
+      Try It Now
+    </a>
+  </section>
+
+  <!-- What Is It Section -->
+  <section class="what-is" #animatedSection>
+    <div class="what-is__icon">?</div>
+    <h2 class="section-title" i18n="@@home.whatIsTitle">
+      What Is Descartes' Square?
+    </h2>
+    <p class="what-is__text" i18n="@@home.whatIsP1">
+      Descartes' Square is a simple yet powerful decision-making technique. It
+      helps you examine any complex situation from four different angles,
+      helping you avoid emotional bias and uncover hidden consequences.
+    </p>
+    <p class="what-is__text" i18n="@@home.whatIsP2">
+      Named after the French philosopher René Descartes, the method encourages
+      you to stop worrying and start analyzing. Instead of simply asking
+      yourself "Should I do this?", you answer four specific questions that
+      reveal the full picture.
+    </p>
+  </section>
+
+  <!-- Four Questions Section -->
+  <section class="questions" #animatedSection>
+    <h2 class="section-title" i18n="@@home.questionsTitle">
+      4 Questions That Will Transform Your Decision
+    </h2>
+    <p class="section-subtitle" i18n="@@home.questionsSubtitle">
+      Our brains tend to focus on just one aspect: either the desired outcome or
+      our fears. Descartes' Square forces you to consider every possible
+      scenario.
+    </p>
+
+    <div class="questions__grid">
+      <div class="questions__card questions__card--q1">
+        <span class="questions__number">1</span>
+        <h3 class="questions__card-title" i18n="@@home.q1Title">
+          What will happen if I do it?
+        </h3>
+        <span class="questions__card-subtitle" i18n="@@home.q1Subtitle"
+          >Positive consequences of action</span
+        >
+        <p class="questions__card-desc" i18n="@@home.q1Desc">
+          Describe the benefits of following through with your plan. What will
+          you achieve? What new opportunities will open up? How will you feel?
+        </p>
+        <blockquote class="questions__example" i18n="@@home.q1Example">
+          I'll quit my job and enjoy the freedom of a flexible schedule.
+        </blockquote>
+      </div>
+
+      <div class="questions__card questions__card--q2">
+        <span class="questions__number">2</span>
+        <h3 class="questions__card-title" i18n="@@home.q2Title">
+          What will happen if I DON'T do it?
+        </h3>
+        <span class="questions__card-subtitle" i18n="@@home.q2Subtitle"
+          >Positive consequences of inaction</span
+        >
+        <p class="questions__card-desc" i18n="@@home.q2Desc">
+          This question is about the upsides of your current situation. What
+          good things will remain in your life if you change nothing? What
+          benefits of stability will you keep?
+        </p>
+        <blockquote class="questions__example" i18n="@@home.q2Example">
+          I'll stay at my job and have a steady paycheck every month.
+        </blockquote>
+      </div>
+
+      <div class="questions__card questions__card--q3">
+        <span class="questions__number">3</span>
+        <h3 class="questions__card-title" i18n="@@home.q3Title">
+          What WON'T happen if I do it?
+        </h3>
+        <span class="questions__card-subtitle" i18n="@@home.q3Subtitle"
+          >Negative consequences of action — losses</span
+        >
+        <p class="questions__card-desc" i18n="@@home.q3Desc">
+          Be honest with yourself here. What are the risks? What will you lose
+          by taking this step? It could be money, time, comfort, or certain
+          relationships.
+        </p>
+        <blockquote class="questions__example" i18n="@@home.q3Example">
+          I'll lose my guaranteed income and benefits package.
+        </blockquote>
+      </div>
+
+      <div class="questions__card questions__card--q4">
+        <span class="questions__number">4</span>
+        <h3 class="questions__card-title" i18n="@@home.q4Title">
+          What WON'T happen if I DON'T do it?
+        </h3>
+        <span class="questions__card-subtitle" i18n="@@home.q4Subtitle"
+          >Negative consequences of inaction — missed opportunities</span
+        >
+        <p class="questions__card-desc" i18n="@@home.q4Desc">
+          This is the trickiest question. What do you lose by keeping things as
+          they are? Which dreams will go unfulfilled? What experiences will you
+          miss out on if you don't take the leap?
+        </p>
+        <blockquote class="questions__example" i18n="@@home.q4Example">
+          I'll never find out if I could have built my own business.
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- How to Use Section -->
+  <section class="how-to" #animatedSection>
+    <h2 class="section-title" i18n="@@home.howToTitle">How to Use This Tool</h2>
+
+    <div class="how-to__steps">
+      <div class="how-to__step">
+        <div class="how-to__step-number">1</div>
+        <h3 class="how-to__step-title" i18n="@@home.step1Title">
+          Define your question
+        </h3>
+        <p class="how-to__step-desc" i18n="@@home.step1Desc">
+          Write down the dilemma that's on your mind. For example: "Should I
+          move to another city?"
+        </p>
+      </div>
+
+      <div class="how-to__connector"></div>
+
+      <div class="how-to__step">
+        <div class="how-to__step-number">2</div>
+        <h3 class="how-to__step-title" i18n="@@home.step2Title">
+          Fill in all 4 sections
+        </h3>
+        <p class="how-to__step-desc" i18n="@@home.step2Desc">
+          Take your time. Give yourself space to reflect on each square. Try to
+          write specific facts rather than vague generalities.
+        </p>
+      </div>
+
+      <div class="how-to__connector"></div>
+
+      <div class="how-to__step">
+        <div class="how-to__step-number">3</div>
+        <h3 class="how-to__step-title" i18n="@@home.step3Title">
+          Analyze the results
+        </h3>
+        <p class="how-to__step-desc" i18n="@@home.step3Desc">
+          Look at all four blocks together. The answer often becomes clear once
+          you see the cost of inaction (question 4) or the real risks of action
+          (question 3).
+        </p>
+      </div>
+
+      <div class="how-to__connector"></div>
+
+      <div class="how-to__step">
+        <div class="how-to__step-number">4</div>
+        <h3 class="how-to__step-title" i18n="@@home.step4Title">
+          Make your decision
+        </h3>
+        <p class="how-to__step-desc" i18n="@@home.step4Desc">
+          Descartes' Square doesn't make the decision for you, but it makes your
+          choice a conscious one.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- When to Use Section -->
+  <section class="when-to" #animatedSection>
+    <h2 class="section-title" i18n="@@home.whenToTitle">
+      When Should You Use Descartes' Square?
+    </h2>
+    <p class="section-subtitle" i18n="@@home.whenToSubtitle">
+      This method is ideal for major life decisions:
+    </p>
+
+    <div class="when-to__tags">
+      <span class="when-to__tag" i18n="@@home.useCase1"
+        >Changing jobs or careers</span
+      >
+      <span class="when-to__tag" i18n="@@home.useCase2"
+        >Relocating or buying property</span
+      >
+      <span class="when-to__tag" i18n="@@home.useCase3"
+        >Starting or ending a relationship</span
+      >
+      <span class="when-to__tag" i18n="@@home.useCase4"
+        >Making significant financial investments</span
+      >
+      <span class="when-to__tag" i18n="@@home.useCase5"
+        >Choosing education or training programs</span
+      >
+    </div>
+
+    <div class="when-to__tip">
+      <span class="when-to__tip-label">Tip</span>
+      <p i18n="@@home.whenToTip">
+        Don't use this method for minor everyday decisions (like what to have
+        for lunch) — you'll only overload yourself with analysis. Save it for
+        what truly matters.
+      </p>
+    </div>
+  </section>
+
+  <!-- Final CTA Section -->
+  <section class="final-cta" #animatedSection>
+    <h2 class="final-cta__title" i18n="@@home.ctaTitle">
+      Ready to make a conscious choice?
+    </h2>
+    <a
+      mat-flat-button
+      class="final-cta__btn"
+      routerLink="/descartes-square"
+      i18n="@@home.ctaCta"
+    >
+      Get Started
+    </a>
+  </section>
+</div>
