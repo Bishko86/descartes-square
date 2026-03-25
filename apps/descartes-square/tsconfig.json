@@ -14,7 +14,9 @@
       "@shared/*": ["libs/shared/*"],
       "@auth/*": ["apps/descartes-square/src/app/auth/*"],
       "@descartes/*": ["apps/descartes-square/src/app/descartes-square/*"]
-    }
+    },
+    "module": "preserve",
+    "moduleResolution": "bundler"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

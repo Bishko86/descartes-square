@@ -45,5 +45,6 @@
       "skipTests": true,
       "changeDetection": "OnPush"
     }
-  }
+  },
+  "analytics": false
 }
