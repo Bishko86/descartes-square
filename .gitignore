@@ -54,3 +54,6 @@ post-log.json
 /.env
 
 .angular
+
+.claude/worktrees
+.claude/settings.local.json

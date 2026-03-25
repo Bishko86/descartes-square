@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AuthComponent } from '@shared-ui/src/lib/auth/auth';
 import { DescartesAuthService } from './services/descartes-auth.service';
 import { Router } from '@angular/router';
@@ -9,7 +9,7 @@ import { IAuthSubmit } from '@shared-ui/src/lib/auth/interfaces/submit-payload.i
 
 @Component({
   selector: 'app-auth',
-  imports: [CommonModule, AuthComponent],
+  imports: [AuthComponent],
   templateUrl: './auth.html',
 })
 export class Auth {

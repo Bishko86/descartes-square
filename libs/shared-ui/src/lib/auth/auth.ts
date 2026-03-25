@@ -6,7 +6,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import {
   MatFormField,
   MatInput,
@@ -30,7 +30,6 @@ import { IAuthSubmit } from './interfaces/submit-payload.interface';
 @Component({
   selector: 'lib-auth',
   imports: [
-    CommonModule,
     MatFormField,
     MatLabel,
     MatFormField,
@@ -39,8 +38,8 @@ import { IAuthSubmit } from './interfaces/submit-payload.interface';
     MatIconButton,
     MatButton,
     MatSuffix,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
