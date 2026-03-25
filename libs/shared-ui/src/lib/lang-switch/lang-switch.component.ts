@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { LangOptionsMap } from './definitions/consts/lang-options.const';
 import { LangCode } from './definitions/enums/lang-code.enum';
 
 @Component({
   selector: 'lib-lang-switch',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './lang-switch.component.html',
   styleUrl: './lang-switch.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
