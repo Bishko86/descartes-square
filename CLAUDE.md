@@ -8,7 +8,7 @@ Descartes Square is a full-stack decision-making tool implementing the Descartes
 
 ## Tech Stack
 
-- **Frontend:** Angular 20 (standalone components, Signals, Reactive Forms), Angular Material, RxJS
+- **Frontend:** Angular 21 (standalone components, Signals, Reactive Forms), Angular Material, RxJS
 - **Backend:** NestJS 11, MongoDB (Mongoose), JWT auth, Google Generative AI
 - **Monorepo:** Nx 21
 - **Testing:** Karma + Jasmine
