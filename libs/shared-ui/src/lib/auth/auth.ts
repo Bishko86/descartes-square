@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 
 import {
   MatFormField,
@@ -17,14 +10,15 @@ import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
 import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+  form,
+  FormField,
+  required,
+  email,
+  hidden,
+  validate,
+} from '@angular/forms/signals';
 import { AuthFormKeys } from './enums/auth-form-keys.enum';
 import { IAuthForm } from './interfaces/auth-form-interface';
-import { TFormControl } from '@shared/src/lib/types/form-utility.type';
 import { IAuthSubmit } from './interfaces/submit-payload.interface';
 
 @Component({
@@ -32,58 +26,72 @@ import { IAuthSubmit } from './interfaces/submit-payload.interface';
   imports: [
     MatFormField,
     MatLabel,
-    MatFormField,
     MatIcon,
     MatInput,
     MatIconButton,
     MatButton,
     MatSuffix,
-    ReactiveFormsModule
-],
+    FormField,
+  ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
-export class AuthComponent implements OnInit {
-  form: FormGroup<TFormControl<IAuthForm>>;
-  formKeys = AuthFormKeys;
-  hidePassword = true;
-  isSignUp = signal(false);
+export class AuthComponent {
+  hidePassword = signal(true);
 
-  authTitle = computed(() => (this.isSignUp() ? $localize`:@@signUp: Sign Up ` : $localize`:@@signIn: Sign In `));
+  isSignUp = signal(!!inject(ActivatedRoute).snapshot.data['isSignUp']);
+
+  authTitle = computed(() =>
+    this.isSignUp()
+      ? $localize`:@@signUp: Sign Up `
+      : $localize`:@@signIn: Sign In `,
+  );
 
   submitEvent = output<IAuthSubmit>();
 
-  #activatedRoute = inject(ActivatedRoute);
+  #model = signal<IAuthForm>({
+    [AuthFormKeys.EMAIL]: '',
+    [AuthFormKeys.USERNAME]: '',
+    [AuthFormKeys.PASSWORD]: '',
+    [AuthFormKeys.CONFIRM_PASSWORD]: '',
+  });
 
-  ngOnInit(): void {
-    this.isSignUp.set(!!this.#activatedRoute.snapshot.data['isSignUp']);
-    this.#initForm();
-  }
+  authForm = form(this.#model, (f) => {
+    required(f.email);
+    email(f.email);
+    required(f.password);
+
+    hidden(f.username, () => !this.isSignUp());
+    required(f.username);
+
+    hidden(f.confirmPassword, () => !this.isSignUp());
+    required(f.confirmPassword);
+
+    validate(f.confirmPassword, ({ value }) => {
+      const password = this.#model().password;
+      if (value() && password && value() !== password) {
+        return { kind: 'passwordMismatch', message: 'Passwords do not match' };
+      }
+      return undefined;
+    });
+  });
+
+  hasPasswordMismatch = computed(
+    () =>
+      !this.authForm.confirmPassword().hidden() &&
+      this.authForm.confirmPassword().errors().some((e) => e.kind === 'passwordMismatch'),
+  );
+
+  submitDisabled = computed(() => this.authForm().invalid() || !this.authForm().dirty());
 
   submit(): void {
-    const { email, password, username } = this.form.getRawValue();
+    const { email, password, username } = this.#model();
     const payload = this.isSignUp()
-      ? { email, password, username }
-      : { email, password };
+      ? { email, password, username, confirmPassword: this.#model().confirmPassword }
+      : { email, password, username: '', confirmPassword: '' };
 
-    this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
-  }
+    console.log(payload);
 
-  #initForm(): void {
-    this.form = new FormGroup<TFormControl<IAuthForm>>({
-      [AuthFormKeys.EMAIL]: new FormControl(null, [
-        Validators.required,
-        Validators.email,
-      ]),
-      [AuthFormKeys.USERNAME]: new FormControl(
-        null,
-        this.isSignUp() ? [Validators.required] : [],
-      ),
-      [AuthFormKeys.PASSWORD]: new FormControl(null, [Validators.required]),
-      [AuthFormKeys.CONFIRM_PASSWORD]: new FormControl(
-        null,
-        this.isSignUp() ? [Validators.required] : [],
-      ),
-    });
+    // this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
   }
 }
