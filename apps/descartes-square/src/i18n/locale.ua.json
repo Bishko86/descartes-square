@@ -47,6 +47,7 @@
     "passwordPlaceholder": "Введіть ваш пароль",
     "confirm-password": "Підтвердіть пароль",
     "confirm-passwordPlaceholder": "Підтвердіть ваш пароль",
+    "passwordMismatch": "Паролі не збігаються",
     "home.heroTitle": "Квадрат Декарта",
     "home.heroTagline": "Приймайте кращі рішення, бачачи повну картину",
     "home.heroCta": "Спробувати зараз",
