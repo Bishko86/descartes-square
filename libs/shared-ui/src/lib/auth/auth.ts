@@ -29,30 +29,32 @@ import { createAuthForm } from './auth-form.config';
   styleUrl: './auth.scss',
 })
 export class AuthComponent {
-  submitEvent = output<IAuthSubmit>();
+  readonly submitEvent = output<IAuthSubmit>();
 
-  isHiddenPassword = signal(true);
+  readonly isHiddenPassword = signal(true);
 
-  isSignUp = signal(!!inject(ActivatedRoute).snapshot.data['isSignUp']);
+  readonly isSignUp = signal(
+    !!inject(ActivatedRoute).snapshot.data['isSignUp'],
+  );
 
-  authTitle = computed(() =>
+  readonly authTitle = computed(() =>
     this.isSignUp()
       ? $localize`:@@signUp: Sign Up `
       : $localize`:@@signIn: Sign In `,
   );
 
-  #form = createAuthForm(this.isSignUp);
-  #model = this.#form.model;
-  authForm = this.#form.authForm;
+  readonly #form = createAuthForm(this.isSignUp);
+  readonly #model = this.#form.model;
+  readonly authForm = this.#form.authForm;
 
-  hasPasswordMinLength = computed(() =>
+  readonly hasPasswordMinLength = computed(() =>
     this.authForm
       .password()
       .errors()
       .some((e) => e.kind === 'minLength'),
   );
 
-  hasConfirmPasswordMinLength = computed(
+  readonly hasConfirmPasswordMinLength = computed(
     () =>
       !this.authForm.confirmPassword().hidden() &&
       this.authForm
@@ -61,7 +63,7 @@ export class AuthComponent {
         .some((e) => e.kind === 'minLength'),
   );
 
-  hasPasswordMismatch = computed(
+  readonly hasPasswordMismatch = computed(
     () =>
       !this.authForm.confirmPassword().hidden() &&
       this.authForm
@@ -70,7 +72,7 @@ export class AuthComponent {
         .some((e) => e.kind === 'passwordMismatch'),
   );
 
-  submitDisabled = computed(
+  readonly submitDisabled = computed(
     () => this.authForm().invalid() || !this.authForm().dirty(),
   );
 
