@@ -9,17 +9,9 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
-import {
-  form,
-  FormField,
-  required,
-  email,
-  hidden,
-  validate,
-} from '@angular/forms/signals';
-import { AuthFormKeys } from './enums/auth-form-keys.enum';
-import { IAuthForm } from './interfaces/auth-form-interface';
+import { FormField } from '@angular/forms/signals';
 import { IAuthSubmit } from './interfaces/submit-payload.interface';
+import { createAuthForm } from './auth-form.config';
 
 @Component({
   selector: 'lib-auth',
@@ -37,7 +29,9 @@ import { IAuthSubmit } from './interfaces/submit-payload.interface';
   styleUrl: './auth.scss',
 })
 export class AuthComponent {
-  hidePassword = signal(true);
+  submitEvent = output<IAuthSubmit>();
+
+  isHiddenPassword = signal(true);
 
   isSignUp = signal(!!inject(ActivatedRoute).snapshot.data['isSignUp']);
 
@@ -47,51 +41,50 @@ export class AuthComponent {
       : $localize`:@@signIn: Sign In `,
   );
 
-  submitEvent = output<IAuthSubmit>();
+  #form = createAuthForm(this.isSignUp);
+  #model = this.#form.model;
+  authForm = this.#form.authForm;
 
-  #model = signal<IAuthForm>({
-    [AuthFormKeys.EMAIL]: '',
-    [AuthFormKeys.USERNAME]: '',
-    [AuthFormKeys.PASSWORD]: '',
-    [AuthFormKeys.CONFIRM_PASSWORD]: '',
-  });
+  hasPasswordMinLength = computed(() =>
+    this.authForm
+      .password()
+      .errors()
+      .some((e) => e.kind === 'minLength'),
+  );
 
-  authForm = form(this.#model, (f) => {
-    required(f.email);
-    email(f.email);
-    required(f.password);
-
-    hidden(f.username, () => !this.isSignUp());
-    required(f.username);
-
-    hidden(f.confirmPassword, () => !this.isSignUp());
-    required(f.confirmPassword);
-
-    validate(f.confirmPassword, ({ value }) => {
-      const password = this.#model().password;
-      if (value() && password && value() !== password) {
-        return { kind: 'passwordMismatch', message: 'Passwords do not match' };
-      }
-      return undefined;
-    });
-  });
+  hasConfirmPasswordMinLength = computed(
+    () =>
+      !this.authForm.confirmPassword().hidden() &&
+      this.authForm
+        .confirmPassword()
+        .errors()
+        .some((e) => e.kind === 'minLength'),
+  );
 
   hasPasswordMismatch = computed(
     () =>
       !this.authForm.confirmPassword().hidden() &&
-      this.authForm.confirmPassword().errors().some((e) => e.kind === 'passwordMismatch'),
+      this.authForm
+        .confirmPassword()
+        .errors()
+        .some((e) => e.kind === 'passwordMismatch'),
   );
 
-  submitDisabled = computed(() => this.authForm().invalid() || !this.authForm().dirty());
+  submitDisabled = computed(
+    () => this.authForm().invalid() || !this.authForm().dirty(),
+  );
 
   submit(): void {
     const { email, password, username } = this.#model();
     const payload = this.isSignUp()
-      ? { email, password, username, confirmPassword: this.#model().confirmPassword }
+      ? {
+          email,
+          password,
+          username,
+          confirmPassword: this.#model().confirmPassword,
+        }
       : { email, password, username: '', confirmPassword: '' };
 
-    console.log(payload);
-
-    // this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
+    this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
   }
 }

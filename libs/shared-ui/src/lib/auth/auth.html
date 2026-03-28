@@ -32,7 +32,7 @@
         matInput
         i18n-placeholder="@@passwordPlaceholder"
         placeholder="Enter your password"
-        [type]="hidePassword() ? 'password' : 'text'"
+        [type]="isHiddenPassword() ? 'password' : 'text'"
         [autocomplete]="'new-password'"
         [formField]="authForm.password"
       />
@@ -40,13 +40,16 @@
         mat-icon-button
         matSuffix
         type="button"
-        (click)="hidePassword.set(!hidePassword())"
+        (click)="isHiddenPassword.set(!isHiddenPassword())"
       >
         <mat-icon>{{
-          hidePassword() ? "visibility_off" : "visibility"
+          isHiddenPassword() ? "visibility_off" : "visibility"
         }}</mat-icon>
       </button>
     </mat-form-field>
+    @if (hasPasswordMinLength()) {
+      <p class="field-error" i18n="@@passwordMinLength">Password must be at least 6 characters</p>
+    }
 
     @if (!authForm.confirmPassword().hidden()) {
       <mat-form-field>
@@ -56,20 +59,23 @@
           i18n-placeholder="@@confirm-passwordPlaceholder"
           placeholder="Confirm your password"
           autocomplete="off"
-          [type]="hidePassword() ? 'password' : 'text'"
+          [type]="isHiddenPassword() ? 'password' : 'text'"
           [formField]="authForm.confirmPassword"
         />
         <button
           mat-icon-button
           matSuffix
           type="button"
-          (click)="hidePassword.set(!hidePassword())"
+          (click)="isHiddenPassword.set(!isHiddenPassword())"
         >
           <mat-icon>{{
-            hidePassword() ? "visibility_off" : "visibility"
+            isHiddenPassword() ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
       </mat-form-field>
+      @if (hasConfirmPasswordMinLength()) {
+        <p class="field-error" i18n="@@passwordMinLength">Password must be at least 6 characters</p>
+      }
       @if (hasPasswordMismatch()) {
         <p class="field-error" i18n="@@passwordMismatch">Passwords do not match</p>
       }

@@ -48,6 +48,7 @@
     "confirm-password": "Підтвердіть пароль",
     "confirm-passwordPlaceholder": "Підтвердіть ваш пароль",
     "passwordMismatch": "Паролі не збігаються",
+    "passwordMinLength": "Пароль повинен містити щонайменше 6 символів",
     "home.heroTitle": "Квадрат Декарта",
     "home.heroTagline": "Приймайте кращі рішення, бачачи повну картину",
     "home.heroCta": "Спробувати зараз",
