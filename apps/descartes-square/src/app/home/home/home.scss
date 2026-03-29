@@ -140,24 +140,22 @@
       box-shadow: 0 4px 20px var(--shadow);
     }
 
-    &--q1 {
-      background: var(--q1-bg);
-      border-left: 3px solid var(--q1-accent);
-    }
+    @each $q in q1, q2, q3, q4 {
+      &--#{$q} {
+        overflow: hidden;
+        position: relative;
+        background: var(--#{$q}-bg);
 
-    &--q2 {
-      background: var(--q2-bg);
-      border-left: 3px solid var(--q2-accent);
-    }
-
-    &--q3 {
-      background: var(--q3-bg);
-      border-left: 3px solid var(--q3-accent);
-    }
-
-    &--q4 {
-      background: var(--q4-bg);
-      border-left: 3px solid var(--q4-accent);
+        &::before {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          top: 0;
+          width: 3px;
+          background-color: var(--#{$q}-accent);
+        }
+      }
     }
   }
 

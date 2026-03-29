@@ -1,11 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  output,
-  signal,
-} from '@angular/core';
+import { Component, computed, inject, output, signal } from '@angular/core';
 
 import {
   MatFormField,
@@ -16,74 +9,84 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { ActivatedRoute } from '@angular/router';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { AuthFormKeys } from './enums/auth-form-keys.enum';
-import { IAuthForm } from './interfaces/auth-form-interface';
-import { TFormControl } from '@shared/src/lib/types/form-utility.type';
+import { FormField } from '@angular/forms/signals';
 import { IAuthSubmit } from './interfaces/submit-payload.interface';
+import { createAuthForm } from './auth-form.config';
 
 @Component({
   selector: 'lib-auth',
   imports: [
     MatFormField,
     MatLabel,
-    MatFormField,
     MatIcon,
     MatInput,
     MatIconButton,
     MatButton,
     MatSuffix,
-    ReactiveFormsModule
-],
+    FormField,
+  ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',
 })
-export class AuthComponent implements OnInit {
-  form: FormGroup<TFormControl<IAuthForm>>;
-  formKeys = AuthFormKeys;
-  hidePassword = true;
-  isSignUp = signal(false);
+export class AuthComponent {
+  readonly submitEvent = output<IAuthSubmit>();
 
-  authTitle = computed(() => (this.isSignUp() ? $localize`:@@signUp: Sign Up ` : $localize`:@@signIn: Sign In `));
+  readonly isHiddenPassword = signal(true);
 
-  submitEvent = output<IAuthSubmit>();
+  readonly isSignUp = signal(
+    !!inject(ActivatedRoute).snapshot.data['isSignUp'],
+  );
 
-  #activatedRoute = inject(ActivatedRoute);
+  readonly authTitle = computed(() =>
+    this.isSignUp()
+      ? $localize`:@@signUp: Sign Up `
+      : $localize`:@@signIn: Sign In `,
+  );
 
-  ngOnInit(): void {
-    this.isSignUp.set(!!this.#activatedRoute.snapshot.data['isSignUp']);
-    this.#initForm();
-  }
+  readonly #form = createAuthForm(this.isSignUp);
+  readonly #model = this.#form.model;
+  readonly authForm = this.#form.authForm;
+
+  readonly hasPasswordMinLength = computed(() =>
+    this.authForm
+      .password()
+      .errors()
+      .some((e) => e.kind === 'minLength'),
+  );
+
+  readonly hasConfirmPasswordMinLength = computed(
+    () =>
+      !this.authForm.confirmPassword().hidden() &&
+      this.authForm
+        .confirmPassword()
+        .errors()
+        .some((e) => e.kind === 'minLength'),
+  );
+
+  readonly hasPasswordMismatch = computed(
+    () =>
+      !this.authForm.confirmPassword().hidden() &&
+      this.authForm
+        .confirmPassword()
+        .errors()
+        .some((e) => e.kind === 'passwordMismatch'),
+  );
+
+  readonly submitDisabled = computed(
+    () => this.authForm().invalid() || !this.authForm().dirty(),
+  );
 
   submit(): void {
-    const { email, password, username } = this.form.getRawValue();
+    const { email, password, username } = this.#model();
     const payload = this.isSignUp()
-      ? { email, password, username }
-      : { email, password };
+      ? {
+          email,
+          password,
+          username,
+          confirmPassword: this.#model().confirmPassword,
+        }
+      : { email, password, username: '', confirmPassword: '' };
 
     this.submitEvent.emit({ isSignUp: this.isSignUp(), payload });
-  }
-
-  #initForm(): void {
-    this.form = new FormGroup<TFormControl<IAuthForm>>({
-      [AuthFormKeys.EMAIL]: new FormControl(null, [
-        Validators.required,
-        Validators.email,
-      ]),
-      [AuthFormKeys.USERNAME]: new FormControl(
-        null,
-        this.isSignUp() ? [Validators.required] : [],
-      ),
-      [AuthFormKeys.PASSWORD]: new FormControl(null, [Validators.required]),
-      [AuthFormKeys.CONFIRM_PASSWORD]: new FormControl(
-        null,
-        this.isSignUp() ? [Validators.required] : [],
-      ),
-    });
   }
 }

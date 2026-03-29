@@ -1,5 +1,5 @@
 <div class="sign-in-container">
-  <form [formGroup]="form" class="sign-in-form" (ngSubmit)="submit()">
+  <form class="sign-in-form" (submit)="$event.preventDefault(); submit()">
     <h2>{{ authTitle() }}</h2>
     <mat-form-field appearance="fill">
       <mat-label i18n="@@email">Email</mat-label>
@@ -9,11 +9,11 @@
         i18n-placeholder="@@emailPlaceholder"
         placeholder="Enter your email"
         [autocomplete]="'email'"
-        [formControlName]="formKeys.EMAIL"
+        [formField]="authForm.email"
       />
     </mat-form-field>
 
-    @if (isSignUp()) {
+    @if (!authForm.username().hidden()) {
       <mat-form-field appearance="fill">
         <mat-label i18n="@@username">Username</mat-label>
         <input
@@ -21,7 +21,7 @@
           type="text"
           i18n-placeholder="@@usernamePlaceholder"
           placeholder="Enter your name"
-          [formControlName]="formKeys.USERNAME"
+          [formField]="authForm.username"
         />
       </mat-form-field>
     }
@@ -32,23 +32,26 @@
         matInput
         i18n-placeholder="@@passwordPlaceholder"
         placeholder="Enter your password"
-        [type]="hidePassword ? 'password' : 'text'"
+        [type]="isHiddenPassword() ? 'password' : 'text'"
         [autocomplete]="'new-password'"
-        [formControlName]="formKeys.PASSWORD"
+        [formField]="authForm.password"
       />
       <button
         mat-icon-button
         matSuffix
         type="button"
-        (click)="hidePassword = !hidePassword"
+        (click)="isHiddenPassword.set(!isHiddenPassword())"
       >
         <mat-icon>{{
-          hidePassword ? "visibility_off" : "visibility"
+          isHiddenPassword() ? "visibility_off" : "visibility"
         }}</mat-icon>
       </button>
     </mat-form-field>
+    @if (hasPasswordMinLength()) {
+      <p class="field-error" i18n="@@passwordMinLength">Password must be at least 6 characters</p>
+    }
 
-    @if (isSignUp()) {
+    @if (!authForm.confirmPassword().hidden()) {
       <mat-form-field>
         <mat-label i18n="@@confirm-password">Confirm Password</mat-label>
         <input
@@ -56,27 +59,33 @@
           i18n-placeholder="@@confirm-passwordPlaceholder"
           placeholder="Confirm your password"
           autocomplete="off"
-          [type]="hidePassword ? 'password' : 'text'"
-          [formControlName]="formKeys.CONFIRM_PASSWORD"
+          [type]="isHiddenPassword() ? 'password' : 'text'"
+          [formField]="authForm.confirmPassword"
         />
         <button
           mat-icon-button
           matSuffix
           type="button"
-          (click)="hidePassword = !hidePassword"
+          (click)="isHiddenPassword.set(!isHiddenPassword())"
         >
           <mat-icon>{{
-            hidePassword ? "visibility_off" : "visibility"
+            isHiddenPassword() ? "visibility_off" : "visibility"
           }}</mat-icon>
         </button>
       </mat-form-field>
+      @if (hasConfirmPasswordMinLength()) {
+        <p class="field-error" i18n="@@passwordMinLength">Password must be at least 6 characters</p>
+      }
+      @if (hasPasswordMismatch()) {
+        <p class="field-error" i18n="@@passwordMismatch">Passwords do not match</p>
+      }
     }
 
     <button
       mat-raised-button
       color="primary"
       type="submit"
-      [disabled]="form.invalid"
+      [disabled]="submitDisabled()"
     >
       {{ authTitle() }}
     </button>
