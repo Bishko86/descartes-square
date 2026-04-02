@@ -3,4 +3,5 @@ export enum MenuRoutes {
   DESCARTES_SQUARE = 'descartes-square',
   SIGN_IN = 'sign-in',
   SIGN_UP = 'sign-up',
+  AUTH_ERROR = 'auth-error',
 }

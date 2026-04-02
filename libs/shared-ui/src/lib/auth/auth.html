@@ -89,5 +89,19 @@
     >
       {{ authTitle() }}
     </button>
+
+    <div class="oauth-divider">
+      <span i18n="@@orContinueWith">or continue with</span>
+    </div>
+
+    <button
+      mat-stroked-button
+      type="button"
+      class="google-btn"
+      (click)="googleSignIn()"
+    >
+      <img src="google-icon.svg" alt="Google" width="20" height="20" />
+      <span i18n="@@signInWithGoogle">Sign in with Google</span>
+    </button>
   </form>
 </div>

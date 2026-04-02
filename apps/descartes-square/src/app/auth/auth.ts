@@ -9,6 +9,7 @@ import { catchError, EMPTY, switchMap, take } from 'rxjs';
 import { IAuthSubmit } from '@shared-ui/src/lib/auth/interfaces/submit-payload.interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorSnackbarComponent } from '@core/components/error-snackbar/error-snackbar';
+import { environment } from '@environment/environment';
 
 const AUTH_ERROR_MESSAGES: Record<string, string> = {
   'User with such email already in use': $localize`:@@authErrorEmailInUse:A user with this email already exists`,
@@ -22,6 +23,8 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Auth {
+  readonly apiUrl = environment.apiUrl;
+
   readonly #router = inject(Router);
 
   readonly #authService = inject(DescartesAuthService);

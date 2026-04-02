@@ -47,6 +47,38 @@
         border: 1px solid var(--border);
       }
     }
+
+    .oauth-divider {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin: var(--medium-indent) 0;
+      gap: var(--basic-indent);
+
+      &::before,
+      &::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid var(--border);
+      }
+
+      span {
+        font-size: 13px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+      }
+    }
+
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--basic-indent);
+      width: 100%;
+      padding: var(--small-indent);
+      font-size: 14px;
+      cursor: pointer;
+    }
   }
 
   mat-form-field {
