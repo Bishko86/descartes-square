@@ -22,6 +22,14 @@ export class UsersService {
     }));
   }
 
+  async createUserFromProvider(data: {
+    username: string;
+    email: string;
+    providers: { provider: string; providerId: string; connectedAt: Date }[];
+  }): Promise<UserDocument> {
+    return this.userModel.create(data);
+  }
+
   async findAllUsers(): Promise<UserDocument[]> {
     return this.userModel.find().exec();
   }
