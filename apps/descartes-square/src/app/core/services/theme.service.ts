@@ -16,14 +16,12 @@ export class ThemeService {
   );
 
   public toggleTheme(): void {
-    const currentTheme = this.#document.body.classList.contains('light')
-      ? 'light'
-      : 'dark';
+    const root = this.#document.documentElement;
+    const currentTheme = root.classList.contains('light') ? 'light' : 'dark';
     const newTheme = currentTheme === 'light' ? 'dark' : 'light';
 
-    this.#renderer.removeClass(this.#document.body, currentTheme);
-
-    this.#renderer.addClass(this.#document.body, newTheme);
+    this.#renderer.removeClass(root, currentTheme);
+    this.#renderer.addClass(root, newTheme);
 
     localStorage.setItem('theme', newTheme);
   }

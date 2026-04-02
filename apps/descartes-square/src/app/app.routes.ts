@@ -62,4 +62,9 @@ export const routes: Routes = [
     data: { isSignUp: true },
     loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
   },
+  {
+    path: MenuRoutes.AUTH_ERROR,
+    loadComponent: () =>
+      import('./auth/auth-error/auth-error').then((mod) => mod.AuthError),
+  },
 ];

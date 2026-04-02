@@ -13,7 +13,7 @@ export class User {
   @Prop({ required: true, unique: true })
   email: string;
 
-  @Prop({ required: true, select: false })
+  @Prop({ select: false })
   password: string;
 
   @Prop({ default: Date.now })
@@ -21,6 +21,12 @@ export class User {
 
   @Prop({ select: false })
   refreshToken: string;
+
+  @Prop({
+    type: [{ provider: String, providerId: String, connectedAt: Date }],
+    default: [],
+  })
+  providers: { provider: string; providerId: string; connectedAt: Date }[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

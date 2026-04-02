@@ -12,6 +12,7 @@ import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '@auth/dtos/create-user.dto';
 import { AuthDto } from '@auth/dtos/auth.dto';
 import { IAuthResponse } from '@auth/interfaces/auth-response.interface';
+import { IOAuthProfile } from '@auth/interfaces/oauth-profile.interface';
 import { Request } from 'express';
 
 @Injectable()
@@ -85,6 +86,39 @@ export class AuthService {
 
     const tokens = await this.getTokens(userId, user.username);
     await this.updateRefreshToken(userId, tokens.refreshToken);
+    return tokens;
+  }
+
+  async signInWithProvider(profile: IOAuthProfile): Promise<IAuthResponse> {
+    const { provider, providerId, email, username } = profile;
+
+    const existingUser = await this.usersService.findUserByEmail(email);
+
+    if (existingUser) {
+      const hasPassword = !!existingUser.password;
+      const hasThisProvider = existingUser.providers?.some(
+        (p) => p.provider === provider && p.providerId === providerId,
+      );
+
+      if (hasPassword && !hasThisProvider) {
+        throw new ForbiddenException('EMAIL_CONFLICT');
+      }
+
+      const id = existingUser._id.toString();
+      const tokens = await this.getTokens(id, existingUser.username);
+      await this.updateRefreshToken(id, tokens.refreshToken);
+      return tokens;
+    }
+
+    const newUser = await this.usersService.createUserFromProvider({
+      username,
+      email,
+      providers: [{ provider, providerId, connectedAt: new Date() }],
+    });
+
+    const id = newUser._id.toString();
+    const tokens = await this.getTokens(id, newUser.username);
+    await this.updateRefreshToken(id, tokens.refreshToken);
     return tokens;
   }
 

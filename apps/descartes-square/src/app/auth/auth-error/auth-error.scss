@@ -1,0 +1,40 @@
+:host {
+  .auth-error-container {
+    display: flex;
+    justify-content: center;
+    padding: var(--medium-indent);
+  }
+
+  .auth-error-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+    text-align: center;
+
+    .error-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      margin-bottom: var(--basic-indent);
+    }
+
+    h2 {
+      margin-bottom: var(--basic-indent);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    p {
+      margin-bottom: var(--medium-indent);
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+  }
+}

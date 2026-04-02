@@ -1,4 +1,4 @@
-import { Component, computed, inject, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 
 import {
   MatFormField,
@@ -29,6 +29,8 @@ import { createAuthForm } from './auth-form.config';
   styleUrl: './auth.scss',
 })
 export class AuthComponent {
+  readonly apiUrl = input.required<string>();
+
   readonly submitEvent = output<IAuthSubmit>();
 
   readonly isHiddenPassword = signal(true);
@@ -75,6 +77,10 @@ export class AuthComponent {
   readonly submitDisabled = computed(
     () => this.authForm().invalid() || !this.authForm().dirty(),
   );
+
+  googleSignIn(): void {
+    window.location.href = `${this.apiUrl()}/auth/google`;
+  }
 
   submit(): void {
     const { email, password, username } = this.#model();
