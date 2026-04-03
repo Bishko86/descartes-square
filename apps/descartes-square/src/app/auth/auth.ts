@@ -24,6 +24,7 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
 })
 export class Auth {
   readonly apiUrl = environment.apiUrl;
+  readonly locale = environment.locale;
 
   readonly #router = inject(Router);
 

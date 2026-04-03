@@ -1,4 +1,5 @@
 import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { Maybe } from '@shared/src';
 
 import {
   MatFormField,
@@ -30,6 +31,7 @@ import { createAuthForm } from './auth-form.config';
 })
 export class AuthComponent {
   readonly apiUrl = input.required<string>();
+  readonly locale = input<Maybe<string>>(null);
 
   readonly submitEvent = output<IAuthSubmit>();
 
@@ -79,7 +81,9 @@ export class AuthComponent {
   );
 
   googleSignIn(): void {
-    window.location.href = `${this.apiUrl()}/auth/google`;
+    const locale = this.locale();
+    const url = `${this.apiUrl()}/auth/google${locale ? `?locale=${locale}` : ''}`;
+    window.location.href = url;
   }
 
   submit(): void {
