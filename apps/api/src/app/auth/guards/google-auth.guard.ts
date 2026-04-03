@@ -5,6 +5,14 @@ import { AuthGuard } from '@nestjs/passport';
 export class GoogleAuthGuard extends AuthGuard('google') {
   private readonly logger = new Logger(GoogleAuthGuard.name);
 
+  canActivate(context: ExecutionContext) {
+    const req = context.switchToHttp().getRequest();
+    if (req.query.locale) {
+      req.session.oauthLocale = req.query.locale;
+    }
+    return super.canActivate(context);
+  }
+
   handleRequest(
     err: unknown,
     user: unknown,

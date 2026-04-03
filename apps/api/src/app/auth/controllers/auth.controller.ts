@@ -77,20 +77,22 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+    const locale: string = req.session['oauthLocale'] ?? '';
+    const localePrefix = locale ? `/${locale}` : '';
     try {
       const profile = req.user as IOAuthProfile;
       const { accessToken, refreshToken } =
         await this.authService.signInWithProvider(profile);
       AuthUtils.attachAuthCookies(res, accessToken, refreshToken);
-      res.redirect(`${frontendUrl}/home`);
+      res.redirect(`${frontendUrl}${localePrefix}/home`);
     } catch (err) {
       if (
         err instanceof ForbiddenException &&
         err.message === 'EMAIL_CONFLICT'
       ) {
-        res.redirect(`${frontendUrl}/auth-error?code=EMAIL_CONFLICT`);
+        res.redirect(`${frontendUrl}${localePrefix}/auth/error?code=EMAIL_CONFLICT`);
       } else {
-        res.redirect(`${frontendUrl}/auth-error?code=UNKNOWN`);
+        res.redirect(`${frontendUrl}${localePrefix}/auth/error?code=UNKNOWN`);
       }
     }
   }
