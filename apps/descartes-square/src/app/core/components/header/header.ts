@@ -2,7 +2,6 @@ import {
   Component,
   inject,
   isDevMode,
-  OnInit,
   WritableSignal,
 } from '@angular/core';
 import { MENU_ITEMS } from '@core/consts/menu-items.const';
@@ -11,7 +10,6 @@ import { MenuItem } from '@core/interfaces/menu-item.interface';
 import { ThemeService } from '@core/services/theme.service';
 import { MatButton } from '@angular/material/button';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
-import { take } from 'rxjs';
 import { IUserDto, Maybe } from '@shared/src';
 import { MatIconModule } from '@angular/material/icon';
 import { MatIcon } from '@core/enums/mat-icon.enum';
@@ -29,33 +27,22 @@ import { LangSwitchComponent } from '@shared-ui/src';
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
-export class Header implements OnInit {
+export class Header {
   menuItems: MenuItem[] = MENU_ITEMS;
   userIcon = MatIcon.PROFILE;
-  currentUser: WritableSignal<Maybe<IUserDto>>;
   isDevMode = isDevMode();
 
   readonly #themeService = inject(ThemeService);
   readonly #authService = inject(DescartesAuthService);
 
-  ngOnInit(): void {
-    this.#getCurrUser();
-    this.#setCurrUser();
-  }
+  readonly currentUser: WritableSignal<Maybe<IUserDto>> =
+    this.#authService.currentUser;
 
   changeTheme(): void {
     this.#themeService.toggleTheme();
   }
 
   signOut(): void {
-    this.#authService.signOut().pipe(take(1)).subscribe();
-  }
-
-  #getCurrUser(): void {
-    this.#authService.getCurrentUser().pipe(take(1)).subscribe();
-  }
-
-  #setCurrUser(): void {
-    this.currentUser = this.#authService.currentUser;
+    this.#authService.signOut().subscribe();
   }
 }
