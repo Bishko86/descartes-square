@@ -17,7 +17,12 @@ import {
   EmailVerificationToken,
   EmailVerificationTokenSchema,
 } from '@auth/schema/email-verification-token.schema';
+import {
+  PasswordResetToken,
+  PasswordResetTokenSchema,
+} from '@auth/schema/password-reset-token.schema';
 import { EmailVerificationTokenService } from '@auth/services/email-verification-token.service';
+import { PasswordResetTokenService } from '@auth/services/password-reset-token.service';
 import { MailService } from '@auth/services/mail.service';
 
 @Module({
@@ -27,6 +32,10 @@ import { MailService } from '@auth/services/mail.service';
       {
         name: EmailVerificationToken.name,
         schema: EmailVerificationTokenSchema,
+      },
+      {
+        name: PasswordResetToken.name,
+        schema: PasswordResetTokenSchema,
       },
     ]),
     JwtModule.register({}),
@@ -45,6 +54,7 @@ import { MailService } from '@auth/services/mail.service';
     AccessTokenGuard,
     RefreshTokenGuard,
     EmailVerificationTokenService,
+    PasswordResetTokenService,
     MailService,
   ],
   exports: [AccessTokenGuard],

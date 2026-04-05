@@ -18,6 +18,7 @@ import { IAuthResponse } from '@auth/interfaces/auth-response.interface';
 import { IOAuthProfile } from '@auth/interfaces/oauth-profile.interface';
 import { Request, Response } from 'express';
 import { EmailVerificationTokenService } from '@auth/services/email-verification-token.service';
+import { PasswordResetTokenService } from '@auth/services/password-reset-token.service';
 import { MailService } from '@auth/services/mail.service';
 import { AuthUtils } from '@auth/utils/auth.utils';
 
@@ -28,6 +29,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly tokenService: EmailVerificationTokenService,
+    private readonly resetTokenService: PasswordResetTokenService,
     private readonly mailService: MailService,
   ) {}
 
@@ -208,6 +210,49 @@ export class AuthService {
     await this.mailService.sendVerificationEmail(user.email, raw, user.locale);
 
     return genericResponse;
+  }
+
+  async forgotPassword(email: string): Promise<{ message: string }> {
+    const genericResponse = {
+      message: 'If that email is registered, a password reset link has been sent',
+    };
+
+    const user = await this.usersService.findUserByEmail(email);
+
+    // Don't reveal whether the user exists or has a password
+    if (!user || !user.password) {
+      return genericResponse;
+    }
+
+    const raw = await this.resetTokenService.createToken(user._id, user.email);
+    await this.mailService.sendPasswordResetEmail(user.email, raw, user.locale);
+
+    return genericResponse;
+  }
+
+  async resetPassword(
+    rawToken: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
+    let record: Awaited<ReturnType<typeof this.resetTokenService.consumeToken>>;
+
+    try {
+      record = await this.resetTokenService.consumeToken(rawToken);
+    } catch (err) {
+      if (err.message === 'EXPIRED_TOKEN') {
+        throw new GoneException('Password reset link has expired');
+      }
+      throw new BadRequestException('Invalid password reset link');
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    // Clear refresh token to invalidate all existing sessions
+    await this.usersService.updateUser(record.userId.toString(), {
+      password: hashedPassword,
+      refreshToken: null,
+    });
+
+    return { message: 'Password has been reset successfully' };
   }
 
   private async getTokens(

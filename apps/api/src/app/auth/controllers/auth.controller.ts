@@ -61,6 +61,24 @@ export class AuthController {
     return this.authService.resendVerification(email);
   }
 
+  @UseGuards(ThrottlerGuard)
+  @Post('forgot-password')
+  @HttpCode(200)
+  async forgotPassword(
+    @Body('email') email: string,
+  ): Promise<{ message: string }> {
+    return this.authService.forgotPassword(email);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  async resetPassword(
+    @Body('token') token: string,
+    @Body('newPassword') newPassword: string,
+  ): Promise<{ message: string }> {
+    return this.authService.resetPassword(token, newPassword);
+  }
+
   @UseGuards(AccessTokenGuard)
   @Get('logout')
   async logout(
