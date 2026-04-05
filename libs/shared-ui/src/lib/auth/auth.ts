@@ -9,7 +9,7 @@ import {
 } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatIconButton } from '@angular/material/button';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormField } from '@angular/forms/signals';
 import { IAuthSubmit } from './interfaces/submit-payload.interface';
 import { createAuthForm } from './auth-form.config';
@@ -25,6 +25,7 @@ import { createAuthForm } from './auth-form.config';
     MatButton,
     MatSuffix,
     FormField,
+    RouterLink,
   ],
   templateUrl: './auth.html',
   styleUrl: './auth.scss',

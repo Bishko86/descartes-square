@@ -119,6 +119,21 @@
     "verifyEmailBackToSignIn": "Повернутися до входу",
     "verifyEmailInvalidTitle": "Недійсне посилання",
     "verifyEmailInvalidMessage": "Це посилання для підтвердження недійсне або вже було використано. Будь ласка, зареєструйтесь знову або зверніться до підтримки.",
-    "verifyEmailRegisterAgain": "Зареєструватися знову"
+    "verifyEmailRegisterAgain": "Зареєструватися знову",
+    "forgotPassword": "Забули пароль?",
+    "forgotPasswordTitle": "Скидання пароля",
+    "forgotPasswordDesc": "Введіть свою електронну пошту, і ми надішлемо посилання для скидання.",
+    "forgotPasswordButton": "Надіслати посилання",
+    "forgotPasswordSentTitle": "Перевірте пошту",
+    "forgotPasswordSentMessage": "Якщо обліковий запис з такою поштою існує, посилання для скидання пароля було надіслано.",
+    "forgotPasswordBackToSignIn": "Назад до входу",
+    "resetPasswordTitle": "Встановити новий пароль",
+    "resetPasswordButton": "Скинути пароль",
+    "resetPasswordSuccessMessage": "Пароль оновлено! Будь ласка, увійдіть з новим паролем.",
+    "resetPasswordExpiredTitle": "Посилання застаріло",
+    "resetPasswordExpiredMessage": "Термін дії посилання закінчився. Запросіть нове.",
+    "resetPasswordExpiredButton": "Запросити нове посилання",
+    "resetPasswordInvalidTitle": "Недійсне посилання",
+    "resetPasswordInvalidMessage": "Це посилання для скидання пароля недійсне або вже було використано."
   }
 }

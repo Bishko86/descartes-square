@@ -60,6 +60,23 @@ export class DescartesAuthService {
     );
   }
 
+  requestPasswordReset(email: string): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(
+      `${this.#baseUrl}/auth/forgot-password`,
+      { email },
+    );
+  }
+
+  resetPassword(
+    token: string,
+    newPassword: string,
+  ): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(
+      `${this.#baseUrl}/auth/reset-password`,
+      { token, newPassword },
+    );
+  }
+
   getCurrentUser(): Observable<Maybe<IUserDto>> {
     return this.#httpClient.get<IUserDto>(`${this.#baseUrl}/users/me`).pipe(
       tap((user: IUserDto) => {

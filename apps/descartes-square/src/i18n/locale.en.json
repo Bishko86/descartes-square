@@ -119,6 +119,21 @@
     "verifyEmailBackToSignIn": "Back to sign in",
     "verifyEmailInvalidTitle": "Invalid link",
     "verifyEmailInvalidMessage": "This verification link is invalid or has already been used. Please register again or contact support.",
-    "verifyEmailRegisterAgain": "Register again"
+    "verifyEmailRegisterAgain": "Register again",
+    "forgotPassword": "Forgot password?",
+    "forgotPasswordTitle": "Reset your password",
+    "forgotPasswordDesc": "Enter your email and we'll send you a reset link.",
+    "forgotPasswordButton": "Send reset link",
+    "forgotPasswordSentTitle": "Check your inbox",
+    "forgotPasswordSentMessage": "If an account exists for that email, a password reset link has been sent.",
+    "forgotPasswordBackToSignIn": "Back to sign in",
+    "resetPasswordTitle": "Set new password",
+    "resetPasswordButton": "Reset password",
+    "resetPasswordSuccessMessage": "Password updated! Please sign in with your new password.",
+    "resetPasswordExpiredTitle": "Link expired",
+    "resetPasswordExpiredMessage": "This reset link has expired. Request a new one.",
+    "resetPasswordExpiredButton": "Request new link",
+    "resetPasswordInvalidTitle": "Invalid link",
+    "resetPasswordInvalidMessage": "This reset link is invalid or has already been used."
   }
 }

@@ -74,4 +74,18 @@ export const routes: Routes = [
         (mod) => mod.VerifyEmailComponent,
       ),
   },
+  {
+    path: MenuRoutes.FORGOT_PASSWORD,
+    loadComponent: () =>
+      import('./auth/forgot-password/forgot-password.component').then(
+        (mod) => mod.ForgotPasswordComponent,
+      ),
+  },
+  {
+    path: MenuRoutes.RESET_PASSWORD,
+    loadComponent: () =>
+      import('./auth/reset-password/reset-password.component').then(
+        (mod) => mod.ResetPasswordComponent,
+      ),
+  },
 ];
