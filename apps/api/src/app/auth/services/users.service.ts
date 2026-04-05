@@ -9,22 +9,23 @@ import { CreateUserDto } from '@auth/dtos/create-user.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async createUser(user: CreateUserDto): Promise<{ id: string }> {
+  async createUser(user: CreateUserDto): Promise<UserDocument> {
     const userModel = new this.userModel({
       username: user.username,
       email: user.email,
       password: user.password,
-      createdAt: user.createdAt,
+      locale: user.locale ?? 'en',
     });
 
-    return userModel.save().then((user) => ({
-      id: user._id.toString(),
-    }));
+    return userModel.save();
   }
 
   async createUserFromProvider(data: {
     username: string;
     email: string;
+    locale: string;
+    isVerified: boolean;
+    verifiedAt: Date;
     providers: { provider: string; providerId: string; connectedAt: Date }[];
   }): Promise<UserDocument> {
     return this.userModel.create(data);

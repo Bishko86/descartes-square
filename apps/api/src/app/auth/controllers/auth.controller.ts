@@ -3,12 +3,14 @@ import {
   Controller,
   ForbiddenException,
   Get,
+  HttpCode,
   Post,
   Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { ThrottlerGuard } from '@nestjs/throttler';
 import { GoogleAuthGuard } from '@auth/guards/google-auth.guard';
 import { AuthService } from '@auth/services/auth.service';
 import { CreateUserDto } from '@auth/dtos/create-user.dto';
@@ -30,7 +32,7 @@ export class AuthController {
   @Post('signup')
   async register(
     @Body() createUserDto: CreateUserDto,
-  ): Promise<{ id: string }> {
+  ): Promise<{ message: string }> {
     return this.authService.signUp(createUserDto);
   }
 
@@ -38,14 +40,25 @@ export class AuthController {
   async login(
     @Body() data: AuthDto,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{
-    userId: string;
-  }> {
-    const { accessToken, refreshToken, userId } =
-      await this.authService.signIn(data);
-    AuthUtils.attachAuthCookies(res, accessToken, refreshToken);
+  ): Promise<{ userId: string }> {
+    return this.authService.signIn(data, res);
+  }
 
-    return { userId };
+  @Post('verify-email')
+  async verifyEmail(
+    @Body('token') token: string,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ userId: string }> {
+    return this.authService.verifyEmail(token, res);
+  }
+
+  @UseGuards(ThrottlerGuard)
+  @Post('resend-verification')
+  @HttpCode(200)
+  async resendVerification(
+    @Body('email') email: string,
+  ): Promise<{ message: string }> {
+    return this.authService.resendVerification(email);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -82,7 +95,7 @@ export class AuthController {
     try {
       const profile = req.user as IOAuthProfile;
       const { accessToken, refreshToken } =
-        await this.authService.signInWithProvider(profile);
+        await this.authService.signInWithProvider(profile, locale || 'en');
       AuthUtils.attachAuthCookies(res, accessToken, refreshToken);
       res.redirect(`${frontendUrl}${localePrefix}/home`);
     } catch (err) {
@@ -90,7 +103,9 @@ export class AuthController {
         err instanceof ForbiddenException &&
         err.message === 'EMAIL_CONFLICT'
       ) {
-        res.redirect(`${frontendUrl}${localePrefix}/auth/error?code=EMAIL_CONFLICT`);
+        res.redirect(
+          `${frontendUrl}${localePrefix}/auth/error?code=EMAIL_CONFLICT`,
+        );
       } else {
         res.redirect(`${frontendUrl}${localePrefix}/auth/error?code=UNKNOWN`);
       }
@@ -102,9 +117,7 @@ export class AuthController {
   async refreshTokens(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{
-    userId: string;
-  }> {
+  ): Promise<{ userId: string }> {
     const userId = req['user']['userId'];
 
     const { accessToken, refreshToken } = await this.authService.refreshTokens(

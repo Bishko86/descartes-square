@@ -27,6 +27,24 @@ export class User {
     default: [],
   })
   providers: { provider: string; providerId: string; connectedAt: Date }[];
+
+  @Prop({ default: false })
+  isVerified: boolean;
+
+  @Prop({ default: null })
+  verifiedAt: Date | null;
+
+  @Prop({ default: 'en', enum: ['en', 'uk'] })
+  locale: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// Auto-delete unverified users 24 hours after creation
+UserSchema.index(
+  { createdAt: 1 },
+  {
+    expireAfterSeconds: 86400,
+    partialFilterExpression: { isVerified: false },
+  },
+);

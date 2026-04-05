@@ -1,6 +1,9 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
+  GoneException,
+  HttpException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -13,41 +16,57 @@ import { CreateUserDto } from '@auth/dtos/create-user.dto';
 import { AuthDto } from '@auth/dtos/auth.dto';
 import { IAuthResponse } from '@auth/interfaces/auth-response.interface';
 import { IOAuthProfile } from '@auth/interfaces/oauth-profile.interface';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+import { EmailVerificationTokenService } from '@auth/services/email-verification-token.service';
+import { MailService } from '@auth/services/mail.service';
+import { AuthUtils } from '@auth/utils/auth.utils';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private configService: ConfigService,
+    private readonly configService: ConfigService,
+    private readonly tokenService: EmailVerificationTokenService,
+    private readonly mailService: MailService,
   ) {}
 
-  async signUp({
-    username,
-    email,
-    password,
-    createdAt,
-  }: CreateUserDto): Promise<{ id: string }> {
-    const existedUser = await this.usersService.findUserByEmail(email);
+  async signUp(dto: CreateUserDto): Promise<{ message: string }> {
+    const existingUser = await this.usersService.findUserByEmail(dto.email);
 
-    if (existedUser) {
-      throw new BadRequestException('User with such email already in use');
+    if (existingUser?.isVerified) {
+      throw new ConflictException('User with such email already in use');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let user: UserDocument;
 
-    return this.usersService.createUser({
-      username,
-      email,
-      createdAt,
-      password: hashedPassword,
-    });
+    if (!existingUser) {
+      const hashedPassword = await bcrypt.hash(dto.password, 10);
+      user = await this.usersService.createUser({
+        ...dto,
+        password: hashedPassword,
+      });
+    } else {
+      const hashedPassword = await bcrypt.hash(dto.password, 10);
+      user = await this.usersService.updateUser(existingUser._id.toString(), {
+        username: dto.username,
+        password: hashedPassword,
+        locale: dto.locale ?? existingUser.locale,
+      });
+    }
+
+    const raw = await this.tokenService.createToken(user._id, user.email);
+    await this.mailService.sendVerificationEmail(user.email, raw, user.locale);
+
+    return { message: 'Check your email to confirm your account' };
   }
 
-  async signIn({ email, password }: AuthDto): Promise<IAuthResponse> {
+  async signIn(
+    { email, password }: AuthDto,
+    res: Response,
+  ): Promise<{ userId: string }> {
     const user = await this.usersService.findUserByEmail(email);
-    if (!user) {
+    if (!user || !user.password) {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
@@ -56,12 +75,23 @@ export class AuthService {
       throw new UnauthorizedException('Email or password is incorrect');
     }
 
+    if (!user.isVerified) {
+      throw new HttpException(
+        {
+          statusCode: 403,
+          error: 'EMAIL_NOT_VERIFIED',
+          message: 'Please verify your email first',
+        },
+        403,
+      );
+    }
+
     const id = user._id.toString();
     const tokens = await this.getTokens(id, user.username);
-
     await this.updateRefreshToken(id, tokens.refreshToken);
+    AuthUtils.attachAuthCookies(res, tokens.accessToken, tokens.refreshToken);
 
-    return tokens;
+    return { userId: id };
   }
 
   async signOut(userId: string): Promise<UserDocument> {
@@ -89,7 +119,7 @@ export class AuthService {
     return tokens;
   }
 
-  async signInWithProvider(profile: IOAuthProfile): Promise<IAuthResponse> {
+  async signInWithProvider(profile: IOAuthProfile, locale: string): Promise<IAuthResponse> {
     const { provider, providerId, email, username } = profile;
 
     const existingUser = await this.usersService.findUserByEmail(email);
@@ -104,6 +134,16 @@ export class AuthService {
         throw new ForbiddenException('EMAIL_CONFLICT');
       }
 
+      if (!existingUser.isVerified) {
+        await Promise.all([
+          this.usersService.updateUser(existingUser._id.toString(), {
+            isVerified: true,
+            verifiedAt: new Date(),
+          }),
+          this.tokenService.deleteTokensForUser(existingUser._id),
+        ]);
+      }
+
       const id = existingUser._id.toString();
       const tokens = await this.getTokens(id, existingUser.username);
       await this.updateRefreshToken(id, tokens.refreshToken);
@@ -113,6 +153,9 @@ export class AuthService {
     const newUser = await this.usersService.createUserFromProvider({
       username,
       email,
+      locale,
+      isVerified: true,
+      verifiedAt: new Date(),
       providers: [{ provider, providerId, connectedAt: new Date() }],
     });
 
@@ -122,26 +165,65 @@ export class AuthService {
     return tokens;
   }
 
+  async verifyEmail(
+    rawToken: string,
+    res: Response,
+  ): Promise<{ userId: string }> {
+    let record: Awaited<ReturnType<typeof this.tokenService.consumeToken>>;
+
+    try {
+      record = await this.tokenService.consumeToken(rawToken);
+    } catch (err) {
+      if (err.message === 'EXPIRED_TOKEN') {
+        throw new GoneException('Verification link has expired');
+      }
+      throw new BadRequestException('Invalid verification link');
+    }
+
+    const user = await this.usersService.updateUser(
+      record.userId.toString(),
+      { isVerified: true, verifiedAt: new Date() },
+    );
+
+    const tokens = await this.getTokens(user._id.toString(), user.username);
+    await this.updateRefreshToken(user._id.toString(), tokens.refreshToken);
+    AuthUtils.attachAuthCookies(res, tokens.accessToken, tokens.refreshToken);
+
+    return { userId: user._id.toString() };
+  }
+
+  async resendVerification(email: string): Promise<{ message: string }> {
+    const genericResponse = {
+      message:
+        'If that email is registered and unverified, a new link has been sent',
+    };
+
+    const user = await this.usersService.findUserByEmail(email);
+
+    if (!user || user.isVerified) {
+      return genericResponse;
+    }
+
+    const raw = await this.tokenService.createToken(user._id, user.email);
+    await this.mailService.sendVerificationEmail(user.email, raw, user.locale);
+
+    return genericResponse;
+  }
+
   private async getTokens(
     userId: string,
     username: string,
   ): Promise<IAuthResponse> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        {
-          userId,
-          username,
-        },
+        { userId, username },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
           expiresIn: '15m',
         },
       ),
       this.jwtService.signAsync(
-        {
-          userId,
-          username,
-        },
+        { userId, username },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
           expiresIn: '7d',
@@ -149,12 +231,7 @@ export class AuthService {
       ),
     ]);
 
-    return {
-      userId,
-      username,
-      accessToken,
-      refreshToken,
-    };
+    return { userId, username, accessToken, refreshToken };
   }
 
   private async updateRefreshToken(
@@ -162,7 +239,6 @@ export class AuthService {
     refreshToken: string,
   ): Promise<void> {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-
     await this.usersService.updateUser(userId, {
       refreshToken: hashedRefreshToken,
     });
