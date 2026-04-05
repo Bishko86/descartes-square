@@ -2,13 +2,14 @@ import {
   Component,
   inject,
   isDevMode,
+  signal,
   WritableSignal,
 } from '@angular/core';
 import { MENU_ITEMS } from '@core/consts/menu-items.const';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MenuItem } from '@core/interfaces/menu-item.interface';
 import { ThemeService } from '@core/services/theme.service';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { IUserDto, Maybe } from '@shared/src';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,6 +22,7 @@ import { LangSwitchComponent } from '@shared-ui/src';
     RouterLink,
     RouterLinkActive,
     MatButton,
+    MatIconButton,
     MatIconModule,
     LangSwitchComponent,
   ],
@@ -37,6 +39,15 @@ export class Header {
 
   readonly currentUser: WritableSignal<Maybe<IUserDto>> =
     this.#authService.currentUser;
+  readonly mobileMenuOpen = signal(false);
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen.update((v) => !v);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
+  }
 
   changeTheme(): void {
     this.#themeService.toggleTheme();

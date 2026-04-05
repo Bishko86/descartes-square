@@ -2,15 +2,18 @@
   <div class="right-section">
     <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto" />
 
-    @for (item of menuItems; track item.name) {
-      <a
-        class="menu-link"
-        [routerLink]="item.route"
-        routerLinkActive="active"
-        >{{ item.name }}</a
-      >
-    }
+    <nav class="desktop-nav">
+      @for (item of menuItems; track item.name) {
+        <a
+          class="menu-link"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          >{{ item.name }}</a
+        >
+      }
+    </nav>
   </div>
+
   <div class="left-section">
     @let user = currentUser();
 
@@ -61,4 +64,54 @@
       🌓 Change theme
     </button>
   </div>
+
+  <button mat-icon-button class="hamburger" (click)="toggleMobileMenu()" aria-label="Toggle menu">
+    <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+  </button>
 </header>
+
+@if (mobileMenuOpen()) {
+  <div class="mobile-menu">
+    <nav>
+      @for (item of menuItems; track item.name) {
+        <a
+          class="menu-link"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          (click)="closeMobileMenu()"
+          >{{ item.name }}</a
+        >
+      }
+    </nav>
+
+    <div class="mobile-actions">
+      @let user = currentUser();
+
+      @if (user) {
+        <div class="user-info">
+          <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
+          <span class="user-email">{{ user.email }}</span>
+          <span>{{ user.username }}</span>
+        </div>
+        <button matButton="elevated" i18n="@@signOut" (click)="signOut(); closeMobileMenu()">
+          Sign Out
+        </button>
+      } @else {
+        <button matButton="elevated" i18n="@@signIn" [routerLink]="['/sign-in']" (click)="closeMobileMenu()">
+          Sign In
+        </button>
+        <button matButton="elevated" i18n="@@signUp" [routerLink]="['/sign-up']" (click)="closeMobileMenu()">
+          Sign Up
+        </button>
+      }
+
+      @if (!isDevMode) {
+        <lib-lang-switch></lib-lang-switch>
+      }
+
+      <button matButton="elevated" i18n="@@themeBtn" (click)="changeTheme(); closeMobileMenu()">
+        🌓 Change theme
+      </button>
+    </div>
+  </div>
+}
