@@ -2,23 +2,42 @@
   display: block;
 }
 
-.error-snackbar-content {
+@mixin snackbar-colors($color-var) {
+  .snackbar-icon,
+  .snackbar-message,
+  .close-button {
+    color: var(#{$color-var});
+  }
+}
+
+.snackbar-content {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 4px 0;
 
-  .error-icon {
-    color: var(--error);
+  &.error {
+    @include snackbar-colors(--error);
+  }
+  &.warning {
+    @include snackbar-colors(--warning);
+  }
+  &.success {
+    @include snackbar-colors(--success);
+  }
+  &.info {
+    @include snackbar-colors(--info);
+  }
+
+  .snackbar-icon {
     font-size: 24px;
     width: 24px;
     height: 24px;
     flex-shrink: 0;
   }
 
-  .error-message {
+  .snackbar-message {
     flex: 1;
-    color: var(--error);
     font-size: 14px;
     font-weight: 500;
     line-height: 1.4;
@@ -26,7 +45,6 @@
 
   .close-button {
     flex-shrink: 0;
-    color: var(--error);
     opacity: 0.6;
     width: 32px;
     height: 32px;

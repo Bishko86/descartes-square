@@ -67,4 +67,11 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./auth/auth-error/auth-error').then((mod) => mod.AuthError),
   },
+  {
+    path: MenuRoutes.VERIFY_EMAIL,
+    loadComponent: () =>
+      import('./auth/verify-email/verify-email.component').then(
+        (mod) => mod.VerifyEmailComponent,
+      ),
+  },
 ];

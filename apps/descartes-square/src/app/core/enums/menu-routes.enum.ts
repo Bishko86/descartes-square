@@ -4,4 +4,5 @@ export enum MenuRoutes {
   SIGN_IN = 'sign-in',
   SIGN_UP = 'sign-up',
   AUTH_ERROR = 'auth-error',
+  VERIFY_EMAIL = 'auth/verify-email',
 }
