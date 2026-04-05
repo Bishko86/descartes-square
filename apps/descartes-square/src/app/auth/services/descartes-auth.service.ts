@@ -19,7 +19,7 @@ export class DescartesAuthService {
     );
   }
 
-  signUp(payload: IAuthForm): Observable<IAuthLogin> {
+  signUp(payload: IAuthForm & { locale?: string }): Observable<IAuthLogin> {
     return this.#httpClient.post<IAuthLogin>(
       `${this.#baseUrl}/auth/signup`,
       payload,
@@ -44,6 +44,37 @@ export class DescartesAuthService {
 
   getUserById(userId: string): Observable<IUserDto> {
     return this.#httpClient.get<IUserDto>(`${this.#baseUrl}/users/${userId}`);
+  }
+
+  verifyEmail(token: string): Observable<IAuthLogin> {
+    return this.#httpClient.post<IAuthLogin>(
+      `${this.#baseUrl}/auth/verify-email`,
+      { token },
+    );
+  }
+
+  resendVerification(email: string): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(
+      `${this.#baseUrl}/auth/resend-verification`,
+      { email },
+    );
+  }
+
+  requestPasswordReset(email: string): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(
+      `${this.#baseUrl}/auth/forgot-password`,
+      { email },
+    );
+  }
+
+  resetPassword(
+    token: string,
+    newPassword: string,
+  ): Observable<{ message: string }> {
+    return this.#httpClient.post<{ message: string }>(
+      `${this.#baseUrl}/auth/reset-password`,
+      { token, newPassword },
+    );
   }
 
   getCurrentUser(): Observable<Maybe<IUserDto>> {

@@ -1,3 +1,5 @@
+$mobile: 768px;
+
 header {
   display: flex;
   justify-content: space-between;
@@ -11,8 +13,15 @@ header {
     column-gap: var(--basic-indent);
   }
 
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    column-gap: var(--basic-indent);
+  }
+
   .left-section {
     display: flex;
+    align-items: center;
     column-gap: var(--basic-indent);
 
     .user-info {
@@ -36,7 +45,6 @@ header {
     }
   }
 
-
   .menu-link {
     font-size: 22px;
     color: var(--text);
@@ -45,9 +53,85 @@ header {
       color: var(--highlighted-text);
     }
   }
+
+  .hamburger {
+    display: none;
+    color: var(--text);
+  }
+
+  @media (max-width: $mobile) {
+    .desktop-nav,
+    .left-section {
+      display: none;
+    }
+
+    .hamburger {
+      display: flex;
+    }
+  }
 }
 
 img {
   height: 56px;
   width: 56px;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  background-color: var(--surface);
+  border-top: 1px solid var(--border);
+  padding: var(--basic-indent);
+  gap: var(--basic-indent);
+
+  nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--small-indent);
+  }
+
+  .menu-link {
+    font-size: 18px;
+    color: var(--text);
+    padding: var(--small-indent) 0;
+    border-bottom: 1px solid var(--border);
+
+    &.active {
+      color: var(--highlighted-text);
+    }
+  }
+
+  .mobile-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--basic-indent);
+
+    .user-info {
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      grid-template-rows: 20px 20px;
+      color: var(--text-secondary);
+    }
+
+    .user-icon {
+      grid-column: 1;
+      grid-row: 1/3;
+      align-self: center;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px var(--shadow);
+    }
+
+    .user-email {
+      font-size: 12px;
+    }
+
+    button {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: $mobile) {
+    display: flex;
+  }
 }

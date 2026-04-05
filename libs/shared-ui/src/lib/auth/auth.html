@@ -51,6 +51,10 @@
       <p class="field-error" i18n="@@passwordMinLength">Password must be at least 6 characters</p>
     }
 
+    @if (!isSignUp()) {
+      <a class="forgot-password-link" routerLink="/forgot-password" i18n="@@forgotPassword">Forgot password?</a>
+    }
+
     @if (!authForm.confirmPassword().hidden()) {
       <mat-form-field>
         <mat-label i18n="@@confirm-password">Confirm Password</mat-label>

@@ -4,12 +4,13 @@
 @use "styles/fonts.scss";
 @use "styles/material.scss";
 
-html, body {
-  height: 100%;
+html,
+body {
+  min-height: 100%;
   padding: 0;
   margin: 0;
   overflow-x: hidden;
-  overflow-y: hidden;
+  overflow-y: auto;
 }
 
 body {
@@ -18,7 +19,8 @@ body {
   background-color: var(--background);
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
@@ -27,7 +29,8 @@ a {
   color: inherit;
 }
 
-html, body {
+html,
+body {
   height: 100%;
 }
 
@@ -36,11 +39,11 @@ body {
   font-family: "Roboto", "Helvetica Neue", sans-serif;
 }
 
-mat-snack-bar-container.error-snackbar {
+@mixin snackbar-variant($bg-var, $accent-var) {
   .mdc-snackbar__surface {
     position: relative;
     overflow: hidden;
-    background-color: var(--error-bg) !important;
+    background-color: var(#{$bg-var}) !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 16px var(--shadow) !important;
     padding: 8px 16px;
@@ -52,7 +55,20 @@ mat-snack-bar-container.error-snackbar {
       left: 0;
       right: 0;
       height: 3px;
-      background-color: var(--error);
+      background-color: var(#{$accent-var});
     }
   }
+}
+
+mat-snack-bar-container.error-snackbar {
+  @include snackbar-variant(--error-bg, --error);
+}
+mat-snack-bar-container.warning-snackbar {
+  @include snackbar-variant(--warning-bg, --warning);
+}
+mat-snack-bar-container.success-snackbar {
+  @include snackbar-variant(--success-bg, --success);
+}
+mat-snack-bar-container.info-snackbar {
+  @include snackbar-variant(--info-bg, --info);
 }

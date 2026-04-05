@@ -10,6 +10,12 @@
   --primary-contrast: #ffffff;
   --error: #dc2626;
   --error-bg: #fde8e8;
+  --warning: #d97706;
+  --warning-bg: #fef3c7;
+  --success: #16a34a;
+  --success-bg: #dcfce7;
+  --info: #7c3aed;
+  --info-bg: #ede9fe;
   --highlighted-text: #2563eb;
   --shadow: rgba(0, 0, 0, 0.1);
   --surface-alt: #f0f4ff;
@@ -38,7 +44,13 @@
   --primary: #3b82f6;
   --primary-contrast: #ffffff;
   --error: #f87171;
-  --error-bg: rgba(248, 113, 113, 0.12);
+  --error-bg: #2d1a1a;
+  --warning: #fbbf24;
+  --warning-bg: #2d2410;
+  --success: #4ade80;
+  --success-bg: #152d1e;
+  --info: #a78bfa;
+  --info-bg: #1e1530;
   --highlighted-text: #60a5fa;
   --shadow: rgba(205, 205, 205, 0.1);
   --surface-alt: #172033;

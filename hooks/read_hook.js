@@ -9,8 +9,11 @@ async function main() {
   const readPath =
     toolArgs.tool_input?.file_path || toolArgs.tool_input?.path || "";
 
-  // TODO: ensure Claude isn't trying to read the .env file
-  if (readPath.includes(".env")) {
+  // Block any .env file except .env.example
+  // Matches: .env, .env.local, apps/api/.env, ../.env, .env.production, etc.
+  // Does NOT match: .env.example
+  const isEnvFile = /(?:^|\/)\.env(?!\.example)(?:\.|$)/.test(readPath);
+  if (isEnvFile) {
     console.error("read_hook: .env file not allowed");
     process.exit(2);
   }

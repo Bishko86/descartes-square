@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MenuRoutes } from '@core/enums/menu-routes.enum';
+import { guestGuard } from '@core/guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -55,16 +56,42 @@ export const routes: Routes = [
   },
   {
     path: MenuRoutes.SIGN_IN,
+    canActivate: [guestGuard],
     loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
   },
   {
     path: MenuRoutes.SIGN_UP,
+    canActivate: [guestGuard],
     data: { isSignUp: true },
     loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),
   },
   {
     path: MenuRoutes.AUTH_ERROR,
+    canActivate: [guestGuard],
     loadComponent: () =>
       import('./auth/auth-error/auth-error').then((mod) => mod.AuthError),
+  },
+  {
+    path: MenuRoutes.VERIFY_EMAIL,
+    loadComponent: () =>
+      import('./auth/verify-email/verify-email.component').then(
+        (mod) => mod.VerifyEmailComponent,
+      ),
+  },
+  {
+    path: MenuRoutes.FORGOT_PASSWORD,
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./auth/forgot-password/forgot-password.component').then(
+        (mod) => mod.ForgotPasswordComponent,
+      ),
+  },
+  {
+    path: MenuRoutes.RESET_PASSWORD,
+    canActivate: [guestGuard],
+    loadComponent: () =>
+      import('./auth/reset-password/reset-password.component').then(
+        (mod) => mod.ResetPasswordComponent,
+      ),
   },
 ];

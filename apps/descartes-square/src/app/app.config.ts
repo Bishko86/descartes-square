@@ -1,5 +1,7 @@
 import {
   ApplicationConfig,
+  inject,
+  provideAppInitializer,
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
@@ -13,6 +15,7 @@ import {
 } from '@angular/common/http';
 import { apiInterceptor } from '@core/interceptors/api-interceptor';
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
+import { firstValueFrom } from 'rxjs';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,5 +24,9 @@ export const appConfig: ApplicationConfig = {
     provideZonelessChangeDetection(),
     provideRouter(routes, withComponentInputBinding()),
     provideHttpClient(withFetch(), withInterceptors([apiInterceptor])),
+    provideAppInitializer(() => {
+      const authService = inject(DescartesAuthService);
+      return firstValueFrom(authService.getCurrentUser());
+    }),
   ],
 };

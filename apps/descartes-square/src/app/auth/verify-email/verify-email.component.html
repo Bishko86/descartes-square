@@ -1,0 +1,37 @@
+<div class="verify-email-container">
+  <div class="verify-email-card">
+    @switch (status()) {
+      @case ('verifying') {
+        <mat-icon class="status-icon">hourglass_empty</mat-icon>
+        <h2 i18n="@@verifyEmailVerifying">Verifying your email…</h2>
+      }
+
+      @case ('expired') {
+        <mat-icon class="status-icon warn">schedule</mat-icon>
+        <h2 i18n="@@verifyEmailExpiredTitle">Link expired</h2>
+        <p i18n="@@verifyEmailExpiredMessage">Your verification link has expired. Enter your email below to receive a new one.</p>
+
+        @if (!resent()) {
+          <mat-form-field appearance="outline">
+            <mat-label i18n="@@verifyEmailInputLabel">Email</mat-label>
+            <input matInput type="email" #emailInput />
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="resend(emailInput.value)" i18n="@@verifyEmailResendButton">
+            Send a new link
+          </button>
+        } @else {
+          <p class="success-text" i18n="@@verifyEmailResentMessage">A new link has been sent — check your inbox.</p>
+        }
+
+        <a mat-button routerLink="/sign-in" i18n="@@verifyEmailBackToSignIn">Back to sign in</a>
+      }
+
+      @case ('invalid') {
+        <mat-icon class="status-icon warn">error_outline</mat-icon>
+        <h2 i18n="@@verifyEmailInvalidTitle">Invalid link</h2>
+        <p i18n="@@verifyEmailInvalidMessage">This verification link is invalid or has already been used. Please register again.</p>
+        <a mat-raised-button color="primary" routerLink="/sign-up" i18n="@@verifyEmailRegisterAgain">Register again</a>
+      }
+    }
+  </div>
+</div>

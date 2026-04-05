@@ -1,0 +1,54 @@
+.signup-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+
+  .success-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 480px;
+    width: 100%;
+    padding: 3rem 2.5rem;
+    border-radius: 16px;
+    background: var(--mat-sys-surface-container-low);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    text-align: center;
+
+    .success-icon {
+      font-size: 56px;
+      width: 56px;
+      height: 56px;
+      color: var(--mat-sys-primary, #6750a4);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--mat-sys-on-surface, #1c1b1f);
+    }
+
+    p {
+      margin: 0;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--mat-sys-on-surface-variant, #49454f);
+    }
+
+    .back-link {
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.resend-verification {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

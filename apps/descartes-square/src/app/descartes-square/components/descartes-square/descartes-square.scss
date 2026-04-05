@@ -1,8 +1,14 @@
+$mobile: 768px;
+
 :host {
   display: block;
   height: 100%;
 
   .descartes-section {
-    margin: 0 auto;
+    margin: 0 60px;
+
+    @media (max-width: $mobile) {
+      margin: 0 auto;
+    }
   }
 }
