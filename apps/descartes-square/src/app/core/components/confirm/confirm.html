@@ -1,11 +1,24 @@
-<section class="confirm">
-  <h3 class="confirm__title">{{ title }}</h3>
-  <div class="confirm__dialog">
-    <button class="confirm__btn" matButton="outlined" (click)="confirm()" i18n="@@yesBtn">
-      Yes
+<div class="confirm">
+  <div class="confirm__header">
+    @if (showIcon) {
+      <mat-icon class="confirm__icon" [class.confirm__icon--delete]="data.type === 'delete'" [class.confirm__icon--warning]="data.type === 'warning'">warning</mat-icon>
+    }
+    <h2 class="confirm__title">{{ dialogTitle }}</h2>
+  </div>
+
+  <p class="confirm__description">{{ description }}</p>
+
+  <div class="confirm__actions">
+    <button class="confirm__cancel" mat-button (click)="cancel()">
+      {{ cancelLabel }}
     </button>
-    <button class="confirm__btn" matButton="outlined" (click)="cancel()" i18n="@@noBtn">
-      No
+    <button
+      class="confirm__confirm"
+      [class.confirm__confirm--delete]="data.type === 'delete'"
+      [class.confirm__confirm--warning]="data.type === 'warning'"
+      mat-button
+      (click)="confirm()">
+      {{ confirmLabel }}
     </button>
   </div>
-</section>
+</div>

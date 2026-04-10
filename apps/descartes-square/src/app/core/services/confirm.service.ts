@@ -1,31 +1,28 @@
 import { inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Confirm } from '@core/components/confirm/confirm';
+import {
+  ConfirmDialogData,
+  ConfirmDialogType,
+} from '@core/definitions/confirm-dialog.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfirmService {
-  readonly #isAllowed = new Subject<boolean>();
   readonly #dialog = inject(MatDialog);
-  readonly #defaultMessage = $localize`:@@confirm.defaultMessage:Are you sure you want to delete this record?`;
 
-  confirm(message = this.#defaultMessage): Observable<boolean> {
-    this.#dialog
+  confirm(
+    data: ConfirmDialogData = { type: ConfirmDialogType.Delete },
+  ): Observable<boolean> {
+    return this.#dialog
       .open(Confirm, {
-        data: message,
+        data,
         width: 'auto',
-        height: '180px',
+        height: 'auto',
+        panelClass: 'confirm-dialog-panel',
       })
-      .afterClosed()
-      .subscribe((confirm: boolean) => {
-        if (confirm) {
-          this.#isAllowed.next(true);
-        } else {
-          this.#isAllowed.next(false);
-        }
-      });
-    return this.#isAllowed;
+      .afterClosed();
   }
 }

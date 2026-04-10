@@ -22,4 +22,8 @@ html {
     color: var(--highlighted-text);
     background-color: var(--surface);
   }
+
+  .confirm-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 12px;
+  }
 }

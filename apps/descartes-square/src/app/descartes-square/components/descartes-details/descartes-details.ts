@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmService } from '@core/services/confirm.service';
 import { tap, first, filter } from 'rxjs';
+import { SnackbarComponent } from '@core/components/snackbar/snackbar';
 
 @Component({
   selector: 'app-descartes-details',
@@ -55,7 +56,16 @@ export class DescartesDetails implements OnInit {
           );
 
           this.#router.navigate(['descartes-square']).then();
-          this.#snackBar.open(`Record ${this.id()} is deleted`, 'Close', {});
+          this.#snackBar.openFromComponent(SnackbarComponent, {
+            data: {
+              message: $localize`:@@deleteRecordSuccess:Record deleted successfully`,
+              type: 'success',
+            },
+            duration: 3000,
+            panelClass: 'success-snackbar',
+            verticalPosition: 'top',
+            horizontalPosition: 'center',
+          });
         }),
       )
       .subscribe();

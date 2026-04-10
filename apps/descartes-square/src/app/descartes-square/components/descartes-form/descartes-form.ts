@@ -52,10 +52,8 @@ import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { HttpErrorResponse } from '@angular/common/http';
-import {
-  ButtonsText,
-  CommonText,
-} from '@descartes/definitions/consts/buttons-text.const';
+import { ButtonsText } from '@descartes/definitions/consts/buttons-text.const';
+import { ConfirmDialogType } from '@core/definitions/confirm-dialog.model';
 
 @Component({
   selector: 'app-descartes-form',
@@ -176,12 +174,13 @@ export class DescartesForm implements OnInit {
 
   clearForm(): void {
     this.#confirmService
-      .confirm(CommonText.get('unsavedChanges'))
+      .confirm({ type: ConfirmDialogType.Warning })
       .pipe(
         first(),
         filter(Boolean),
         tap(() => {
-          this.#initForm();
+          this.#initForm(true);
+          this.#cdr.markForCheck();
         }),
       )
       .subscribe();
@@ -273,11 +272,13 @@ export class DescartesForm implements OnInit {
     return this.form.get(key) as FormArray<FormControl<Maybe<string>>>;
   }
 
-  #initForm(): void {
+  #initForm(isClear = false): void {
     const list: IDescartesSolution[] = JSON.parse(
       localStorage.getItem(LocalStorageKeys.LIST) || '[]',
     );
-    const editedEntity = list.find((form) => form.id === this.id());
+    const editedEntity = isClear
+      ? null
+      : list.find((form) => form.id === this.id());
 
     this.form = new FormGroup<IDescartesForm>({
       title: new FormControl(editedEntity?.title || null, Validators.required),

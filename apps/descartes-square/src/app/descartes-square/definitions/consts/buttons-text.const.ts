@@ -7,7 +7,3 @@ export const ButtonsText = new Map<string, string>()
   .set('addTitle', $localize`:@@addTitle:Add Title`)
   .set('aiSuggestion', $localize`:@@aiSuggestion:AI Suggestion`);
 
-export const CommonText = new Map<string, string>().set(
-  'unsavedChanges',
-  $localize`:@@confirm.unsavedChanges:Are you sure you want to clear this form? All unsaved changes will be lost.`,
-);
