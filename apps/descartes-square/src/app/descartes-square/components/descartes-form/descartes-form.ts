@@ -53,7 +53,7 @@ import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ButtonsText } from '@descartes/definitions/consts/buttons-text.const';
-import { ConfirmDialogType } from '@core/definitions/confirm-dialog.model';
+import { ConfirmDialogType } from '@core/enums/confirm-dialog-type.enum';
 
 @Component({
   selector: 'app-descartes-form',

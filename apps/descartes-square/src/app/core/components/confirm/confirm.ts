@@ -2,10 +2,8 @@ import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import {
-  ConfirmDialogData,
-  ConfirmDialogType,
-} from '@core/definitions/confirm-dialog.model';
+import { ConfirmDialogType } from '@core/enums/confirm-dialog-type.enum';
+import { IConfirmDialogData } from '@core/interfaces/confirm-dialog-data.interface';
 
 @Component({
   selector: 'app-confirm',
@@ -15,7 +13,7 @@ import {
 })
 export class Confirm {
   readonly dialog = inject(MatDialogRef<Confirm>);
-  readonly data: ConfirmDialogData = inject(MAT_DIALOG_DATA);
+  readonly data: IConfirmDialogData = inject(MAT_DIALOG_DATA);
 
   get dialogTitle(): string {
     if (this.data.title) {
