@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-footer',
-  imports: [],
+  imports: [MatIconModule],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
 })
-export class Footer {}
+export class Footer {
+  readonly currentYear = new Date().getFullYear();
+}

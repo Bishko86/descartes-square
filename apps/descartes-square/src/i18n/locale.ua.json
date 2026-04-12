@@ -142,6 +142,9 @@
     "resetPasswordExpiredMessage": "Термін дії посилання закінчився. Запросіть нове.",
     "resetPasswordExpiredButton": "Запросити нове посилання",
     "resetPasswordInvalidTitle": "Недійсне посилання",
-    "resetPasswordInvalidMessage": "Це посилання для скидання пароля недійсне або вже було використано."
+    "resetPasswordInvalidMessage": "Це посилання для скидання пароля недійсне або вже було використано.",
+    "footer.copyright": " \u00a9 {$INTERPOLATION} Descartes Square ",
+    "footer.github": " GitHub ",
+    "footer.githubAriaLabel": "GitHub репозиторій"
   }
 }

@@ -142,6 +142,9 @@
     "resetPasswordExpiredMessage": "This reset link has expired. Request a new one.",
     "resetPasswordExpiredButton": "Request new link",
     "resetPasswordInvalidTitle": "Invalid link",
-    "resetPasswordInvalidMessage": "This reset link is invalid or has already been used."
+    "resetPasswordInvalidMessage": "This reset link is invalid or has already been used.",
+    "footer.copyright": " \u00a9 {$INTERPOLATION} Descartes Square ",
+    "footer.github": " GitHub ",
+    "footer.githubAriaLabel": "GitHub Repository"
   }
 }
