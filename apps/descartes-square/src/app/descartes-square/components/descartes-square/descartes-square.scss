@@ -1,4 +1,4 @@
-$mobile: 768px;
+@use "breakpoints";
 
 :host {
   display: block;
@@ -7,7 +7,7 @@ $mobile: 768px;
   .descartes-section {
     margin: 0 60px;
 
-    @media (max-width: $mobile) {
+    @media (max-width: breakpoints.$mobile) {
       margin: 0 auto;
     }
   }

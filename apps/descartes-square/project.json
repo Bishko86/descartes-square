@@ -24,13 +24,16 @@
         "browser": "apps/descartes-square/src/main.ts",
         "tsConfig": "apps/descartes-square/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
+        "styles": ["apps/descartes-square/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/descartes-square/src/styles"]
+        },
         "assets": [
           {
             "glob": "**/*",
             "input": "apps/descartes-square/public"
           }
         ],
-        "styles": ["apps/descartes-square/src/styles.scss"],
         "outputPath": "dist/descartes-square"
       },
       "configurations": {
@@ -107,6 +110,9 @@
       "options": {
         "tsConfig": "apps/descartes-square/tsconfig.spec.json",
         "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/descartes-square/src/styles"]
+        },
         "assets": [
           {
             "glob": "**/*",
