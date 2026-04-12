@@ -1,4 +1,4 @@
-$mobile: 768px;
+@use "breakpoints";
 
 header {
   display: flex;
@@ -59,7 +59,7 @@ header {
     color: var(--text);
   }
 
-  @media (max-width: $mobile) {
+  @media (max-width: breakpoints.$mobile) {
     .desktop-nav,
     .left-section {
       display: none;
@@ -131,7 +131,7 @@ img {
     }
   }
 
-  @media (max-width: $mobile) {
+  @media (max-width: breakpoints.$mobile) {
     display: flex;
   }
 }
