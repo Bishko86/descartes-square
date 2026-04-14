@@ -1,49 +1,33 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
-import { MatTableModule } from '@angular/material/table';
-import { IMoreOptions } from '@core/interfaces/more-options.interface';
-import { MatIcon } from '@core/enums/mat-icon.enum';
-import { MoreOptionAction } from '@core/enums/more-options-action.enum';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
 import { filter, first, tap } from 'rxjs';
-import { MoreOptions } from '@core/components/more-options/more-options';
 import { ConfirmService } from '@core/services/confirm.service';
+import { DescartesSolutionCard } from '../descartes-solution-card/descartes-solution-card';
 
 @Component({
   selector: 'app-descartes-list',
-  imports: [MatTableModule, MoreOptions, MatButton, RouterLink],
+  imports: [MatButton, DescartesSolutionCard],
   templateUrl: './descartes-list.html',
   styleUrl: './descartes-list.scss',
 })
 export class DescartesList implements OnInit {
-  readonly moreOptions: IMoreOptions[] = [
-    {
-      icon: MatIcon.EDIT,
-      text: $localize`:@@editBtn: Edit `,
-      action: MoreOptionAction.Update,
-    },
-    {
-      icon: MatIcon.DELETE,
-      text: $localize`:@@deleteBtn: Delete `,
-      action: MoreOptionAction.Delete,
-    },
-  ];
-
   readonly #confirmService = inject(ConfirmService);
+  readonly #router = inject(Router);
 
   dataSource = signal<IDescartesSolution[]>([]);
-
-  displayedColumns = ['id', 'title', 'conclusion', 'options'];
-
-  #router = inject(Router);
 
   ngOnInit(): void {
     const currList: IDescartesSolution[] = JSON.parse(
       localStorage.getItem(LocalStorageKeys.LIST) || '[]',
     );
     this.dataSource.set(currList);
+  }
+
+  view(id: string): void {
+    this.#router.navigate([`descartes-square/list/${id}/details`]);
   }
 
   update(id: string): void {
