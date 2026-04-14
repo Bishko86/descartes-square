@@ -309,7 +309,11 @@ export class DescartesForm implements OnInit {
       localStorage.getItem(LocalStorageKeys.LIST) || '[]',
     );
     const id = crypto.randomUUID();
-    list.push({ ...this.form.value, id } as IDescartesSolution);
+    list.push({
+      ...this.form.value,
+      id,
+      createdAt: new Date().toISOString(),
+    } as IDescartesSolution);
 
     localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
 

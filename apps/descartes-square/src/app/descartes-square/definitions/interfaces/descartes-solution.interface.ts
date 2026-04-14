@@ -8,4 +8,5 @@ export interface IDescartesSolution {
   q2: Maybe<string[]>;
   q3: Maybe<string[]>;
   q4: Maybe<string[]>;
+  createdAt?: string;
 }
