@@ -145,6 +145,8 @@
     "resetPasswordInvalidMessage": "This reset link is invalid or has already been used.",
     "footer.copyright": " \u00a9 {$INTERPOLATION} Descartes Square ",
     "footer.github": " GitHub ",
-    "footer.githubAriaLabel": "GitHub Repository"
+    "footer.githubAriaLabel": "GitHub Repository",
+    "emptyList": "No records yet",
+    "viewBtn": "View details"
   }
 }
