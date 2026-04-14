@@ -1,0 +1,43 @@
+<article class="solution-card">
+  <div class="solution-card__content">
+    <h3 class="solution-card__title">{{ solution().title }}</h3>
+    @if (solution().createdAt) {
+      <span class="solution-card__date">
+        {{ solution().createdAt | date : 'mediumDate' }}
+      </span>
+    }
+  </div>
+  <div class="solution-card__actions">
+    <button
+      mat-icon-button
+      [attr.aria-label]="viewLabel"
+      [matTooltip]="viewLabel"
+      matTooltipPosition="above"
+      [matTooltipShowDelay]="400"
+      (click)="view.emit(solution().id!)"
+    >
+      <mat-icon>visibility</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      [attr.aria-label]="editLabel"
+      [matTooltip]="editLabel"
+      matTooltipPosition="above"
+      [matTooltipShowDelay]="400"
+      (click)="edit.emit(solution().id!)"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button
+      mat-icon-button
+      class="solution-card__action-btn--danger"
+      [attr.aria-label]="deleteLabel"
+      [matTooltip]="deleteLabel"
+      matTooltipPosition="above"
+      [matTooltipShowDelay]="400"
+      (click)="remove.emit(solution().id!)"
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</article>
