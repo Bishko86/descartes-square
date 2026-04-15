@@ -3,13 +3,14 @@ import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { Router } from '@angular/router';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { filter, first, tap } from 'rxjs';
 import { ConfirmService } from '@core/services/confirm.service';
 import { DescartesSolutionCard } from '../descartes-solution-card/descartes-solution-card';
 
 @Component({
   selector: 'app-descartes-list',
-  imports: [MatButton, DescartesSolutionCard],
+  imports: [MatButton, MatIcon, DescartesSolutionCard],
   templateUrl: './descartes-list.html',
   styleUrl: './descartes-list.scss',
 })

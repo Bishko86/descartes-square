@@ -1,4 +1,4 @@
-@use 'breakpoints' as *;
+@use "breakpoints" as *;
 
 .descartes-list {
   display: flex;
@@ -28,10 +28,39 @@
     }
   }
 
-  &__empty {
-    grid-column: 1 / -1;
+  &__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: var(--x-large-indent) var(--large-indent);
+    gap: var(--basic-indent);
+  }
+
+  &__empty-illustration {
+    width: 120px;
+    height: 108px;
+    margin-bottom: var(--small-indent);
+  }
+
+  &__empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  &__empty-subtitle {
+    font-size: 1rem;
     color: var(--text-subtle);
-    padding: var(--large-indent);
+    max-width: 400px;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  &__empty-cta {
+    margin-top: var(--small-indent);
+    border-radius: 24px;
   }
 }
