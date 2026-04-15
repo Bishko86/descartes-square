@@ -4,4 +4,5 @@ export enum MatIcon {
   ADD_SHOPPING_CART = 'add_shopping_cart',
   PROFILE = 'person',
   MORE_OPTIONS = 'more_vert',
+  VISIBILITY = 'visibility',
 }

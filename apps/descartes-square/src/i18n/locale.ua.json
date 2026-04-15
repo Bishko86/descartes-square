@@ -145,6 +145,11 @@
     "resetPasswordInvalidMessage": "Це посилання для скидання пароля недійсне або вже було використано.",
     "footer.copyright": " \u00a9 {$INTERPOLATION} Descartes Square ",
     "footer.github": " GitHub ",
-    "footer.githubAriaLabel": "GitHub репозиторій"
+    "footer.githubAriaLabel": "GitHub репозиторій",
+    "emptyList": "Записів поки немає",
+    "viewBtn": "Переглянути деталі",
+    "emptyState.title": "Ще немає рішень",
+    "emptyState.subtitle": "Створіть свій перший Квадрат Декарта, щоб починати аналізувати рішення чітко та впевнено.",
+    "emptyState.cta": " Створити новий квадрат "
   }
 }

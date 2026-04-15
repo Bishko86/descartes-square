@@ -1,3 +1,5 @@
+@use "breakpoints" as *;
+
 .descartes-list {
   display: flex;
   flex-direction: column;
@@ -8,7 +10,57 @@
     justify-content: flex-end;
   }
 
-  td a {
-    text-decoration: underline;
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--basic-indent);
+
+    @media (min-width: $desktop-lg) {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: $tablet) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: $mobile) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--x-large-indent) var(--large-indent);
+    gap: var(--basic-indent);
+  }
+
+  &__empty-illustration {
+    width: 120px;
+    height: 108px;
+    margin-bottom: var(--small-indent);
+  }
+
+  &__empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  &__empty-subtitle {
+    font-size: 1rem;
+    color: var(--text-subtle);
+    max-width: 400px;
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  &__empty-cta {
+    margin-top: var(--small-indent);
+    border-radius: 24px;
   }
 }
