@@ -147,6 +147,9 @@
     "footer.github": " GitHub ",
     "footer.githubAriaLabel": "GitHub Repository",
     "emptyList": "No records yet",
-    "viewBtn": "View details"
+    "viewBtn": "View details",
+    "emptyState.title": "No decisions yet",
+    "emptyState.subtitle": "Create your first Descartes Square to start analyzing decisions clearly and confidently.",
+    "emptyState.cta": " Create new square "
   }
 }

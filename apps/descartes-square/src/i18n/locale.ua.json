@@ -147,6 +147,9 @@
     "footer.github": " GitHub ",
     "footer.githubAriaLabel": "GitHub репозиторій",
     "emptyList": "Записів поки немає",
-    "viewBtn": "Переглянути деталі"
+    "viewBtn": "Переглянути деталі",
+    "emptyState.title": "Ще немає рішень",
+    "emptyState.subtitle": "Створіть свій перший Квадрат Декарта, щоб починати аналізувати рішення чітко та впевнено.",
+    "emptyState.cta": " Створити новий квадрат "
   }
 }
