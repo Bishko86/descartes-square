@@ -1,0 +1,112 @@
+// v2 design tokens — canonical source for Descartes Square redesign (DS-56).
+// Imported after theme.scss; v2 overrides shared property names via cascade.
+
+:root {
+  --font-sans:  "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
+  --font-body:  "Open Sans", "Inter", system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+.light {
+  // surface
+  --bg: #ffffff;
+  --bg-elevated: #ffffff;
+  --surface: #f7f8fa;
+  --surface-hover: #f0f2f6;
+  --surface-alt: #eef3ff;
+
+  // text
+  --text: #0b1220;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-subtle: #9ca3af;
+  --text-inverse: #ffffff;
+
+  // border
+  --border: #e5e7eb;
+  --border-strong: #d1d5db;
+  --border-subtle: #eef0f4;
+
+  // primary
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-contrast: #ffffff;
+  --primary-soft: rgba(59, 130, 246, 0.08);
+  --primary-soft-hover: rgba(59, 130, 246, 0.12);
+  --primary-border: rgba(59, 130, 246, 0.22);
+
+  // status
+  --success: #16a34a;  --success-bg: #dcfce7;  --success-border: #86efac;
+  --warning: #d97706;  --warning-bg: #fef3c7;  --warning-border: #fcd34d;
+  --error:   #dc2626;  --error-bg:   #fee2e2;  --error-border:   #fca5a5;
+  --info:    #7c3aed;  --info-bg:    #ede9fe;  --info-border:    #c4b5fd;
+
+  // quadrant accents (v2 names: --q1..q4, --qN-bg, --qN-border)
+  --q1: #3b82f6;  --q1-bg: rgba(59, 130, 246, 0.06);  --q1-border: rgba(59, 130, 246, 0.22);
+  --q2: #8b5cf6;  --q2-bg: rgba(139, 92, 246, 0.06);  --q2-border: rgba(139, 92, 246, 0.22);
+  --q3: #f59e0b;  --q3-bg: rgba(245, 158, 11, 0.08);  --q3-border: rgba(245, 158, 11, 0.24);
+  --q4: #ef4444;  --q4-bg: rgba(239, 68, 68, 0.06);   --q4-border: rgba(239, 68, 68, 0.22);
+
+  // effects
+  --focus-ring: rgba(59, 130, 246, 0.35);
+  --shadow-sm:  0 1px 2px rgba(17, 24, 39, 0.04);
+  --shadow-md:  0 4px 16px rgba(17, 24, 39, 0.06);
+  --shadow-lg:  0 16px 48px rgba(17, 24, 39, 0.08);
+  --overlay:    rgba(17, 24, 39, 0.48);
+}
+
+.dark {
+  // surface
+  --bg: #0b1220;
+  --bg-elevated: #111a2e;
+  --surface: #172033;
+  --surface-hover: #1e2940;
+  --surface-alt: #1a2744;
+
+  // text
+  --text: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-subtle: #64748b;
+  --text-inverse: #0b1220;
+
+  // border
+  --border: #26314a;
+  --border-strong: #334155;
+  --border-subtle: #1a2336;
+
+  // primary
+  --primary: #60a5fa;
+  --primary-hover: #7eb8fc;
+  --primary-active: #93c5fd;
+  --primary-contrast: #0b1220;
+  --primary-soft: rgba(96, 165, 250, 0.12);
+  --primary-soft-hover: rgba(96, 165, 250, 0.18);
+  --primary-border: rgba(96, 165, 250, 0.28);
+
+  // status
+  --success: #4ade80;  --success-bg: rgba(74, 222, 128, 0.12);  --success-border: rgba(74, 222, 128, 0.28);
+  --warning: #fbbf24;  --warning-bg: rgba(251, 191, 36, 0.12);  --warning-border: rgba(251, 191, 36, 0.28);
+  --error:   #f87171;  --error-bg:   rgba(248, 113, 113, 0.12); --error-border:   rgba(248, 113, 113, 0.28);
+  --info:    #a78bfa;  --info-bg:    rgba(167, 139, 250, 0.12); --info-border:    rgba(167, 139, 250, 0.28);
+
+  // quadrant accents
+  --q1: #60a5fa;  --q1-bg: rgba(96, 165, 250, 0.10);  --q1-border: rgba(96, 165, 250, 0.28);
+  --q2: #a78bfa;  --q2-bg: rgba(167, 139, 250, 0.10); --q2-border: rgba(167, 139, 250, 0.28);
+  --q3: #fbbf24;  --q3-bg: rgba(251, 191, 36, 0.10);  --q3-border: rgba(251, 191, 36, 0.28);
+  --q4: #f87171;  --q4-bg: rgba(248, 113, 113, 0.10); --q4-border: rgba(248, 113, 113, 0.28);
+
+  // effects
+  --focus-ring: rgba(96, 165, 250, 0.45);
+  --shadow-sm:  0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md:  0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg:  0 20px 60px rgba(0, 0, 0, 0.5);
+  --overlay:    rgba(0, 0, 0, 0.65);
+}

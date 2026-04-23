@@ -1,8 +1,11 @@
 @use "styles/indentation.scss";
 @use "styles/colors.scss";
-@use "styles/theme.scss";
+@use "styles/theme.scss";       // v1 — @deprecated
+@use "styles/theme-v2.scss";    // v2 — overrides shared property names
 @use "styles/fonts.scss";
 @use "styles/material.scss";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
 html,
 body {
