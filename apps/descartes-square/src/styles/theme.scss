@@ -1,3 +1,7 @@
+// @deprecated — v1 light/dark theme tokens.
+// Migrate usages to the v2 tokens in theme-v2.scss (DS-56).
+// Old-only tokens (--background, --muted, --highlighted-text, --q1-accent, etc.)
+// remain here until each component is migrated.
 .light {
   --background: #ffffff;
   --surface: #f9fafb;
