@@ -1,0 +1,78 @@
+:host {
+  display: flex;
+  gap: var(--x-small-indent);
+  overflow-x: auto;
+  padding: var(--x-small-indent) 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.quadrant-chips__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--x-small-indent);
+  flex-shrink: 0;
+  padding: var(--small-indent) var(--basic-indent);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--regular);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  &::before {
+    content: '';
+    width: var(--small-indent);
+    height: var(--small-indent);
+    border-radius: 50%;
+    background: var(--border-strong);
+  }
+
+  &[data-quadrant='q1']::before { background: var(--q1); }
+  &[data-quadrant='q2']::before { background: var(--q2); }
+  &[data-quadrant='q3']::before { background: var(--q3); }
+  &[data-quadrant='q4']::before { background: var(--q4); }
+
+  &.is-active {
+    color: var(--text);
+    box-shadow: var(--shadow-sm);
+
+    &[data-quadrant='q1'] { background: var(--q1-bg); border-color: var(--q1-border); }
+    &[data-quadrant='q2'] { background: var(--q2-bg); border-color: var(--q2-border); }
+    &[data-quadrant='q3'] { background: var(--q3-bg); border-color: var(--q3-border); }
+    &[data-quadrant='q4'] { background: var(--q4-bg); border-color: var(--q4-border); }
+  }
+}
+
+.quadrant-chips__number {
+  font-family: var(--font-mono);
+  font-size: var(--semi-small);
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+}
+
+.quadrant-chips__label {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.quadrant-chips__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--x-small-indent);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  font-size: var(--semi-small);
+  color: var(--text-secondary);
+}
