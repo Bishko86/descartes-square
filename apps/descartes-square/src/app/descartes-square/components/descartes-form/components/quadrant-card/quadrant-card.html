@@ -1,0 +1,89 @@
+<header class="quadrant-card__header">
+  <span class="quadrant-card__number">{{ numberLabel() }}</span>
+  <div class="quadrant-card__titles">
+    <h2 class="quadrant-card__question">{{ question() }}</h2>
+    <p class="quadrant-card__subtitle">{{ subtitle() }}</p>
+  </div>
+</header>
+
+<ul
+  class="quadrant-card__list"
+  cdkDropList
+  (cdkDropListDropped)="onDrop($event)"
+>
+  @for (item of items(); track $index) {
+    <li class="quadrant-card__item" cdkDrag>
+      <button
+        type="button"
+        class="quadrant-card__handle"
+        cdkDragHandle
+        i18n-matTooltip="@@dragToReorder"
+        matTooltip="Drag to reorder"
+        aria-label="Drag to reorder"
+      >
+        <mat-icon fontIcon="drag_indicator"></mat-icon>
+      </button>
+      <textarea
+        #argInput
+        class="quadrant-card__textarea"
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="6"
+        [value]="item"
+        (input)="onInput($index, $event)"
+        i18n-placeholder="@@argPlaceholder"
+        placeholder="Type an argument…"
+        maxlength="255"
+      ></textarea>
+      <button
+        type="button"
+        class="quadrant-card__remove"
+        (click)="remove.emit($index)"
+        i18n-matTooltip="@@removeArgument"
+        matTooltip="Remove"
+        aria-label="Remove argument"
+      >
+        <mat-icon fontIcon="close"></mat-icon>
+      </button>
+    </li>
+  }
+</ul>
+
+<div class="quadrant-card__actions">
+  <button
+    type="button"
+    matButton="tonal"
+    class="quadrant-card__add"
+    (click)="onAdd()"
+  >
+    <mat-icon fontIcon="add"></mat-icon>
+    <span i18n="@@addArgument">Add argument</span>
+  </button>
+
+  <button
+    type="button"
+    matButton="outlined"
+    class="quadrant-card__suggest"
+    [disabled]="!canSuggest() || isStreaming()"
+    (click)="requestSuggestion.emit()"
+  >
+    @if (isStreaming()) {
+      <mat-spinner diameter="16"></mat-spinner>
+    } @else {
+      <mat-icon fontIcon="auto_awesome"></mat-icon>
+    }
+    <span i18n="@@suggestWithAi">Suggest with AI</span>
+  </button>
+</div>
+
+@if (suggestions().length > 0) {
+  <section class="quadrant-card__suggestions" aria-live="polite">
+    @for (text of suggestions(); track $index) {
+      <app-ai-suggestion-card
+        [text]="text"
+        (accept)="acceptSuggestion.emit($event)"
+        (dismiss)="dismissSuggestion.emit($index)"
+      />
+    }
+  </section>
+}
