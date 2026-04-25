@@ -1,239 +1,123 @@
-@let delay = 400;
-@let position = "above";
-@let user = currentUser();
+<ng-template #activeCardTpl>
+  @let ctx = activeContext();
+  <app-quadrant-card
+    [questionId]="ctx.id"
+    [questionNumber]="ctx.number"
+    [question]="ctx.question"
+    [subtitle]="ctx.subtitle"
+    [items]="ctx.items"
+    [suggestions]="ctx.suggestions"
+    [isStreaming]="ctx.isStreaming"
+    [canSuggest]="canSuggest()"
+    (add)="onArgumentAdd(ctx.id)"
+    (remove)="onArgumentRemove(ctx.id, $event)"
+    (changeArgument)="onArgumentChange(ctx.id, $event.index, $event.value)"
+    (reorder)="onArgumentReorder(ctx.id, $event.from, $event.to)"
+    (requestSuggestion)="onRequestSuggestion(ctx.id)"
+    (acceptSuggestion)="onAcceptSuggestion(ctx.id, $event, 0)"
+    (dismissSuggestion)="onDismissSuggestion(ctx.id, $event)"
+  />
+</ng-template>
 
-<form [formGroup]="form">
-  <div class="input-container title-container">
-    <label class="open-sans-regular" for="title" i18n="@@title">Title</label>
-    <input id="title" type="text" formControlName="title" />
-    @let titleControl = form.controls.title;
+<header class="descartes-form__header">
+  <input
+    type="text"
+    class="descartes-form__title"
+    [formField]="form.field.title"
+    i18n-placeholder="@@titlePlaceholder"
+    placeholder="Frame your decision as a yes/no question…"
+    autofocus
+  />
+  <app-progress-pill [counts]="form.counts()" />
+</header>
 
-    <!-- Error Tooltip -->
-    @if (titleControl.invalid) {
-      <div class="error-tooltip error-visible">
-        @switch (true) {
-          @case (titleControl.hasError("required")) {
-            <span i18n="@@required">This field is required</span>
-          }
-          @case (titleControl.hasError("unclearTitle")) {
-            <span i18n="@@unclearTitle">
-              Your decision title is unclear. Please restate it as a specific
-              decision, e.g., 'Should I move to another city?' or 'Should I
-              start my own business?'
-            </span>
-          }
-        }
+<section
+  class="descartes-form__grid"
+  [class.is-locked]="form.isLocked()"
+  aria-label="Descartes square"
+  i18n-aria-label="@@descartesSquareAria"
+>
+  <span
+    class="descartes-form__axis descartes-form__axis--top"
+    i18n="@@axisGains"
+  >
+    Gains
+  </span>
+  <span
+    class="descartes-form__axis descartes-form__axis--bottom"
+    i18n="@@axisLosses"
+  >
+    Losses
+  </span>
+  <span
+    class="descartes-form__axis descartes-form__axis--left"
+    i18n="@@axisOutcomesActing"
+  >
+    Outcomes of acting
+  </span>
+  <span
+    class="descartes-form__axis descartes-form__axis--right"
+    i18n="@@axisOutcomesNotActing"
+  >
+    Outcomes of not acting
+  </span>
+
+  @for (id of order; track id) {
+    @if (id === activeQuadrant()) {
+      <div class="descartes-form__active-slot" [style.grid-area]="id">
+        <ng-container *ngTemplateOutlet="activeCardTpl"></ng-container>
       </div>
+    } @else {
+      <app-quadrant-preview
+        [style.grid-area]="id"
+        [questionId]="id"
+        [questionNumber]="numbers.get(id)!"
+        [shortLabel]="shortLabels.get(id)!"
+        [items]="form.model()[id]"
+        (activate)="onActivate(id)"
+      />
     }
-  </div>
+  }
 
-  <ng-container
-    *ngTemplateOutlet="
-      controlTemplate;
-      context: {
-        key: descartesQuestionsIds.Q1,
-      }
-    "
-  >
-  </ng-container>
+  @if (form.isLocked()) {
+    <app-lock-overlay />
+  }
+</section>
 
-  <ng-container
-    *ngTemplateOutlet="
-      controlTemplate;
-      context: {
-        key: descartesQuestionsIds.Q2,
-      }
-    "
-  >
-  </ng-container>
+<section class="descartes-form__mobile" aria-label="Descartes quadrants">
+  <app-quadrant-chips
+    [activeId]="activeQuadrant()"
+    [counts]="form.counts()"
+    (select)="onActivate($event)"
+  />
+  <ng-container *ngTemplateOutlet="activeCardTpl"></ng-container>
+</section>
 
-  <ng-container
-    *ngTemplateOutlet="
-      controlTemplate;
-      context: {
-        key: descartesQuestionsIds.Q3,
-      }
-    "
-  >
-  </ng-container>
-
-  <ng-container
-    *ngTemplateOutlet="
-      controlTemplate;
-      context: {
-        key: descartesQuestionsIds.Q4,
-      }
-    "
-  >
-  </ng-container>
-
-  <label class="open-sans-regular" for="conclusion" i18n="@@conclusionTitle"
-    >Conclusion</label
-  >
-  <input type="text" formControlName="conclusion" />
-</form>
-
-<div class="controls">
+<footer class="descartes-form__footer">
   <button
-    class="controls__cancel"
-    matButton="tonal"
-    (click)="cancelForm()"
+    matButton="outlined"
+    type="button"
+    (click)="form.cancel()"
     i18n="@@cancelBtn"
   >
     Cancel
   </button>
-
   <button
-    class="controls__clear"
-    matButton="outlined"
-    i18n="@@clearBtn"
-    [disabled]="form.pristine"
-    (click)="clearForm()"
+    matButton="tonal"
+    type="button"
+    [disabled]="form.isLocked()"
+    (click)="form.saveDraft()"
+    i18n="@@saveDraftBtn"
   >
-    Clear
+    Save Draft
   </button>
-
   <button
-    class="controls__save"
-    matButton="outlined"
-    [disabled]="form.pristine"
-    (click)="saveForm()"
+    matButton="elevated"
+    type="button"
+    [disabled]="form.isLocked()"
+    (click)="form.reviewAndConclude()"
+    i18n="@@reviewConcludeBtn"
   >
-    {{ applyButtonText() }}
+    Review & conclude →
   </button>
-</div>
-
-<ng-template #controlTemplate let-key="key;">
-  <ng-container [formGroup]="form">
-    @let formArray = getFormArrayControls(key);
-    <p class="open-sans-regular">{{ descartesQuestions.get(key) }}</p>
-
-    <ng-container [formArrayName]="key">
-      <ul>
-        @for (control of formArray; let index = $index; track control) {
-          @if (formEditTracker.get(key)?.index === index) {
-            <li class="arg-list input-container">
-              <textarea
-                appAutoFocus
-                cdkTextareaAutosize
-                autocomplete="off"
-                class="roboto-regular"
-                i18n-placeholder="@@placeholder-question"
-                placeholder="Type your text here..."
-                [class.loading]="isLoading()"
-                [formControl]="control"
-                [id]="key"
-                (blur)="onBlur($event, key, index)"
-              ></textarea>
-
-              <!-- Error Tooltip -->
-              @if (control.invalid && (control.dirty || control.touched)) {
-                <div class="error-tooltip error-visible">
-                  @switch (true) {
-                    @case (control.hasError("required")) {
-                      <span i18n="@@required">This field is required</span>
-                    }
-
-                    @case (control.hasError("minlength")) {
-                      <span i18n="@@minlength">
-                        The minimum length of text should be
-                        {{ control?.errors?.["minlength"]?.requiredLength }}.
-                      </span>
-                    }
-
-                    @case (control.hasError("maxlength")) {
-                      <span i18n="@@maxlength">
-                        The maximum length of text should not exceed
-                        {{ control?.errors?.["maxlength"]?.requiredLength }}
-                        symbols.
-                      </span>
-                    }
-
-                    @case (control.hasError("serviceUnavailable")) {
-                      {{ errorMessage() }}
-                    }
-                  }
-                </div>
-              }
-
-              <button
-                class="btn cancel-arg"
-                [attr.data-index]="index"
-                [matTooltip]="buttonText.get('cancel')"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-                (click)="cancelArgument(index, key)"
-              >
-                &#x2715;
-              </button>
-              <button
-                class="btn save-arg"
-                [attr.data-index]="index"
-                [matTooltip]="buttonText.get('save')"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-                [disabled]="isLoading()"
-                (click)="saveArgument(key)"
-              >
-                &#x2713;
-              </button>
-            </li>
-          } @else {
-            <li class="roboto-regular arg-list">
-              <p>{{ control.value }}</p>
-              <button
-                class="btn remove-arg"
-                [matTooltip]="buttonText.get('remove')"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-                (click)="deleteArgument(index, key)"
-              >
-                &#x2715;
-              </button>
-
-              <button
-                class="btn edit-arg"
-                [matTooltip]="buttonText.get('edit')"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-                [disabled]="isLoading()"
-                (click)="editArgument(index, key)"
-              >
-                &#9998;
-              </button>
-            </li>
-          }
-        }
-
-        @if (!formEditTracker.get(key)?.isCreating) {
-          <li class="roboto-regular add-btn-container">
-            <button
-              class="btn add-arg"
-              [matTooltip]="buttonText.get('add')"
-              [matTooltipPosition]="position"
-              [matTooltipShowDelay]="delay"
-              (click)="addArgument(key)"
-            >
-              <span class="plus">&#65291;</span>
-            </button>
-
-            @if (user) {
-              @let isDisabled = !form.controls.title.value;
-              @let tooltip = isDisabled ? "addTitle" : "aiSuggestion";
-              <button
-                class="btn add-ai"
-                [matTooltip]="buttonText.get(tooltip)"
-                [matTooltipPosition]="position"
-                [matTooltipShowDelay]="delay"
-                [disabled]="isDisabled"
-                (click)="addAISuggestion(key)"
-              >
-                <span class="ai-icon">&#xFCC;</span>
-              </button>
-            }
-          </li>
-        }
-      </ul>
-    </ng-container>
-  </ng-container>
-</ng-template>
+</footer>

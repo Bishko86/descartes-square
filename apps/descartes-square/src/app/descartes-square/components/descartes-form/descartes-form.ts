@@ -1,392 +1,188 @@
 import {
-  ChangeDetectorRef,
+  ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
+  effect,
   inject,
   input,
   OnInit,
   signal,
-  WritableSignal,
 } from '@angular/core';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import {
-  IDescartesForm,
-  IDescartesFormValues,
-  TFormNames,
-} from '@descartes/definitions/interfaces/descartes-form.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
-import { Maybe } from '@shared/src/lib/types/maybe.type';
-import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { IDescartesSolution } from '@descartes/definitions/interfaces/descartes-solution.interface';
-import { MatButton } from '@angular/material/button';
-import { Router } from '@angular/router';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { ConfirmService } from '@core/services/confirm.service';
-import {
-  filter,
-  finalize,
-  first,
-  interval,
-  of,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs';
-import { IFormStateTracker } from '@descartes/definitions/interfaces/descartes-form-state-tracker.interface';
-import { FormStateTracker } from '@descartes/definitions/models/form-state-tracker.model';
-import { AutoFocus } from '@core/directives/auto-focus/auto-focus';
-import {
-  DescartesQuestionsIds,
-  IAiSuggestionResponse,
-  IUserDto,
-} from '@shared/src';
-import { DescartesQuestionsMap } from '@shared/src/lib/consts/descartes-questions-map.const';
+import { FormField } from '@angular/forms/signals';
+import { interval, take, tap } from 'rxjs';
+
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
-import { HttpErrorResponse } from '@angular/common/http';
-import { ButtonsText } from '@descartes/definitions/consts/buttons-text.const';
-import { ConfirmDialogType } from '@core/enums/confirm-dialog-type.enum';
+import { AiSuggestionsStore } from '@descartes/services/ai-suggestions-store';
+import { DescartesFormStore } from '@descartes/services/descartes-form-store';
+import { DescartesQuestionShortLabels } from '@descartes/definitions/consts/descartes-question-short-labels.const';
+import { DescartesQuestionSubtitles } from '@descartes/definitions/consts/descartes-question-subtitles.const';
+import {
+  QUADRANT_NUMBER,
+  QUADRANT_ORDER,
+} from '@descartes/definitions/consts/quadrant-order.const';
+import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.interface';
+import { DescartesQuestionsIds } from '@shared/src';
+import { DescartesQuestionsMap } from '@shared/src/lib/consts/descartes-questions-map.const';
+
+import { LockOverlay } from './components/lock-overlay/lock-overlay';
+import { ProgressPill } from './components/progress-pill/progress-pill';
+import { QuadrantCard } from './components/quadrant-card/quadrant-card';
+import { QuadrantChips } from './components/quadrant-chips/quadrant-chips';
+import { QuadrantPreview } from './components/quadrant-preview/quadrant-preview';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+const TYPING_INTERVAL_MS = 12;
+const ARROW_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
 
 @Component({
   selector: 'app-descartes-form',
   imports: [
-    ReactiveFormsModule,
     NgTemplateOutlet,
+    FormField,
+    MatButtonModule,
     MatSnackBarModule,
-    MatButton,
-    MatTooltipModule,
-    AutoFocus,
-    CdkTextareaAutosize,
+    LockOverlay,
+    ProgressPill,
+    QuadrantCard,
+    QuadrantChips,
+    QuadrantPreview,
   ],
-  providers: [AiSuggestionService],
+  providers: [DescartesFormStore, AiSuggestionsStore, AiSuggestionService],
   templateUrl: './descartes-form.html',
   styleUrl: './descartes-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    class: 'descartes-form',
+    '(keydown)': 'onKeyDown($event)',
+  },
 })
 export class DescartesForm implements OnInit {
   readonly id = input<string>();
 
-  readonly buttonText = ButtonsText;
-
-  readonly descartesQuestions = DescartesQuestionsMap;
-
-  readonly descartesQuestionsIds = DescartesQuestionsIds;
-
-  currentUser: WritableSignal<Maybe<IUserDto>>;
-
-  isLoading = signal<boolean>(false);
-
-  errorMessage = signal<Maybe<string>>(null);
-
-  applyButtonText = computed(() =>
-    this.id() ? $localize`:@@updateBtn:Update` : $localize`:@@saveBtn:Save`,
-  );
-
-  form: FormGroup<IDescartesForm>;
-
-  formEditTracker = new Map<TFormNames, IFormStateTracker>()
-    .set('q1', new FormStateTracker())
-    .set('q2', new FormStateTracker())
-    .set('q3', new FormStateTracker())
-    .set('q4', new FormStateTracker());
-
-  readonly #confirmService = inject(ConfirmService);
-
-  readonly #snackBar = inject(MatSnackBar);
-
-  readonly #router = inject(Router);
+  readonly form = inject(DescartesFormStore);
+  readonly suggestionsStore = inject(AiSuggestionsStore);
 
   readonly #authService = inject(DescartesAuthService);
+  readonly #destroyRef = inject(DestroyRef);
 
-  readonly #aiSuggestionService = inject(AiSuggestionService);
+  readonly order = QUADRANT_ORDER;
+  readonly shortLabels = DescartesQuestionShortLabels;
+  readonly numbers = QUADRANT_NUMBER;
 
-  readonly #cdr = inject(ChangeDetectorRef);
+  readonly activeQuadrant = signal<DescartesQuestionsIds>(
+    DescartesQuestionsIds.Q1,
+  );
+  readonly #previousQuadrant = signal<DescartesQuestionsIds>(
+    DescartesQuestionsIds.Q1,
+  );
+
+  readonly canSuggest = computed(
+    () =>
+      !!this.#authService.currentUser() &&
+      !this.form.isLocked() &&
+      !this.suggestionsStore.isStreaming(),
+  );
+
+  readonly activeContext = computed(() => {
+    const id = this.activeQuadrant();
+    return {
+      id,
+      number: (QUADRANT_NUMBER.get(id) ?? 1) as 1 | 2 | 3 | 4,
+      question: DescartesQuestionsMap.get(id) ?? '',
+      subtitle: DescartesQuestionSubtitles.get(id) ?? '',
+      items: this.form.model()[id],
+      suggestions: this.suggestionsStore.suggestions()[id],
+      isStreaming: this.suggestionsStore.streamingQuadrant() === id,
+    };
+  });
+
+  // Suggestions are scoped to the quadrant that produced them — drop them
+  // when the user moves on so they don't reappear on return.
+  readonly #syncEffect = effect(() => {
+    const current = this.activeQuadrant();
+    const previous = this.#previousQuadrant();
+    if (previous === current) return;
+    this.suggestionsStore.clear(previous);
+    this.#previousQuadrant.set(current);
+  });
 
   ngOnInit(): void {
-    this.#initForm();
-    this.#setCurrUser();
+    this.form.init(this.id());
   }
 
-  addArgument(key: TFormNames): void {
-    const formArray = this.#getArgumentForm(key);
+  onKeyDown(event: KeyboardEvent): void {
+    if (!ARROW_KEYS.has(event.key) || this.form.isLocked()) return;
 
-    if (formArray.valid) {
-      formArray.push(this.#createFormControl(''));
-      const tracker = new FormStateTracker(formArray.length - 1, true);
-      this.formEditTracker.set(key, tracker);
-    }
-  }
-
-  deleteArgument(index: number, key: TFormNames): void {
-    this.#confirmService
-      .confirm()
-      .pipe(
-        first(),
-        filter(Boolean),
-        tap(() => {
-          this.#deleteFormControl(key, index);
-        }),
-      )
-      .subscribe();
-  }
-
-  cancelArgument(index: number, key: TFormNames): void {
-    if (this.formEditTracker.get(key)?.isCreating) {
-      this.deleteArgument(index, key);
-    } else {
-      const formArray = this.#getArgumentForm(key);
-      formArray.at(index)?.setValue(this.formEditTracker.get(key)?.value);
-      this.formEditTracker.set(key, new FormStateTracker());
-    }
-  }
-
-  editArgument(index: number, key: TFormNames): void {
-    const formArray = this.#getArgumentForm(key);
-
-    if (formArray.valid) {
-      const value = formArray.at(index)?.value;
-      const tracker = (this.formEditTracker.get(key) as IFormStateTracker)
-        .setIndex(index)
-        .setValue(value);
-      this.formEditTracker.set(key, tracker);
-    }
-  }
-
-  saveArgument(key: TFormNames): void {
-    const formArray = this.#getArgumentForm(key);
-    if (formArray.valid) {
-      this.formEditTracker.set(key, new FormStateTracker());
-      formArray.markAsDirty();
-    }
-  }
-
-  getFormArrayControls(key: TFormNames): FormControl<Maybe<string>>[] {
-    const formArray = this.#getArgumentForm(key);
-    return formArray?.controls || [];
-  }
-
-  clearForm(): void {
-    this.#confirmService
-      .confirm({ type: ConfirmDialogType.Warning })
-      .pipe(
-        first(),
-        filter(Boolean),
-        tap(() => {
-          this.#initForm(true);
-          this.#cdr.markForCheck();
-        }),
-      )
-      .subscribe();
-  }
-
-  saveForm(): void {
-    if (this.id()) {
-      this.#update();
-    } else {
-      this.#create();
-    }
-  }
-
-  cancelForm(): void {
-    this.#router.navigate(['descartes-square']).then();
-  }
-
-  addAISuggestion(key: TFormNames): void {
-    const typingSpeed = 10;
-
-    this.isLoading.set(true);
-    this.addArgument(key);
-    const formArray = this.#getArgumentForm(key);
-    const index = formArray.length - 1;
-    const newControl = formArray.at(index);
-    const tracker = new FormStateTracker(index, true);
-
-    this.#aiSuggestionService
-      .addAISuggestion({
-        ...this.form.getRawValue(),
-        key,
-      } as IDescartesFormValues)
-      .pipe(
-        take(1),
-        switchMap((data: IAiSuggestionResponse) => {
-          if (data.isUnclearTitle) {
-            this.#setUnclearTitleError(formArray, key);
-            return of(0);
-          }
-
-          this.formEditTracker.set(key, tracker);
-          this.#cdr.markForCheck();
-
-          return interval(typingSpeed).pipe(
-            take(data.suggestion?.length || 0),
-            tap((i) => {
-              newControl.setValue(data.suggestion?.substring(0, i + 1));
-              this.#cdr.markForCheck();
-            }),
-          );
-        }),
-        tap({
-          error: (error: HttpErrorResponse) => {
-            this.errorMessage.set(
-              error.error?.message ||
-                $localize`:@@unknownError:Something went wrong. Please try again later`,
-            );
-            newControl.setErrors({ serviceUnavailable: true });
-            newControl.markAsTouched();
-          },
-        }),
-        finalize(() => {
-          this.isLoading.set(false);
-        }),
-      )
-      .subscribe();
-  }
-
-  onBlur(event: FocusEvent, key: TFormNames, index: number): void {
-    const target = event.target as HTMLInputElement;
-    const relatedTarget = event.relatedTarget as HTMLElement;
-
-    // Skip blur handling if focus moved to an element within the same row or AI suggestion request is in progress
-    if (this.#isFocusWithinSameRow(relatedTarget, index) || this.isLoading()) {
+    const target = event.target as HTMLElement;
+    if (
+      target instanceof HTMLInputElement ||
+      target instanceof HTMLTextAreaElement
+    ) {
       return;
     }
 
-    // Auto-save if there's content in the input
-    if (target.value.trim()) {
-      this.saveArgument(key);
-      return;
-    }
-
-    // Clean up empty new entries
-    this.#handleEmptyNewEntry(key);
+    event.preventDefault();
+    const delta =
+      event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : -1;
+    const idx = this.order.indexOf(this.activeQuadrant());
+    const next =
+      this.order[(idx + delta + this.order.length) % this.order.length];
+    this.activeQuadrant.set(next);
   }
 
-  #getArgumentForm(key: string): FormArray<FormControl<Maybe<string>>> {
-    return this.form.get(key) as FormArray<FormControl<Maybe<string>>>;
+  onRequestSuggestion(quadrant: TFormNames): void {
+    this.suggestionsStore.request(quadrant);
   }
 
-  #initForm(isClear = false): void {
-    const list: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-    );
-    const editedEntity = isClear
-      ? null
-      : list.find((form) => form.id === this.id());
-
-    this.form = new FormGroup<IDescartesForm>({
-      title: new FormControl(editedEntity?.title || null, Validators.required),
-      q1: new FormArray<FormControl<Maybe<string>>>(
-        this.#mapFormArrayControls(editedEntity?.q1),
-      ),
-      q2: new FormArray<FormControl<Maybe<string>>>(
-        this.#mapFormArrayControls(editedEntity?.q2),
-      ),
-      q3: new FormArray<FormControl<Maybe<string>>>(
-        this.#mapFormArrayControls(editedEntity?.q3),
-      ),
-      q4: new FormArray<FormControl<Maybe<string>>>(
-        this.#mapFormArrayControls(editedEntity?.q4),
-      ),
-      conclusion: new FormControl(editedEntity?.conclusion),
-    });
+  onDismissSuggestion(quadrant: TFormNames, index: number): void {
+    this.suggestionsStore.dismiss(quadrant, index);
   }
 
-  #mapFormArrayControls(
-    collection: Maybe<string[]>,
-  ): FormControl<Maybe<string>>[] {
-    return (collection || []).map(this.#createFormControl);
-  }
-
-  #create(): void {
-    const list: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-    );
-    const id = crypto.randomUUID();
-    list.push({
-      ...this.form.value,
-      id,
-      createdAt: new Date().toISOString(),
-    } as IDescartesSolution);
-
-    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
-
-    this.#snackBar.open('Form is saved', 'Close', {});
-    this.#redirectToDescartesDetails(id);
-  }
-
-  #update(): void {
-    const list: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-    );
-    const updatedList = list.map((item) =>
-      this.id() === item.id ? { ...item, ...this.form.value } : item,
-    );
-
-    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(updatedList));
-
-    this.#snackBar.open('Form is updated', 'Close', {});
-    this.#redirectToDescartesDetails(this.id() as string);
-  }
-
-  #redirectToDescartesDetails(id: string): void {
-    this.#router.navigate([`descartes-square/list/${id}/details`]).then();
-  }
-
-  #setCurrUser(): void {
-    this.currentUser = this.#authService.currentUser;
-  }
-
-  #createFormControl(value: Maybe<string>): FormControl<Maybe<string>> {
-    return new FormControl(value, [
-      Validators.required,
-      Validators.maxLength(255),
-      Validators.minLength(3),
-    ]);
-  }
-
-  #setUnclearTitleError(
-    formArray: FormArray<FormControl<Maybe<string>>>,
-    key: TFormNames,
+  onAcceptSuggestion(
+    quadrant: TFormNames,
+    text: string,
+    suggestionIndex: number,
   ): void {
-    this.form.controls.title.setErrors({
-      unclearTitle: true,
-    });
-
-    this.formEditTracker.set(key, new FormStateTracker());
-
-    formArray.removeAt(formArray.length - 1);
+    const newIndex = this.form.addArgument(quadrant, '');
+    this.suggestionsStore.dismiss(quadrant, suggestionIndex);
+    this.#animateTyping(quadrant, newIndex, text);
   }
 
-  #deleteFormControl(key: TFormNames, index: number): void {
-    const formArray = this.#getArgumentForm(key);
-
-    if (index === formArray.length - 1) {
-      this.formEditTracker.set(key, new FormStateTracker());
-    }
-
-    formArray.removeAt(index);
-    formArray.markAsDirty();
+  onArgumentChange(quadrant: TFormNames, index: number, value: string): void {
+    this.form.setArgument(quadrant, index, value);
   }
 
-  #isFocusWithinSameRow(
-    relatedTarget: Maybe<HTMLElement>,
-    currentIndex: number,
-  ): boolean {
-    return relatedTarget?.dataset?.['index'] === currentIndex.toString();
+  onArgumentAdd(quadrant: TFormNames): void {
+    this.form.addArgument(quadrant);
   }
 
-  #handleEmptyNewEntry(key: TFormNames): void {
-    const tracker = this.formEditTracker.get(key);
+  onArgumentRemove(quadrant: TFormNames, index: number): void {
+    this.form.removeArgument(quadrant, index);
+  }
 
-    if (tracker?.isCreating && !tracker.value) {
-      this.#deleteFormControl(key, tracker.index ?? 0);
-    }
+  onArgumentReorder(quadrant: TFormNames, from: number, to: number): void {
+    this.form.reorderArgument(quadrant, from, to);
+  }
+
+  onActivate(id: DescartesQuestionsIds): void {
+    this.activeQuadrant.set(id);
+  }
+
+  #animateTyping(quadrant: TFormNames, index: number, text: string): void {
+    if (!text) return;
+    interval(TYPING_INTERVAL_MS)
+      .pipe(
+        take(text.length),
+        tap((i) =>
+          this.form.setArgument(quadrant, index, text.substring(0, i + 1)),
+        ),
+        takeUntilDestroyed(this.#destroyRef),
+      )
+      .subscribe();
   }
 }
