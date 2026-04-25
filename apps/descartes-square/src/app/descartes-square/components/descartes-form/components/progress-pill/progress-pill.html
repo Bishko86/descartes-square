@@ -1,0 +1,10 @@
+@for (id of order; track id) {
+  <span
+    class="progress-pill__dot"
+    [class.progress-pill__dot--filled]="counts()[id] > 0"
+    [attr.data-quadrant]="id"
+  ></span>
+}
+<span class="progress-pill__label" i18n="@@exploredCounter">
+  {{ exploredCount() }} / 4 explored
+</span>
