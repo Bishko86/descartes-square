@@ -1,0 +1,23 @@
+<p class="ai-suggestion-card__text">{{ text() }}</p>
+<div class="ai-suggestion-card__actions">
+  <button
+    type="button"
+    class="ai-suggestion-card__btn ai-suggestion-card__btn--accept"
+    (click)="onAccept()"
+    i18n-matTooltip="@@acceptSuggestion"
+    matTooltip="Add to arguments"
+    aria-label="Accept suggestion"
+  >
+    <mat-icon fontIcon="add"></mat-icon>
+  </button>
+  <button
+    type="button"
+    class="ai-suggestion-card__btn ai-suggestion-card__btn--dismiss"
+    (click)="onDismiss()"
+    i18n-matTooltip="@@dismissSuggestion"
+    matTooltip="Dismiss"
+    aria-label="Dismiss suggestion"
+  >
+    <mat-icon fontIcon="close"></mat-icon>
+  </button>
+</div>
