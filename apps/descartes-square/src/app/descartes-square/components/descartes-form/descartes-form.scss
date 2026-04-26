@@ -110,7 +110,7 @@
     transform-origin: center;
   }
 
-  @media (max-width: $tablet) {
+  @media (max-width: $mobile) {
     display: none;
   }
 }
