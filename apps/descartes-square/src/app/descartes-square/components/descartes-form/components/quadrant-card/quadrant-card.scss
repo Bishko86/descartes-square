@@ -7,7 +7,6 @@
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
-  min-height: 320px;
   position: relative;
 
   &[data-quadrant='q1'] {
@@ -38,7 +37,7 @@
 
 .quadrant-card__number {
   font-family: var(--font-mono);
-  font-size: var(--regular);
+  font-size: var(--big);
   letter-spacing: 0.08em;
   padding-top: var(--x-small-indent);
 }
@@ -112,7 +111,6 @@
   color: var(--text-muted);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: color 0.15s ease, background-color 0.15s ease;
 
   mat-icon {
     font-size: 18px;
@@ -128,10 +126,10 @@
   }
 }
 
-// Handle shows as a colored bullet at rest; reveals drag icon on item hover
 .quadrant-card__handle {
   cursor: grab;
   position: relative;
+  transition: color 0.15s ease, background-color 0.15s ease;
 
   &::before {
     content: '';
@@ -146,7 +144,7 @@
   }
 }
 
-// Span wrapper around mat-icon — native element, CSS scoping works reliably
+// opacity: 0 on mat-icon doesn't pierce Angular Material's CSS — span wrapper used instead
 .quadrant-card__handle-icon {
   opacity: 0;
   display: flex;
@@ -157,23 +155,23 @@
 
 .quadrant-card__handle:active { cursor: grabbing; }
 
-// Remove button hidden at rest
 .quadrant-card__remove {
   opacity: 0;
+  pointer-events: none;
   transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
 }
 
-// Reveal controls on item hover / keyboard focus
 .quadrant-card__item:hover,
 .quadrant-card__item:focus-within {
-  .quadrant-card__handle {
-    &::before { opacity: 0; }
-  }
+  .quadrant-card__handle::before { opacity: 0; }
   .quadrant-card__handle-icon { opacity: 1; }
-  .quadrant-card__remove { opacity: 1; }
+
+  .quadrant-card__remove {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
-// Colored bullets per quadrant
 :host[data-quadrant='q1'] .quadrant-card__handle::before { background: var(--q1); }
 :host[data-quadrant='q2'] .quadrant-card__handle::before { background: var(--q2); }
 :host[data-quadrant='q3'] .quadrant-card__handle::before { background: var(--q3); }
@@ -206,19 +204,16 @@
   padding-top: var(--x-small-indent);
 }
 
-// Add argument — dashed outline pill
 .quadrant-card__add {
   border-style: dashed;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
 }
 
-// Suggest with AI — tonal pill
 .quadrant-card__suggest {
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   ::ng-deep mat-spinner circle { stroke: var(--primary); }
 }
 
-// Per-quadrant button colors
 :host[data-quadrant='q1'] {
   .quadrant-card__add { color: var(--q1); border-color: var(--q1); }
   .quadrant-card__suggest { background-color: var(--q1-bg); color: var(--q1); }
