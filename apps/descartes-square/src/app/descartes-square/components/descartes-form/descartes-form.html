@@ -20,14 +20,17 @@
 </ng-template>
 
 <header class="descartes-form__header">
-  <input
-    type="text"
-    class="descartes-form__title"
-    [formField]="form.field.title"
-    i18n-placeholder="@@titlePlaceholder"
-    placeholder="Frame your decision as a yes/no question…"
-    autofocus
-  />
+  <div class="descartes-form__title-wrap">
+    <label class="descartes-form__title-label" i18n="@@yourDecisionLabel">Your Decision</label>
+    <input
+      type="text"
+      class="descartes-form__title"
+      [formField]="form.field.title"
+      i18n-placeholder="@@titlePlaceholder"
+      placeholder="Frame your decision as a yes/no question…"
+      autofocus
+    />
+  </div>
   <app-progress-pill [counts]="form.counts()" />
 </header>
 
@@ -39,27 +42,27 @@
 >
   <span
     class="descartes-form__axis descartes-form__axis--top"
-    i18n="@@axisGains"
-  >
-    Gains
-  </span>
-  <span
-    class="descartes-form__axis descartes-form__axis--bottom"
-    i18n="@@axisLosses"
-  >
-    Losses
-  </span>
-  <span
-    class="descartes-form__axis descartes-form__axis--left"
     i18n="@@axisOutcomesActing"
   >
     Outcomes of acting
   </span>
   <span
-    class="descartes-form__axis descartes-form__axis--right"
+    class="descartes-form__axis descartes-form__axis--bottom"
     i18n="@@axisOutcomesNotActing"
   >
     Outcomes of not acting
+  </span>
+  <span
+    class="descartes-form__axis descartes-form__axis--left"
+    i18n="@@axisGains"
+  >
+    Gains
+  </span>
+  <span
+    class="descartes-form__axis descartes-form__axis--right"
+    i18n="@@axisLosses"
+  >
+    Losses
   </span>
 
   @for (id of order; track id) {

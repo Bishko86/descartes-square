@@ -10,10 +10,22 @@
   min-height: 320px;
   position: relative;
 
-  &[data-quadrant='q1'] { border-top: 3px solid var(--q1); }
-  &[data-quadrant='q2'] { border-top: 3px solid var(--q2); }
-  &[data-quadrant='q3'] { border-top: 3px solid var(--q3); }
-  &[data-quadrant='q4'] { border-top: 3px solid var(--q4); }
+  &[data-quadrant='q1'] {
+    border-color: var(--q1);
+    background: linear-gradient(155deg, var(--q1-bg) 0%, var(--bg-elevated) 55%);
+  }
+  &[data-quadrant='q2'] {
+    border-color: var(--q2);
+    background: linear-gradient(155deg, var(--q2-bg) 0%, var(--bg-elevated) 55%);
+  }
+  &[data-quadrant='q3'] {
+    border-color: var(--q3);
+    background: linear-gradient(155deg, var(--q3-bg) 0%, var(--bg-elevated) 55%);
+  }
+  &[data-quadrant='q4'] {
+    border-color: var(--q4);
+    background: linear-gradient(155deg, var(--q4-bg) 0%, var(--bg-elevated) 55%);
+  }
 }
 
 .quadrant-card__header {
@@ -27,10 +39,14 @@
 .quadrant-card__number {
   font-family: var(--font-mono);
   font-size: var(--regular);
-  color: var(--text-muted);
   letter-spacing: 0.08em;
   padding-top: var(--x-small-indent);
 }
+
+:host[data-quadrant='q1'] .quadrant-card__number { color: var(--q1); }
+:host[data-quadrant='q2'] .quadrant-card__number { color: var(--q2); }
+:host[data-quadrant='q3'] .quadrant-card__number { color: var(--q3); }
+:host[data-quadrant='q4'] .quadrant-card__number { color: var(--q4); }
 
 .quadrant-card__titles {
   flex: 1;
@@ -112,8 +128,56 @@
   }
 }
 
-.quadrant-card__handle { cursor: grab; }
+// Handle shows as a colored bullet at rest; reveals drag icon on item hover
+.quadrant-card__handle {
+  cursor: grab;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.15s ease;
+  }
+}
+
+// Span wrapper around mat-icon — native element, CSS scoping works reliably
+.quadrant-card__handle-icon {
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.15s ease;
+}
+
 .quadrant-card__handle:active { cursor: grabbing; }
+
+// Remove button hidden at rest
+.quadrant-card__remove {
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+
+// Reveal controls on item hover / keyboard focus
+.quadrant-card__item:hover,
+.quadrant-card__item:focus-within {
+  .quadrant-card__handle {
+    &::before { opacity: 0; }
+  }
+  .quadrant-card__handle-icon { opacity: 1; }
+  .quadrant-card__remove { opacity: 1; }
+}
+
+// Colored bullets per quadrant
+:host[data-quadrant='q1'] .quadrant-card__handle::before { background: var(--q1); }
+:host[data-quadrant='q2'] .quadrant-card__handle::before { background: var(--q2); }
+:host[data-quadrant='q3'] .quadrant-card__handle::before { background: var(--q3); }
+:host[data-quadrant='q4'] .quadrant-card__handle::before { background: var(--q4); }
 
 .quadrant-card__textarea {
   flex: 1;
@@ -142,8 +206,34 @@
   padding-top: var(--x-small-indent);
 }
 
+// Add argument — dashed outline pill
+.quadrant-card__add {
+  border-style: dashed;
+  border-radius: 8px;
+}
+
+// Suggest with AI — tonal pill
 .quadrant-card__suggest {
+  border-radius: 8px;
   ::ng-deep mat-spinner circle { stroke: var(--primary); }
+}
+
+// Per-quadrant button colors
+:host[data-quadrant='q1'] {
+  .quadrant-card__add { color: var(--q1); border-color: var(--q1); }
+  .quadrant-card__suggest { background-color: var(--q1-bg); color: var(--q1); }
+}
+:host[data-quadrant='q2'] {
+  .quadrant-card__add { color: var(--q2); border-color: var(--q2); }
+  .quadrant-card__suggest { background-color: var(--q2-bg); color: var(--q2); }
+}
+:host[data-quadrant='q3'] {
+  .quadrant-card__add { color: var(--q3); border-color: var(--q3); }
+  .quadrant-card__suggest { background-color: var(--q3-bg); color: var(--q3); }
+}
+:host[data-quadrant='q4'] {
+  .quadrant-card__add { color: var(--q4); border-color: var(--q4); }
+  .quadrant-card__suggest { background-color: var(--q4-bg); color: var(--q4); }
 }
 
 .quadrant-card__suggestions {

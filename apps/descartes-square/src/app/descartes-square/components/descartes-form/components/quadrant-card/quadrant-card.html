@@ -21,7 +21,7 @@
         matTooltip="Drag to reorder"
         aria-label="Drag to reorder"
       >
-        <mat-icon fontIcon="drag_indicator"></mat-icon>
+        <span class="quadrant-card__handle-icon"><mat-icon fontIcon="drag_indicator"></mat-icon></span>
       </button>
       <textarea
         #argInput
@@ -52,7 +52,7 @@
 <div class="quadrant-card__actions">
   <button
     type="button"
-    matButton="tonal"
+    matButton="outlined"
     class="quadrant-card__add"
     (click)="onAdd()"
   >
@@ -62,7 +62,7 @@
 
   <button
     type="button"
-    matButton="outlined"
+    matButton="tonal"
     class="quadrant-card__suggest"
     [disabled]="!canSuggest() || isStreaming()"
     (click)="requestSuggestion.emit()"

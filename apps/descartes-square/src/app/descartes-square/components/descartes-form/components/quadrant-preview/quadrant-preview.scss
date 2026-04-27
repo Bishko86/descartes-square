@@ -49,9 +49,13 @@
 .quadrant-preview__number {
   font-family: var(--font-mono);
   font-size: var(--semi-small);
-  color: var(--text-muted);
   letter-spacing: 0.08em;
 }
+
+:host[data-quadrant='q1'] .quadrant-preview__number { color: var(--q1); }
+:host[data-quadrant='q2'] .quadrant-preview__number { color: var(--q2); }
+:host[data-quadrant='q3'] .quadrant-preview__number { color: var(--q3); }
+:host[data-quadrant='q4'] .quadrant-preview__number { color: var(--q4); }
 
 .quadrant-preview__label {
   flex: 1;
