@@ -24,7 +24,7 @@
   min-width: 240px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: var(--extra-small-indent);
 }
 
 .descartes-form__title-label {
