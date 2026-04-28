@@ -27,7 +27,7 @@
       class="descartes-form__title"
       [formField]="form.field.title"
       i18n-placeholder="@@titlePlaceholder"
-      placeholder="Frame your decision as a yes/no question…"
+      placeholder="Should I…?"
       autofocus
     />
   </div>
@@ -100,14 +100,16 @@
   <button
     matButton="outlined"
     type="button"
+    class="descartes-form__btn descartes-form__btn--cancel"
     (click)="form.cancel()"
     i18n="@@cancelBtn"
   >
     Cancel
   </button>
   <button
-    matButton="tonal"
+    matButton="outlined"
     type="button"
+    class="descartes-form__btn descartes-form__btn--draft"
     [disabled]="form.isLocked()"
     (click)="form.saveDraft()"
     i18n="@@saveDraftBtn"
@@ -115,8 +117,9 @@
     Save Draft
   </button>
   <button
-    matButton="elevated"
+    matButton="filled"
     type="button"
+    class="descartes-form__btn descartes-form__btn--review"
     [disabled]="form.isLocked()"
     (click)="form.reviewAndConclude()"
     i18n="@@reviewConcludeBtn"

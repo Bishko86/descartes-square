@@ -10,13 +10,11 @@
 
 .descartes-form__header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: var(--basic-indent);
   flex-wrap: wrap;
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--small-indent) var(--basic-indent);
+  padding-bottom: var(--small-indent);
+  border-bottom: 1px solid var(--border);
 }
 
 .descartes-form__title-wrap {
@@ -24,30 +22,32 @@
   min-width: 240px;
   display: flex;
   flex-direction: column;
-  gap: var(--extra-small-indent);
+  gap: 4px;
 }
 
 .descartes-form__title-label {
-  font-size: var(--semi-small);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted);
 }
 
 .descartes-form__title {
   width: 100%;
-  padding: 0;
-  font-family: var(--font-serif);
-  font-size: var(--title-font-size);
-  font-weight: 500;
+  padding: 4px 0;
+  font-family: var(--font-sans);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
   color: var(--text);
   background: transparent;
   border: none;
 
   &::placeholder {
     color: var(--text-subtle);
-    font-family: var(--font-body);
+    font-weight: 500;
   }
 
   &:focus-visible {
@@ -150,4 +150,18 @@
   button:first-child {
     margin-right: auto;
   }
+}
+
+.descartes-form__btn {
+  border-radius: var(--radius-md);
+}
+
+.descartes-form__btn--cancel,
+.descartes-form__btn--draft {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.descartes-form__btn--draft {
+  border-style: dashed;
 }
