@@ -22,11 +22,11 @@
   min-width: 240px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--x-small-indent);
 }
 
 .descartes-form__title-label {
-  font-size: 12px;
+  font-size: var(--semi-small);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -35,7 +35,7 @@
 
 .descartes-form__title {
   width: 100%;
-  padding: 4px 0;
+  padding: var(--x-small-indent) 0;
   font-family: var(--font-sans);
   font-size: 26px;
   font-weight: 600;
@@ -162,6 +162,4 @@
   border-color: var(--primary);
 }
 
-.descartes-form__btn--draft {
-  border-style: dashed;
-}
+.descartes-form__btn--draft { border-style: dashed; }
