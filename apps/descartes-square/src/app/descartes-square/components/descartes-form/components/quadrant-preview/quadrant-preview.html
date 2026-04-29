@@ -1,0 +1,26 @@
+<header class="quadrant-preview__header">
+  <span class="quadrant-preview__number">{{ numberLabel() }}</span>
+  <span class="quadrant-preview__label">{{ shortLabel() }}</span>
+  <span class="quadrant-preview__count" [class.is-empty]="count() === 0">
+    {{ count() }}
+  </span>
+</header>
+
+@if (count() === 0) {
+  <p class="quadrant-preview__empty" i18n="@@quadrantEmpty">
+    No arguments yet — open to add some.
+  </p>
+} @else {
+  <ul class="quadrant-preview__list">
+    @for (item of previewItems(); track $index) {
+      <li class="quadrant-preview__item">
+        <span class="quadrant-preview__item-text">{{ item }}</span>
+      </li>
+    }
+  </ul>
+  @if (overflow() > 0) {
+    <span class="quadrant-preview__overflow" i18n="@@moreOverflow">
+      +{{ overflow() }} more
+    </span>
+  }
+}

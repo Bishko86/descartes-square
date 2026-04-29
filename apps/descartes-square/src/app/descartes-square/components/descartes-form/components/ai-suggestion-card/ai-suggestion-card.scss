@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--small-indent);
+  padding: var(--small-indent) var(--basic-indent);
+  background: var(--primary-soft);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: var(--regular);
+  animation: ai-card-in 180ms ease-out;
+}
+
+.ai-suggestion-card__text {
+  flex: 1;
+  margin: 0;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ai-suggestion-card__actions {
+  display: inline-flex;
+  gap: var(--x-small-indent);
+}
+
+.ai-suggestion-card__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  &--accept {
+    background: var(--success-bg);
+    color: var(--success);
+
+    &:hover { background: var(--success-border); }
+  }
+
+  &--dismiss {
+    background: transparent;
+    color: var(--text-muted);
+
+    &:hover { color: var(--text); background: var(--surface-hover); }
+  }
+}
+
+@keyframes ai-card-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

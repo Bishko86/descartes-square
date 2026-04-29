@@ -1,0 +1,15 @@
+@for (id of order; track id) {
+  <button
+    type="button"
+    class="quadrant-chips__chip"
+    [class.is-active]="activeId() === id"
+    [attr.data-quadrant]="id"
+    [attr.aria-selected]="activeId() === id"
+    role="tab"
+    (click)="select.emit(id)"
+  >
+    <span class="quadrant-chips__number">{{ numberLabel(id) }}</span>
+    <span class="quadrant-chips__label">{{ shortLabels.get(id) }}</span>
+    <span class="quadrant-chips__count">{{ counts()[id] }}</span>
+  </button>
+}
