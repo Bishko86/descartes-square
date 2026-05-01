@@ -94,6 +94,7 @@
     "saveDraftBtn": " Save Draft ",
     "reviewConcludeBtn": " Review & conclude → ",
     "addBtn": " Add data ",
+    "yourDecisionLabel": "Your decision",
     "emptyState.title": " No decisions yet ",
     "emptyState.subtitle": " Create your first Descartes Square to start analyzing decisions clearly and confidently. ",
     "emptyState.cta": "{$START_TAG_MAT_ICON}add{$CLOSE_TAG_MAT_ICON} Create new square ",
