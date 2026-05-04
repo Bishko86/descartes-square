@@ -9,6 +9,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormField } from '@angular/forms/signals';
@@ -69,6 +70,7 @@ export class DescartesForm implements OnInit {
 
   readonly #authService = inject(DescartesAuthService);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #route = inject(ActivatedRoute);
 
   readonly order = QUADRANT_ORDER;
   readonly shortLabels = DescartesQuestionShortLabels;
@@ -113,6 +115,13 @@ export class DescartesForm implements OnInit {
 
   ngOnInit(): void {
     this.form.init(this.id());
+
+    const requested = this.#route.snapshot.queryParamMap.get('quadrant');
+    if (requested && this.order.includes(requested as DescartesQuestionsIds)) {
+      const quadrant = requested as DescartesQuestionsIds;
+      this.activeQuadrant.set(quadrant);
+      this.#previousQuadrant.set(quadrant);
+    }
   }
 
   onKeyDown(event: KeyboardEvent): void {

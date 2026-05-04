@@ -48,6 +48,13 @@ export const routes: Routes = [
             './descartes-square/components/descartes-form/descartes-form'
           ).then((mod) => mod.DescartesForm),
       },
+      {
+        path: 'list/:id/review',
+        loadComponent: () =>
+          import(
+            './descartes-square/components/descartes-review/descartes-review'
+          ).then((mod) => mod.DescartesReview),
+      },
     ],
   },
   {

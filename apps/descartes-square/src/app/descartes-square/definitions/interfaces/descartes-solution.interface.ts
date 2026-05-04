@@ -4,6 +4,7 @@ export interface IDescartesSolution {
   id?: string;
   title: Maybe<string>;
   conclusion: Maybe<string>;
+  confidence?: Maybe<number>;
   q1: Maybe<string[]>;
   q2: Maybe<string[]>;
   q3: Maybe<string[]>;

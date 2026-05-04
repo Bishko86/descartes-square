@@ -1,0 +1,57 @@
+@if (!expanded()) {
+  <button
+    type="button"
+    class="review-synthesis-card__cta"
+    (click)="expand()"
+  >
+    <span class="review-synthesis-card__cta-icon" aria-hidden="true">✦</span>
+    <span class="review-synthesis-card__cta-text" i18n="@@synthesisCta">
+      Ask AI to summarize the pattern
+    </span>
+    <span class="review-synthesis-card__cta-sub" i18n="@@synthesisCtaSub">
+      Optional — read your own first
+    </span>
+  </button>
+} @else {
+  <div class="review-synthesis-card__body">
+    <header class="review-synthesis-card__head">
+      <span class="review-synthesis-card__head-icon" aria-hidden="true">✦</span>
+      <strong class="review-synthesis-card__head-title" i18n="@@synthesisHeader">
+        A synthesis
+      </strong>
+      <button
+        type="button"
+        class="review-synthesis-card__refresh"
+        (click)="refresh()"
+        [disabled]="loading()"
+        i18n-aria-label="@@synthesisRefreshAria"
+        aria-label="Regenerate synthesis"
+      >
+        ↻
+      </button>
+      <button
+        type="button"
+        class="review-synthesis-card__close"
+        (click)="collapse()"
+        i18n-aria-label="@@synthesisCloseAria"
+        aria-label="Hide"
+      >
+        ✕
+      </button>
+    </header>
+
+    @if (loading()) {
+      <div class="review-synthesis-card__skeleton" aria-busy="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    } @else if (hasContent()) {
+      <p class="review-synthesis-card__text">{{ synthesis() }}</p>
+    }
+
+    <p class="review-synthesis-card__disclaimer" i18n="@@synthesisDisclaimer">
+      This is a mirror, not an answer. The decision is yours.
+    </p>
+  </div>
+}

@@ -1,0 +1,210 @@
+@use "breakpoints" as *;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--small-indent);
+  padding: var(--basic-indent) var(--basic-indent) var(--small-indent);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  min-width: 0;
+
+  &[data-quadrant="q1"] {
+    background: linear-gradient(180deg, var(--q1-bg) 0%, var(--bg-elevated) 60%);
+    border-color: var(--q1-border);
+  }
+  &[data-quadrant="q2"] {
+    background: linear-gradient(180deg, var(--q2-bg) 0%, var(--bg-elevated) 60%);
+    border-color: var(--q2-border);
+  }
+  &[data-quadrant="q3"] {
+    background: linear-gradient(180deg, var(--q3-bg) 0%, var(--bg-elevated) 60%);
+    border-color: var(--q3-border);
+  }
+  &[data-quadrant="q4"] {
+    background: linear-gradient(180deg, var(--q4-bg) 0%, var(--bg-elevated) 60%);
+    border-color: var(--q4-border);
+  }
+}
+
+.review-quadrant-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--small-indent);
+}
+
+.review-quadrant-card__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  min-width: 0;
+}
+
+.review-quadrant-card__number {
+  font-family: var(--font-serif);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+
+  :host[data-quadrant="q1"] & { color: var(--q1); }
+  :host[data-quadrant="q2"] & { color: var(--q2); }
+  :host[data-quadrant="q3"] & { color: var(--q3); }
+  :host[data-quadrant="q4"] & { color: var(--q4); }
+}
+
+.review-quadrant-card__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--big);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.005em;
+}
+
+.review-quadrant-card__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 26px;
+  padding: 0 var(--x-small-indent);
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: var(--semi-small);
+  color: var(--text-muted);
+
+  &.is-empty {
+    opacity: 0.55;
+  }
+}
+
+.review-quadrant-card__list {
+  list-style: none;
+  margin: var(--x-small-indent) 0;
+  padding: 0 0 0 var(--small-indent);
+  display: flex;
+  flex-direction: column;
+  gap: var(--x-small-indent);
+}
+
+.review-quadrant-card__item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--small-indent);
+  padding: 2px 0;
+  font-size: var(--regular);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.review-quadrant-card__bullet {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-top: 9px;
+  border-radius: 50%;
+  background: var(--border-strong);
+  flex-shrink: 0;
+
+  :host[data-quadrant="q1"] & { background: var(--q1); }
+  :host[data-quadrant="q2"] & { background: var(--q2); }
+  :host[data-quadrant="q3"] & { background: var(--q3); }
+  :host[data-quadrant="q4"] & { background: var(--q4); }
+}
+
+.review-quadrant-card__text {
+  min-width: 0;
+  word-break: break-word;
+}
+
+.review-quadrant-card__empty {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--x-small-indent);
+  padding: var(--basic-indent) 0;
+  font-size: var(--regular);
+  color: var(--text-muted);
+}
+
+.review-quadrant-card__inline-link {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--primary);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+.review-quadrant-card__footer {
+  margin-top: auto;
+  padding-top: var(--small-indent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--small-indent);
+  border-top: 1px dashed var(--border);
+}
+
+.review-quadrant-card__helper {
+  margin: 0;
+  font-size: var(--semi-small);
+  color: var(--text-muted);
+}
+
+.review-quadrant-card__edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px dashed currentcolor;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  :host[data-quadrant="q1"] & {
+    color: var(--q1);
+    &:hover { background: var(--q1-bg); }
+  }
+  :host[data-quadrant="q2"] & {
+    color: var(--q2);
+    &:hover { background: var(--q2-bg); }
+  }
+  :host[data-quadrant="q3"] & {
+    color: var(--q3);
+    &:hover { background: var(--q3-bg); }
+  }
+  :host[data-quadrant="q4"] & {
+    color: var(--q4);
+    &:hover { background: var(--q4-bg); }
+  }
+}
+
+.review-quadrant-card__edit-icon {
+  display: block;
+}

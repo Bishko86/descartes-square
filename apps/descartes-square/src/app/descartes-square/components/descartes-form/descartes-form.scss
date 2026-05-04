@@ -154,12 +154,30 @@
 
 .descartes-form__btn {
   border-radius: var(--radius-md);
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .descartes-form__btn--cancel,
 .descartes-form__btn--draft {
   color: var(--primary);
   border-color: var(--primary);
+  transition: background-color 0.15s ease;
+
+  &:hover:not([disabled]) {
+    background-color: var(--primary-soft);
+  }
 }
 
 .descartes-form__btn--draft { border-style: dashed; }
+
+.descartes-form__btn.mat-mdc-unelevated-button {
+  transition: background-color 0.15s ease;
+
+  &:hover:not([disabled]) {
+    background-color: var(--primary-soft-hover) !important;
+  }
+}

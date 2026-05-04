@@ -1,0 +1,117 @@
+<header class="descartes-review__header">
+  <span class="descartes-review__eyebrow" i18n="@@reviewEyebrow">
+    Review & conclude
+  </span>
+  <h1 class="descartes-review__title">
+    @if (title()) {
+      {{ title() }}
+    } @else {
+      <span i18n="@@reviewTitleFallback">Your decision</span>
+    }
+  </h1>
+  <p class="descartes-review__subtitle" i18n="@@reviewSubtitle">
+    A verdict written by your own thinking. Read it. Then write yours.
+  </p>
+</header>
+
+<app-review-balance-card
+  [counts]="counts()"
+  [lean]="balanceLean()"
+  [confidence]="confidence()"
+/>
+
+<section class="descartes-review__grid" aria-label="Review grid"
+  i18n-aria-label="@@reviewGridAria">
+  @for (id of visualOrder; track id) {
+    <app-review-quadrant-card
+      [questionId]="id"
+      [items]="quadrantItems()[id]"
+      (edit)="onEditQuadrant($event)"
+    />
+  }
+</section>
+
+<app-review-synthesis-card
+  [payload]="synthesisPayload()"
+  [lean]="balanceLean()"
+/>
+
+<section class="descartes-review__conclusion">
+  <label
+    class="descartes-review__conclusion-label"
+    for="review-conclusion"
+    i18n="@@conclusionLabel"
+  >
+    Your conclusion
+  </label>
+  <textarea
+    id="review-conclusion"
+    class="descartes-review__conclusion-textarea"
+    rows="3"
+    [value]="entity()?.conclusion ?? ''"
+    (input)="onConclusionInput($event)"
+    i18n-placeholder="@@conclusionPlaceholder"
+    placeholder="Based on everything above — what will you do, and why?"
+  ></textarea>
+
+  <div class="descartes-review__confidence">
+    <div class="descartes-review__confidence-head">
+      <label
+        class="descartes-review__confidence-label"
+        for="review-confidence"
+        i18n="@@confidenceQuestion"
+      >
+        How sure do you feel?
+      </label>
+      <span class="descartes-review__confidence-value">
+        {{ confidenceLabel(confidence()) }}
+      </span>
+    </div>
+    <input
+      id="review-confidence"
+      class="descartes-review__confidence-slider"
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      [value]="confidence()"
+      (input)="onConfidenceInput($event)"
+    />
+    <div class="descartes-review__confidence-anchors">
+      <span i18n="@@confidenceAnchorUnsure">UNSURE</span>
+      <span i18n="@@confidenceAnchorFence">FENCE</span>
+      <span i18n="@@confidenceAnchorConfident">CONFIDENT</span>
+    </div>
+  </div>
+</section>
+
+<footer class="descartes-review__footer">
+  <button
+    matButton="outlined"
+    type="button"
+    class="descartes-review__btn descartes-review__btn--back"
+    (click)="onBackToSquare()"
+    i18n="@@reviewBackBtn"
+  >
+    ← Back to square
+  </button>
+  <button
+    matButton="outlined"
+    type="button"
+    class="descartes-review__btn descartes-review__btn--draft"
+    (click)="onSaveDraft()"
+    i18n="@@reviewSaveDraftBtn"
+  >
+    Save draft
+  </button>
+  <button
+    matButton="filled"
+    type="button"
+    class="descartes-review__btn"
+    [disabled]="!canSave()"
+    (click)="onSaveDecision()"
+    i18n="@@reviewSaveDecisionBtn"
+  >
+    Save decision
+  </button>
+</footer>

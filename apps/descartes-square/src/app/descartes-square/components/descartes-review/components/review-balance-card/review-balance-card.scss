@@ -1,0 +1,212 @@
+@use "breakpoints" as *;
+
+:host {
+  display: block;
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.review-balance-card__accent {
+  display: flex;
+  height: 6px;
+  width: 100%;
+}
+
+.review-balance-card__accent-seg {
+  display: block;
+  height: 100%;
+  min-width: 0;
+  transition: flex 0.4s ease;
+
+  &[data-quadrant="q1"] { background: var(--q1); }
+  &[data-quadrant="q2"] { background: var(--q2); }
+  &[data-quadrant="q3"] { background: var(--q3); }
+  &[data-quadrant="q4"] { background: var(--q4); }
+}
+
+.review-balance-card__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--large-indent);
+  padding: var(--large-indent);
+  align-items: center;
+
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    padding: var(--basic-indent);
+    gap: var(--basic-indent);
+  }
+}
+
+.review-balance-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--basic-indent);
+  min-width: 0;
+}
+
+.review-balance-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--x-small-indent);
+  font-family: var(--font-mono);
+  font-size: var(--semi-small);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.review-balance-card__status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+
+.review-balance-card__headline {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 36px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text);
+
+  em {
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: $mobile) {
+    font-size: 28px;
+  }
+}
+
+.review-balance-card__explanation {
+  margin: 0;
+  font-size: var(--big);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 56ch;
+
+  strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  em {
+    font-style: italic;
+  }
+}
+
+.review-balance-card__stats {
+  display: flex;
+  align-items: baseline;
+  gap: var(--medium-indent);
+  flex-wrap: wrap;
+  margin: var(--x-small-indent) 0 0;
+}
+
+.review-balance-card__stat {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--x-small-indent);
+  font-size: var(--regular);
+  color: var(--text-muted);
+
+  dt {
+    margin: 0;
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  &[data-side="act"] dd { color: var(--q1); }
+  &[data-side="stay"] dd { color: var(--q2); }
+  &[data-side="confidence"] dd { color: var(--text); }
+}
+
+.review-balance-card__chart {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+
+  @media (max-width: $mobile) {
+    width: 160px;
+    height: 160px;
+    align-self: center;
+  }
+}
+
+.review-balance-card__ring {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.review-balance-card__ring-track {
+  stroke: var(--border-subtle);
+  stroke-width: 22;
+}
+
+.review-balance-card__ring-act {
+  stroke: var(--q1);
+  stroke-width: 22;
+  stroke-linecap: butt;
+  transition: stroke-dasharray 0.4s ease;
+}
+
+.review-balance-card__ring-stay {
+  stroke: var(--q2);
+  stroke-width: 22;
+  stroke-linecap: butt;
+  transition:
+    stroke-dasharray 0.4s ease,
+    stroke-dashoffset 0.4s ease;
+}
+
+.review-balance-card__chart-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.review-balance-card__chart-pct {
+  font-family: var(--font-serif);
+  font-size: 44px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--text);
+
+  @media (max-width: $mobile) {
+    font-size: 36px;
+  }
+}
+
+.review-balance-card__chart-word {
+  font-family: var(--font-mono);
+  font-size: var(--semi-small);
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+}
+
+.review-balance-card__chart-vs {
+  font-family: var(--font-mono);
+  font-size: var(--small);
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+  margin-top: 2px;
+}

@@ -12,4 +12,5 @@ export const environment = {
   enableDebugTools: true,
   logLevel: 'debug',
   locale: null as Maybe<string>,
+  aiSynthesisEnabled: false,
 };

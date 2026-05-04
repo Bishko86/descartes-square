@@ -1,0 +1,59 @@
+<header class="review-quadrant-card__head">
+  <div class="review-quadrant-card__heading">
+    <span class="review-quadrant-card__number">{{ numberLabel() }}</span>
+    <h3 class="review-quadrant-card__title">{{ shortLabel() }}</h3>
+  </div>
+  <span class="review-quadrant-card__count" [class.is-empty]="isEmpty()">
+    {{ count() }}
+  </span>
+</header>
+
+@if (isEmpty()) {
+  <div class="review-quadrant-card__empty">
+    <span i18n="@@reviewCardEmpty">No arguments yet.</span>
+    <button
+      type="button"
+      class="review-quadrant-card__inline-link"
+      (click)="onEdit()"
+      i18n="@@reviewCardEmptyAdd"
+    >
+      Add some →
+    </button>
+  </div>
+} @else {
+  <ul class="review-quadrant-card__list">
+    @for (arg of items(); track $index) {
+      <li class="review-quadrant-card__item">
+        <span class="review-quadrant-card__bullet" aria-hidden="true"></span>
+        <span class="review-quadrant-card__text">{{ arg }}</span>
+      </li>
+    }
+  </ul>
+}
+
+<footer class="review-quadrant-card__footer">
+  <p class="review-quadrant-card__helper">{{ helper() }}</p>
+  <button
+    type="button"
+    class="review-quadrant-card__edit"
+    (click)="onEdit()"
+  >
+    <svg
+      class="review-quadrant-card__edit-icon"
+      viewBox="0 0 24 24"
+      width="14"
+      height="14"
+      aria-hidden="true"
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M16.5 3.5a2.121 2.121 0 1 1 3 3L8 18l-4 1 1-4 11.5-11.5Z"
+      />
+    </svg>
+    <span i18n="@@reviewCardEdit">Edit</span>
+  </button>
+</footer>
