@@ -120,7 +120,8 @@ export class DescartesForm implements OnInit {
 
   #applyQuadrantQueryParam(): void {
     const requested = this.#route.snapshot.queryParamMap.get('quadrant');
-    if (!requested || !this.order.includes(requested as DescartesQuestionsIds)) return;
+    if (!requested || !this.order.includes(requested as DescartesQuestionsIds))
+      return;
     const quadrant = requested as DescartesQuestionsIds;
     this.activeQuadrant.set(quadrant);
     this.#previousQuadrant.set(quadrant);
