@@ -10,6 +10,7 @@ import {
   QuadrantCounts,
   confidenceLabel,
 } from '@descartes/definitions/utils/balance.util';
+import { buildAccentBar } from '@descartes/definitions/utils/accent-bar.util';
 
 const RING_RADIUS = 78;
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS;
@@ -38,24 +39,9 @@ export class ReviewBalanceCard {
   });
   readonly stayPct = computed(() => 100 - this.actPct());
 
-  readonly accentBar = computed(() => {
-    const c = this.counts();
-    const total = this.total();
-    if (total === 0) {
-      return [
-        { quadrant: 'q1' as const, pct: 25 },
-        { quadrant: 'q4' as const, pct: 25 },
-        { quadrant: 'q3' as const, pct: 25 },
-        { quadrant: 'q2' as const, pct: 25 },
-      ];
-    }
-    return [
-      { quadrant: 'q1' as const, pct: (c.q1 / total) * 100 },
-      { quadrant: 'q4' as const, pct: (c.q4 / total) * 100 },
-      { quadrant: 'q3' as const, pct: (c.q3 / total) * 100 },
-      { quadrant: 'q2' as const, pct: (c.q2 / total) * 100 },
-    ];
-  });
+  readonly accentBar = computed(() =>
+    buildAccentBar(this.counts(), this.total()),
+  );
 
   readonly ringRadius = RING_RADIUS;
   readonly ringCircumference = RING_CIRCUMFERENCE;
