@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { MatButton } from '@angular/material/button';
@@ -15,9 +15,12 @@ import { SolutionsRepository } from '@descartes/services/solutions-repository';
   templateUrl: './descartes-details.html',
   styleUrl: './descartes-details.scss',
 })
-export class DescartesDetails implements OnInit {
+export class DescartesDetails {
   id = input<string>();
-  overviewedEntity = signal<Maybe<IDescartesSolution>>(null);
+  overviewedEntity = computed<Maybe<IDescartesSolution>>(() => {
+    const id = this.id();
+    return id ? this.#repository.findById(id) : null;
+  });
 
   readonly #router = inject(Router);
 
@@ -26,12 +29,6 @@ export class DescartesDetails implements OnInit {
   readonly #confirmService = inject(ConfirmService);
 
   readonly #repository = inject(SolutionsRepository);
-
-  ngOnInit(): void {
-    const id = this.id();
-    if (!id) return;
-    this.overviewedEntity.set(this.#repository.findById(id));
-  }
 
   back(): void {
     this.#router.navigate(['descartes-square']).then();

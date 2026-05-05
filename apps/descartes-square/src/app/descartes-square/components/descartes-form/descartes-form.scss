@@ -157,6 +157,7 @@
 
   &[disabled] {
     opacity: 0.5;
+    pointer-events: auto;
     cursor: not-allowed;
   }
 }
@@ -178,6 +179,6 @@
   transition: background-color 0.15s ease;
 
   &:hover:not([disabled]) {
-    background-color: var(--primary-soft-hover) !important;
+    background-color: var(--primary-soft-hover);
   }
 }

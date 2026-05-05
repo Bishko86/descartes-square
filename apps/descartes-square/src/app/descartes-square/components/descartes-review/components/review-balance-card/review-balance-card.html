@@ -19,61 +19,54 @@
       </span>
     </div>
 
-    <h2 class="review-balance-card__headline">
-      @switch (lean()) {
-        @case ("act") {
-          <span i18n="@@balanceHeadlineAct">
-            Your reasoning <em>leans toward acting</em>.
-          </span>
-        }
-        @case ("stay") {
-          <span i18n="@@balanceHeadlineStay">
-            Your reasoning <em>leans toward staying</em>.
-          </span>
-        }
-        @case ("even") {
-          <span i18n="@@balanceHeadlineEven">
-            The square is <em>evenly split</em>.
-          </span>
-        }
-        @default {
-          <span i18n="@@balanceHeadlineEmpty">
-            Add a few arguments to see <em>the shape of your thinking</em>.
-          </span>
-        }
-      }
-    </h2>
-
-    <p class="review-balance-card__explanation">
-      @switch (lean()) {
-        @case ("act") {
+    @switch (lean()) {
+      @case ("act") {
+        <h2 class="review-balance-card__headline">
+          <span i18n="@@balanceHeadlineAct">Your reasoning <em>leans toward acting</em>.</span>
+        </h2>
+        <p class="review-balance-card__explanation">
           <span i18n="@@balanceExplanationAct">
             On paper, the case for acting is heavier. Trust it — but read each
             card to make sure nothing's <strong>under-weighted</strong>.
           </span>
-        }
-        @case ("stay") {
+        </p>
+      }
+      @case ("stay") {
+        <h2 class="review-balance-card__headline">
+          <span i18n="@@balanceHeadlineStay">Your reasoning <em>leans toward staying</em>.</span>
+        </h2>
+        <p class="review-balance-card__explanation">
           <span i18n="@@balanceExplanationStay">
             The case for staying is heavier. Before you close the book, revisit
             quadrant <strong>04</strong> — the cost of <em>not</em> acting is
             easy to under-count.
           </span>
-        }
-        @case ("even") {
+        </p>
+      }
+      @case ("even") {
+        <h2 class="review-balance-card__headline">
+          <span i18n="@@balanceHeadlineEven">The square is <em>evenly split</em>.</span>
+        </h2>
+        <p class="review-balance-card__explanation">
           <span i18n="@@balanceExplanationEven">
             Both sides carry similar weight. The decision likely rests on
             <strong>one or two specific arguments</strong> — read each card and
             ask which feels heaviest.
           </span>
-        }
-        @default {
+        </p>
+      }
+      @default {
+        <h2 class="review-balance-card__headline">
+          <span i18n="@@balanceHeadlineEmpty">Add a few arguments to see <em>the shape of your thinking</em>.</span>
+        </h2>
+        <p class="review-balance-card__explanation">
           <span i18n="@@balanceExplanationEmpty">
             Open each quadrant and capture what you know. Once you've weighed a
             few angles, the pattern will start to show.
           </span>
-        }
+        </p>
       }
-    </p>
+    }
 
     <dl class="review-balance-card__stats">
       <div class="review-balance-card__stat" data-side="act">
