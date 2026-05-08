@@ -1,4 +1,4 @@
-@if (!expanded()) {
+@if (!isExpanded()) {
   <button
     type="button"
     class="review-synthesis-card__cta"
@@ -23,7 +23,7 @@
         type="button"
         class="review-synthesis-card__refresh"
         (click)="refresh()"
-        [disabled]="loading()"
+        [disabled]="isLoading()"
         i18n-aria-label="@@synthesisRefreshAria"
         aria-label="Regenerate synthesis"
       >
@@ -40,7 +40,7 @@
       </button>
     </header>
 
-    @if (loading()) {
+    @if (isLoading()) {
       <div class="review-synthesis-card__skeleton" aria-busy="true">
         <span></span>
         <span></span>

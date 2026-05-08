@@ -33,30 +33,30 @@ export class ReviewSynthesisCard {
   readonly #service = inject(AiSynthesisService);
   readonly #destroyRef = inject(DestroyRef);
 
-  readonly expanded = signal(false);
-  readonly loading = signal(false);
+  readonly isExpanded = signal(false);
+  readonly isLoading = signal(false);
   readonly synthesis = signal<string | null>(null);
 
-  readonly hasContent = computed(() => !!this.synthesis() && !this.loading());
+  readonly hasContent = computed(() => !!this.synthesis() && !this.isLoading());
 
   readonly #invalidateOnInputChange = effect(() => {
     this.payload();
     this.lean();
     untracked(() => {
       this.synthesis.set(null);
-      if (this.expanded()) this.#fetch();
+      if (this.isExpanded()) this.#fetch();
     });
   });
 
   expand(): void {
-    if (this.expanded()) return;
-    this.expanded.set(true);
+    if (this.isExpanded()) return;
+    this.isExpanded.set(true);
     if (this.synthesis()) return;
     this.#fetch();
   }
 
   collapse(): void {
-    this.expanded.set(false);
+    this.isExpanded.set(false);
   }
 
   refresh(): void {
@@ -65,17 +65,17 @@ export class ReviewSynthesisCard {
   }
 
   #fetch(): void {
-    this.loading.set(true);
+    this.isLoading.set(true);
     this.#service
       .requestSynthesis(this.payload(), this.lean())
       .pipe(takeUntilDestroyed(this.#destroyRef))
       .subscribe({
         next: (response) => {
           this.synthesis.set(response.text);
-          this.loading.set(false);
+          this.isLoading.set(false);
         },
         error: () => {
-          this.loading.set(false);
+          this.isLoading.set(false);
         },
       });
   }
