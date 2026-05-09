@@ -110,16 +110,16 @@
   }
 
   &--left {
-    left: -16px;
+    left: calc(var(--large-indent) / 2);
     top: 50%;
-    transform: translateY(-50%) rotate(-90deg);
+    transform: translate(-50%, -50%) rotate(-90deg);
     transform-origin: center;
   }
 
   &--right {
-    right: -8px;
+    right: calc(var(--large-indent) / 2);
     top: 50%;
-    transform: translateY(-50%) rotate(90deg);
+    transform: translate(50%, -50%) rotate(90deg);
     transform-origin: center;
   }
 
