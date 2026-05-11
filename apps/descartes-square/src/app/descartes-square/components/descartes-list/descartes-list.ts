@@ -1,11 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { Router } from '@angular/router';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { filter, first, tap } from 'rxjs';
 import { ConfirmService } from '@core/services/confirm.service';
+import { SolutionsRepository } from '@descartes/services/solutions-repository';
 import { DescartesSolutionCard } from '../descartes-solution-card/descartes-solution-card';
 
 @Component({
@@ -17,14 +17,12 @@ import { DescartesSolutionCard } from '../descartes-solution-card/descartes-solu
 export class DescartesList implements OnInit {
   readonly #confirmService = inject(ConfirmService);
   readonly #router = inject(Router);
+  readonly #repository = inject(SolutionsRepository);
 
   dataSource = signal<IDescartesSolution[]>([]);
 
   ngOnInit(): void {
-    const currList: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-    );
-    this.dataSource.set(currList);
+    this.dataSource.set(this.#repository.list());
   }
 
   view(id: string): void {
@@ -42,12 +40,7 @@ export class DescartesList implements OnInit {
         first(),
         filter(Boolean),
         tap(() => {
-          const currList: IDescartesSolution[] = JSON.parse(
-            localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-          ).filter((item: IDescartesSolution) => item.id !== id);
-          localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(currList));
-
-          this.dataSource.set(currList);
+          this.dataSource.set(this.#repository.remove(id));
         }),
       )
       .subscribe();

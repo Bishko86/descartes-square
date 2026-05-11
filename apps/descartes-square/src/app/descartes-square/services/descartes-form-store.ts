@@ -10,11 +10,12 @@ import {
   schema,
 } from '@angular/forms/signals';
 
-import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { SnackbarComponent } from '@core/components/snackbar/snackbar';
 import { IDescartesSolution } from '@descartes/definitions/interfaces/descartes-solution.interface';
 import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.interface';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
+
+import { SolutionsRepository } from './solutions-repository';
 
 interface IFormModel {
   title: string;
@@ -40,6 +41,7 @@ const argumentSchema = schema<string>((item) => {
 export class DescartesFormStore {
   readonly #router = inject(Router);
   readonly #snackBar = inject(MatSnackBar);
+  readonly #repository = inject(SolutionsRepository);
 
   readonly #id = signal<Maybe<string>>(undefined);
 
@@ -88,10 +90,6 @@ export class DescartesFormStore {
     this.model.update((m) => ({ ...m, title: value }));
   }
 
-  setConclusion(value: string): void {
-    this.model.update((m) => ({ ...m, conclusion: value }));
-  }
-
   setArgument(quadrant: TFormNames, index: number, value: string): void {
     this.model.update((m) => {
       const next = [...m[quadrant]];
@@ -136,12 +134,7 @@ export class DescartesFormStore {
 
   reviewAndConclude(): void {
     const id = this.#persist();
-    this.#showInfoSnackbar(
-      this.isEditing()
-        ? $localize`:@@formUpdated:Form is updated`
-        : $localize`:@@formSaved:Form is saved`,
-    );
-    this.#router.navigate(['descartes-square', 'list', id, 'details']);
+    this.#router.navigate(['descartes-square', 'list', id, 'review']);
   }
 
   #showInfoSnackbar(message: string): void {
@@ -155,25 +148,20 @@ export class DescartesFormStore {
   }
 
   #persist(): string {
-    const list = this.#readList();
     const currentId = this.#id();
     const payload = this.#sanitize(this.model());
 
     if (currentId) {
-      const next = list.map((item) =>
-        item.id === currentId ? { ...item, ...payload } : item,
-      );
-      this.#writeList(next);
+      this.#repository.upsert({ ...payload, id: currentId });
       return currentId;
     }
 
     const newId = crypto.randomUUID();
-    const entity: IDescartesSolution = {
+    this.#repository.upsert({
       ...payload,
       id: newId,
       createdAt: new Date().toISOString(),
-    };
-    this.#writeList([...list, entity]);
+    });
     this.#id.set(newId);
     this.#router.navigate(['descartes-square', 'list', newId, 'edit'], {
       replaceUrl: true,
@@ -181,20 +169,19 @@ export class DescartesFormStore {
     return newId;
   }
 
-  #readList(): IDescartesSolution[] {
-    return JSON.parse(localStorage.getItem(LocalStorageKeys.LIST) ?? '[]');
-  }
-
-  #writeList(list: IDescartesSolution[]): void {
-    localStorage.setItem(LocalStorageKeys.LIST, JSON.stringify(list));
-  }
-
   #loadById(id: string): Maybe<IDescartesSolution> {
-    return this.#readList().find((item) => item.id === id);
+    return this.#repository.findById(id);
   }
 
   #emptyModel(): IFormModel {
-    return { title: '', q1: [], q2: [], q3: [], q4: [], conclusion: '' };
+    return {
+      title: '',
+      q1: [],
+      q2: [],
+      q3: [],
+      q4: [],
+      conclusion: '',
+    };
   }
 
   #fromSolution(s: IDescartesSolution): IFormModel {

@@ -8,4 +8,5 @@ export const environment = {
   enableDebugTools: false,
   logLevel: 'error',
   locale: $localize.locale as Maybe<string>,
+  aiSynthesisEnabled: false,
 };

@@ -177,12 +177,27 @@
 :host[data-quadrant='q3'] .quadrant-card__handle::before { background: var(--q3); }
 :host[data-quadrant='q4'] .quadrant-card__handle::before { background: var(--q4); }
 
+.quadrant-card__textarea-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  padding: 0 var(--small-indent);
+  border-radius: var(--radius-sm);
+
+  &:focus-within {
+    background: var(--bg-elevated);
+  }
+}
+
 .quadrant-card__textarea {
   flex: 1;
+  min-width: 0;
+  width: 100%;
+  overflow-wrap: anywhere;
   resize: none;
   border: none;
   background: transparent;
-  padding: var(--x-small-indent) var(--small-indent);
+  padding: var(--x-small-indent) 0;
   font-family: var(--font-body);
   font-size: var(--regular);
   color: var(--text);
@@ -190,8 +205,6 @@
 
   &:focus-visible {
     outline: none;
-    background: var(--bg-elevated);
-    border-radius: var(--radius-sm);
   }
 
   &::placeholder { color: var(--text-subtle); }

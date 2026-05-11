@@ -1,6 +1,5 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
-import { LocalStorageKeys } from '@core/enums/local-storage-key.enum';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 import { MatButton } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -8,6 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmService } from '@core/services/confirm.service';
 import { tap, first, filter } from 'rxjs';
 import { SnackbarComponent } from '@core/components/snackbar/snackbar';
+import { SolutionsRepository } from '@descartes/services/solutions-repository';
 
 @Component({
   selector: 'app-descartes-details',
@@ -15,9 +15,12 @@ import { SnackbarComponent } from '@core/components/snackbar/snackbar';
   templateUrl: './descartes-details.html',
   styleUrl: './descartes-details.scss',
 })
-export class DescartesDetails implements OnInit {
+export class DescartesDetails {
   id = input<string>();
-  overviewedEntity = signal<Maybe<IDescartesSolution>>(null);
+  overviewedEntity = computed<Maybe<IDescartesSolution>>(() => {
+    const id = this.id();
+    return id ? this.#repository.findById(id) : null;
+  });
 
   readonly #router = inject(Router);
 
@@ -25,14 +28,7 @@ export class DescartesDetails implements OnInit {
 
   readonly #confirmService = inject(ConfirmService);
 
-  ngOnInit(): void {
-    const list: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-    );
-    const overviewedEntity = list.find((form) => form.id === this.id());
-
-    this.overviewedEntity.set(overviewedEntity);
-  }
+  readonly #repository = inject(SolutionsRepository);
 
   back(): void {
     this.#router.navigate(['descartes-square']).then();
@@ -45,15 +41,9 @@ export class DescartesDetails implements OnInit {
         first(),
         filter(Boolean),
         tap(() => {
-          const list: IDescartesSolution[] = JSON.parse(
-            localStorage.getItem(LocalStorageKeys.LIST) || '[]',
-          );
-          const updatedList = list.filter((item) => item.id !== this.id());
-
-          localStorage.setItem(
-            LocalStorageKeys.LIST,
-            JSON.stringify(updatedList),
-          );
+          const id = this.id();
+          if (!id) return;
+          this.#repository.remove(id);
 
           this.#router.navigate(['descartes-square']).then();
           this.#snackBar.openFromComponent(SnackbarComponent, {
