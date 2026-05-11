@@ -40,6 +40,7 @@ export class AiSynthesisService {
     );
   }
 
+  //@todo: remove this once the backend is ready
   #generateLocalSynthesis(
     payload: IAiSynthesisPayload,
     lean: BalanceLean,
