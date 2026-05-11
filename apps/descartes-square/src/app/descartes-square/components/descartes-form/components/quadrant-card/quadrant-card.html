@@ -23,18 +23,19 @@
       >
         <span class="quadrant-card__handle-icon"><mat-icon fontIcon="drag_indicator"></mat-icon></span>
       </button>
-      <textarea
-        #argInput
-        class="quadrant-card__textarea"
-        cdkTextareaAutosize
-        cdkAutosizeMinRows="1"
-        cdkAutosizeMaxRows="6"
-        [value]="item"
-        (input)="onInput($index, $event)"
-        i18n-placeholder="@@argPlaceholder"
-        placeholder="Type an argument…"
-        maxlength="255"
-      ></textarea>
+      <div class="quadrant-card__textarea-wrap">
+        <textarea
+          #argInput
+          class="quadrant-card__textarea"
+          cdkTextareaAutosize
+          cdkAutosizeMaxRows="6"
+          [value]="item"
+          (input)="onInput($index, $event)"
+          i18n-placeholder="@@argPlaceholder"
+          placeholder="Type an argument…"
+          maxlength="255"
+        ></textarea>
+      </div>
       <button
         type="button"
         class="quadrant-card__remove"
