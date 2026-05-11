@@ -35,13 +35,6 @@ export const routes: Routes = [
           ).then((mod) => mod.DescartesList),
       },
       {
-        path: 'list/:id/details',
-        loadComponent: () =>
-          import(
-            './descartes-square/components/descartes-details/descartes-details'
-          ).then((mod) => mod.DescartesDetails),
-      },
-      {
         path: 'list/:id/edit',
         loadComponent: () =>
           import(

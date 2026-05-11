@@ -26,7 +26,7 @@ export class DescartesList implements OnInit {
   }
 
   view(id: string): void {
-    this.#router.navigate([`descartes-square/list/${id}/details`]);
+    this.#router.navigate([`descartes-square/list/${id}/review`]);
   }
 
   update(id: string): void {
