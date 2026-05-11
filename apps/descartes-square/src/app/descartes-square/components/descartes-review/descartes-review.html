@@ -86,32 +86,44 @@
 </section>
 
 <footer class="descartes-review__footer">
-  <button
-    matButton="outlined"
-    type="button"
-    class="descartes-review__btn descartes-review__btn--back"
-    (click)="onBackToSquare()"
-    i18n="@@reviewBackBtn"
-  >
-    ← Back to square
-  </button>
-  <button
-    matButton="outlined"
-    type="button"
-    class="descartes-review__btn descartes-review__btn--draft"
-    (click)="onSaveDraft()"
-    i18n="@@reviewSaveDraftBtn"
-  >
-    Save draft
-  </button>
-  <button
-    matButton="filled"
-    type="button"
-    class="descartes-review__btn"
-    [disabled]="!canSave()"
-    (click)="onSaveDecision()"
-    i18n="@@reviewSaveDecisionBtn"
-  >
-    Save decision
-  </button>
+  @if (isPreview()) {
+    <button
+      matButton="outlined"
+      type="button"
+      class="descartes-review__btn descartes-review__btn--back"
+      (click)="onBackToList()"
+      i18n="@@reviewBackToListBtn"
+    >
+      ← Back to the list
+    </button>
+  } @else {
+    <button
+      matButton="outlined"
+      type="button"
+      class="descartes-review__btn descartes-review__btn--back"
+      (click)="onBackToSquare()"
+      i18n="@@reviewBackBtn"
+    >
+      ← Back to square
+    </button>
+    <button
+      matButton="outlined"
+      type="button"
+      class="descartes-review__btn descartes-review__btn--draft"
+      (click)="onSaveDraft()"
+      i18n="@@reviewSaveDraftBtn"
+    >
+      Save draft
+    </button>
+    <button
+      matButton="filled"
+      type="button"
+      class="descartes-review__btn"
+      [disabled]="!canSave()"
+      (click)="onSaveDecision()"
+      i18n="@@reviewSaveDecisionBtn"
+    >
+      Save decision
+    </button>
+  }
 </footer>

@@ -55,6 +55,9 @@ const REVIEW_VISUAL_ORDER: readonly DescartesQuestionsIds[] = [
 })
 export class DescartesReview implements OnInit {
   readonly id = input<string>();
+  readonly isPreview = input(false, {
+    transform: (value: string | boolean) => value === true || value === 'true',
+  });
 
   readonly visualOrder = REVIEW_VISUAL_ORDER;
 
@@ -164,6 +167,10 @@ export class DescartesReview implements OnInit {
     if (!this.canSave()) return;
     this.#persist();
     this.#showInfoSnackbar($localize`:@@decisionSaved:Decision saved`);
+    this.#router.navigate(['descartes-square', 'list']);
+  }
+
+  onBackToList(): void {
     this.#router.navigate(['descartes-square', 'list']);
   }
 
