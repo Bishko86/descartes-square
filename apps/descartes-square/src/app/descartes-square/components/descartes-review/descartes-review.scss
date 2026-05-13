@@ -184,6 +184,16 @@
   button:first-child {
     margin-right: auto;
   }
+
+  @media (max-width: $mobile) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: var(--x-small-indent);
+
+    button:first-child {
+      margin-right: 0;
+    }
+  }
 }
 
 .descartes-review__btn {
@@ -192,6 +202,11 @@
   &[disabled] {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  @media (max-width: $mobile) {
+    width: 100%;
+    min-height: 44px;
   }
 }
 

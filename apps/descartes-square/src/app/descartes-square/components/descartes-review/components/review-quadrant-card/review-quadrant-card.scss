@@ -84,21 +84,24 @@
 
 .review-quadrant-card__list {
   list-style: none;
-  margin: var(--x-small-indent) 0;
-  padding: 0 0 0 var(--small-indent);
+  margin: var(--x-small-indent) 0 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--x-small-indent);
+  gap: var(--small-indent);
 }
 
 .review-quadrant-card__item {
   display: flex;
   align-items: flex-start;
   gap: var(--small-indent);
-  padding: 2px 0;
+  padding: var(--small-indent) var(--basic-indent);
   font-size: var(--regular);
   line-height: 1.5;
   color: var(--text);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 }
 
 .review-quadrant-card__bullet {
@@ -156,15 +159,15 @@
   padding-top: var(--small-indent);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: var(--small-indent);
-  border-top: 1px dashed var(--border);
 }
 
 .review-quadrant-card__helper {
-  margin: 0;
-  font-size: var(--semi-small);
+  margin: calc(var(--x-small-indent) * -0.5) 0 0;
+  font-size: var(--regular);
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 .review-quadrant-card__edit {
