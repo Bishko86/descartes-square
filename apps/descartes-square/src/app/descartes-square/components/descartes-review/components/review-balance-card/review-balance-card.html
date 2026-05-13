@@ -13,7 +13,6 @@
     <div class="review-balance-card__status">
       <span class="review-balance-card__status-dot" aria-hidden="true"></span>
       <span class="review-balance-card__status-autosaved" i18n="@@balanceAutosaved">Auto-saved</span>
-      <span class="review-balance-card__status-sep" aria-hidden="true">·</span>
       <span i18n="@@balanceArgsCount">
         {{ total() }} {total(), plural, =1 {argument} other {arguments}} weighed
       </span>
@@ -94,49 +93,49 @@
   </dl>
 
   <div class="review-balance-card__chart" aria-hidden="true">
-      <svg viewBox="0 0 200 200" class="review-balance-card__ring">
-        <circle
-          class="review-balance-card__ring-track"
-          cx="100"
-          cy="100"
-          [attr.r]="ringRadius"
-          fill="none"
-        />
-        <circle
-          class="review-balance-card__ring-stay"
-          cx="100"
-          cy="100"
-          [attr.r]="ringRadius"
-          fill="none"
-          [attr.stroke-dasharray]="
-            ringDashArray().stayLen + ' ' + ringDashArray().actLen
-          "
-          [attr.stroke-dashoffset]="-ringDashArray().actLen"
-          transform="rotate(-90 100 100)"
-        />
-        <circle
-          class="review-balance-card__ring-act"
-          cx="100"
-          cy="100"
-          [attr.r]="ringRadius"
-          fill="none"
-          [attr.stroke-dasharray]="
-            ringDashArray().actLen + ' ' + ringDashArray().stayLen
-          "
-          stroke-dashoffset="0"
-          transform="rotate(-90 100 100)"
-        />
-      </svg>
-      <div class="review-balance-card__chart-label">
-        <span class="review-balance-card__chart-pct">{{ actPct() }}%</span>
-        <span class="review-balance-card__chart-word" i18n="@@balanceChartAct">
-          ACT
-        </span>
-        <span class="review-balance-card__chart-vs">
-          <ng-container i18n="@@balanceChartVs">vs</ng-container>
-          {{ stayPct() }}%
-          <ng-container i18n="@@balanceChartStay">stay</ng-container>
-        </span>
-      </div>
+    <svg viewBox="0 0 200 200" class="review-balance-card__ring">
+      <circle
+        class="review-balance-card__ring-track"
+        cx="100"
+        cy="100"
+        [attr.r]="ringRadius"
+        fill="none"
+      />
+      <circle
+        class="review-balance-card__ring-stay"
+        cx="100"
+        cy="100"
+        [attr.r]="ringRadius"
+        fill="none"
+        [attr.stroke-dasharray]="
+          ringDashArray().stayLen + ' ' + ringDashArray().actLen
+        "
+        [attr.stroke-dashoffset]="-ringDashArray().actLen"
+        transform="rotate(-90 100 100)"
+      />
+      <circle
+        class="review-balance-card__ring-act"
+        cx="100"
+        cy="100"
+        [attr.r]="ringRadius"
+        fill="none"
+        [attr.stroke-dasharray]="
+          ringDashArray().actLen + ' ' + ringDashArray().stayLen
+        "
+        stroke-dashoffset="0"
+        transform="rotate(-90 100 100)"
+      />
+    </svg>
+    <div class="review-balance-card__chart-label">
+      <span class="review-balance-card__chart-pct">{{ actPct() }}%</span>
+      <span class="review-balance-card__chart-word" i18n="@@balanceChartAct">
+        ACT
+      </span>
+      <span class="review-balance-card__chart-vs">
+        <ng-container i18n="@@balanceChartVs">vs</ng-container>
+        {{ stayPct() }}%
+        <ng-container i18n="@@balanceChartStay">stay</ng-container>
+      </span>
+    </div>
   </div>
 </div>

@@ -27,7 +27,6 @@
   &[data-quadrant="q4"] { background: var(--q4); }
 }
 
-// Mobile-first: stacked intro, then dashed-separated row of chart + stats.
 .review-balance-card__body {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -75,9 +74,7 @@
   flex-shrink: 0;
 }
 
-// "Auto-saved · " is desktop-only; mobile shows just the count.
-.review-balance-card__status-autosaved,
-.review-balance-card__status-sep {
+.review-balance-card__status-autosaved {
   @media (max-width: $mobile) {
     display: none;
   }
@@ -156,7 +153,6 @@
 }
 
 .review-balance-card__stat-dot {
-  display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -240,16 +236,12 @@
   }
 }
 
-// Desktop: restore the original 2-col layout (intro + stats on the left,
-// large chart on the right). No dashed separators between sections.
 @media (min-width: ($mobile + 1px)) {
   .review-balance-card__body {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
       "intro chart"
-      "sep   chart"
       "stats chart";
-    grid-template-rows: auto 0 auto;
     column-gap: var(--large-indent);
     row-gap: var(--basic-indent);
     padding: var(--large-indent);
@@ -257,6 +249,10 @@
 
   .review-balance-card__body::before {
     display: none;
+  }
+
+  .review-balance-card__status-autosaved::after {
+    content: " · ";
   }
 
   .review-balance-card__stats {
@@ -269,7 +265,6 @@
   .review-balance-card__stat {
     display: inline-flex;
     align-items: baseline;
-    justify-content: flex-start;
     gap: var(--x-small-indent);
 
     &[data-side="confidence"] {
@@ -281,7 +276,6 @@
     &[data-side="stay"] dd { color: var(--q2); }
   }
 
-  // No bullet dots inline on desktop — the number colour carries the side.
   .review-balance-card__stat-dot {
     display: none;
   }
@@ -289,7 +283,6 @@
   .review-balance-card__chart {
     width: 200px;
     height: 200px;
-    align-self: center;
   }
 
   .review-balance-card__chart-pct {
