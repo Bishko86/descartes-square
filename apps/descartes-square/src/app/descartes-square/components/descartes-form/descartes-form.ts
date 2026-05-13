@@ -32,7 +32,6 @@ import { DescartesQuestionsMap } from '@shared/src/lib/consts/descartes-question
 import { LockOverlay } from './components/lock-overlay/lock-overlay';
 import { ProgressPill } from './components/progress-pill/progress-pill';
 import { QuadrantCard } from './components/quadrant-card/quadrant-card';
-import { QuadrantChips } from './components/quadrant-chips/quadrant-chips';
 import { QuadrantPreview } from './components/quadrant-preview/quadrant-preview';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -50,7 +49,6 @@ const ARROW_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
     LockOverlay,
     ProgressPill,
     QuadrantCard,
-    QuadrantChips,
     QuadrantPreview,
   ],
   providers: [DescartesFormStore, AiSuggestionsStore, AiSuggestionService],
@@ -75,6 +73,8 @@ export class DescartesForm implements OnInit {
   readonly order = QUADRANT_ORDER;
   readonly shortLabels = DescartesQuestionShortLabels;
   readonly numbers = QUADRANT_NUMBER;
+  readonly questions = DescartesQuestionsMap;
+  readonly subtitles = DescartesQuestionSubtitles;
 
   readonly activeQuadrant = signal<DescartesQuestionsIds>(
     DescartesQuestionsIds.Q1,
