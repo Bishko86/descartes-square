@@ -140,6 +140,7 @@
     "confidenceAnchorFence": "FENCE",
     "confidenceAnchorConfident": "CONFIDENT",
     "reviewBackBtn": " ← Back to square ",
+    "reviewBackToListBtn": " ← Back to the list ",
     "reviewSaveDraftBtn": " Save draft ",
     "reviewSaveDecisionBtn": " Save decision ",
     "draftSaved": "Draft saved",

@@ -130,8 +130,14 @@
 
 .descartes-form__mobile {
   display: none;
+  position: relative;
   flex-direction: column;
   gap: var(--basic-indent);
+
+  &.is-locked > :not(app-lock-overlay) {
+    pointer-events: none;
+    filter: saturate(0.4) opacity(0.6);
+  }
 
   @media (max-width: $mobile) {
     display: flex;
@@ -150,6 +156,16 @@
   button:first-child {
     margin-right: auto;
   }
+
+  @media (max-width: $mobile) {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: var(--x-small-indent);
+
+    button:first-child {
+      margin-right: 0;
+    }
+  }
 }
 
 .descartes-form__btn {
@@ -159,6 +175,11 @@
     opacity: 0.5;
     pointer-events: auto;
     cursor: not-allowed;
+  }
+
+  @media (max-width: $mobile) {
+    width: 100%;
+    min-height: 44px;
   }
 }
 

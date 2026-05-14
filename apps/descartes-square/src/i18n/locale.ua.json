@@ -226,6 +226,7 @@
     "confidenceAnchorFence": "ВАГАННЯ",
     "confidenceAnchorConfident": "ВПЕВНЕНО",
     "reviewBackBtn": " ← Повернутись до квадрата ",
+    "reviewBackToListBtn": " ← Повернутись до списку ",
     "reviewSaveDraftBtn": " Зберегти чернетку ",
     "reviewSaveDecisionBtn": " Зберегти рішення ",
     "confidenceUnsure": "Дуже не впевнений",

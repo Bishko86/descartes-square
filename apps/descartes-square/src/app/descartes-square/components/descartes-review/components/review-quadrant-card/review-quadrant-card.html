@@ -8,6 +8,8 @@
   </span>
 </header>
 
+<p class="review-quadrant-card__helper">{{ helper() }}</p>
+
 @if (isEmpty()) {
   <div class="review-quadrant-card__empty">
     <span i18n="@@reviewCardEmpty">No arguments yet.</span>
@@ -32,7 +34,6 @@
 }
 
 <footer class="review-quadrant-card__footer">
-  <p class="review-quadrant-card__helper">{{ helper() }}</p>
   <button
     type="button"
     class="review-quadrant-card__edit"

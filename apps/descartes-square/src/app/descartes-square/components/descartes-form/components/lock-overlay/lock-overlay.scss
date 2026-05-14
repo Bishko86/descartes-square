@@ -1,3 +1,5 @@
+@use "breakpoints";
+
 :host {
   position: absolute;
   inset: 0;
@@ -9,6 +11,11 @@
   backdrop-filter: blur(2px);
   z-index: 2;
   pointer-events: all;
+
+  @media (max-width: breakpoints.$mobile) {
+    align-items: start;
+    padding: var(--x-large-indent) var(--medium-indent);
+  }
 }
 
 .lock-overlay__card {
@@ -24,6 +31,11 @@
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
   color: var(--text);
+
+  @media (max-width: breakpoints.$mobile) {
+    position: sticky;
+    top: var(--x-large-indent);
+  }
 }
 
 .lock-overlay__icon {

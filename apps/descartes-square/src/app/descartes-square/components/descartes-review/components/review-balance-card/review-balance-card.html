@@ -9,11 +9,10 @@
 </div>
 
 <div class="review-balance-card__body">
-  <div class="review-balance-card__main">
+  <div class="review-balance-card__intro">
     <div class="review-balance-card__status">
       <span class="review-balance-card__status-dot" aria-hidden="true"></span>
-      <span i18n="@@balanceAutosaved">Auto-saved</span>
-      <span aria-hidden="true">·</span>
+      <span class="review-balance-card__status-autosaved" i18n="@@balanceAutosaved">Auto-saved</span>
       <span i18n="@@balanceArgsCount">
         {{ total() }} {total(), plural, =1 {argument} other {arguments}} weighed
       </span>
@@ -68,23 +67,30 @@
       }
     }
 
-    <dl class="review-balance-card__stats">
-      <div class="review-balance-card__stat" data-side="act">
-        <dt i18n="@@balanceStatAct">Reasons to act</dt>
-        <dd>{{ actCount() }}</dd>
-      </div>
-      <div class="review-balance-card__stat" data-side="stay">
-        <dt i18n="@@balanceStatStay">Reasons to stay</dt>
-        <dd>{{ stayCount() }}</dd>
-      </div>
-      @if (confidenceLabel(); as label) {
-        <div class="review-balance-card__stat" data-side="confidence">
-          <dt i18n="@@balanceStatConfidence">Confidence</dt>
-          <dd>{{ label }}</dd>
-        </div>
-      }
-    </dl>
   </div>
+
+  <dl class="review-balance-card__stats">
+    <div class="review-balance-card__stat" data-side="act">
+      <dt>
+        <span class="review-balance-card__stat-dot" aria-hidden="true"></span>
+        <span i18n="@@balanceStatAct">Reasons to act</span>
+      </dt>
+      <dd>{{ actCount() }}</dd>
+    </div>
+    <div class="review-balance-card__stat" data-side="stay">
+      <dt>
+        <span class="review-balance-card__stat-dot" aria-hidden="true"></span>
+        <span i18n="@@balanceStatStay">Reasons to stay</span>
+      </dt>
+      <dd>{{ stayCount() }}</dd>
+    </div>
+    @if (confidenceLabel(); as label) {
+      <div class="review-balance-card__stat" data-side="confidence">
+        <dt i18n="@@balanceStatConfidence">Confidence</dt>
+        <dd>{{ label }}</dd>
+      </div>
+    }
+  </dl>
 
   <div class="review-balance-card__chart" aria-hidden="true">
     <svg viewBox="0 0 200 200" class="review-balance-card__ring">

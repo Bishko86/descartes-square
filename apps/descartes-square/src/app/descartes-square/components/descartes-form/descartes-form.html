@@ -87,13 +87,35 @@
   }
 </section>
 
-<section class="descartes-form__mobile" aria-label="Descartes quadrants">
-  <app-quadrant-chips
-    [activeId]="activeQuadrant()"
-    [counts]="form.counts()"
-    (select)="onActivate($event)"
-  />
-  <ng-container *ngTemplateOutlet="activeCardTpl"></ng-container>
+<section
+  class="descartes-form__mobile"
+  [class.is-locked]="form.isLocked()"
+  aria-label="Descartes quadrants"
+  i18n-aria-label="@@descartesSquareAria"
+>
+  @for (id of order; track id) {
+    <app-quadrant-card
+      [questionId]="id"
+      [questionNumber]="numbers.get(id)!"
+      [question]="questions.get(id) ?? ''"
+      [subtitle]="subtitles.get(id) ?? ''"
+      [items]="form.model()[id]"
+      [suggestions]="suggestionsStore.suggestions()[id]"
+      [isStreaming]="suggestionsStore.streamingQuadrant() === id"
+      [canSuggest]="canSuggest()"
+      (add)="onArgumentAdd(id)"
+      (remove)="onArgumentRemove(id, $event)"
+      (changeArgument)="onArgumentChange(id, $event.index, $event.value)"
+      (reorder)="onArgumentReorder(id, $event.from, $event.to)"
+      (requestSuggestion)="onRequestSuggestion(id)"
+      (acceptSuggestion)="onAcceptSuggestion(id, $event, 0)"
+      (dismissSuggestion)="onDismissSuggestion(id, $event)"
+    />
+  }
+
+  @if (form.isLocked()) {
+    <app-lock-overlay />
+  }
 </section>
 
 <footer class="descartes-form__footer">
