@@ -11,7 +11,12 @@ import { catchError, of, take, tap } from 'rxjs';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { DescartesFormStore } from '@descartes/services/descartes-form-store';
 import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.interface';
-import { IAiSuggestionResponse } from '@shared/src';
+import {
+  DescartesQuestionsIds,
+  IAiSuggestionRequest,
+  IAiSuggestionResponse,
+} from '@shared/src';
+import { AI_SUGGESTION_COUNT_DEFAULT } from '@shared/src/lib/consts/ai-suggestion-limits.const';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 
 interface ISuggestionsMap {
@@ -33,22 +38,15 @@ export class AiSuggestionsStore {
     q3: [],
     q4: [],
   });
-  readonly #streamingQuadrant = signal<Maybe<TFormNames>>(undefined);
-  readonly #errorMessage = signal<Maybe<string>>(undefined);
+  readonly #streamingQuadrant = signal<Maybe<TFormNames>>(null);
+  readonly #errorMessage = signal<Maybe<string>>(null);
+  readonly #isQuotaExhausted = signal(false);
 
   readonly suggestions = this.#suggestions.asReadonly();
   readonly streamingQuadrant = this.#streamingQuadrant.asReadonly();
-  readonly errorMessage = this.#errorMessage.asReadonly();
+  readonly isQuotaExhausted = this.#isQuotaExhausted.asReadonly();
 
   readonly isStreaming = computed(() => !!this.#streamingQuadrant());
-
-  suggestionsFor(quadrant: TFormNames) {
-    return computed(() => this.#suggestions()[quadrant]);
-  }
-
-  isStreamingFor(quadrant: TFormNames) {
-    return computed(() => this.#streamingQuadrant() === quadrant);
-  }
 
   request(quadrant: TFormNames): void {
     if (this.isStreaming()) return;
@@ -56,21 +54,23 @@ export class AiSuggestionsStore {
     this.#streamingQuadrant.set(quadrant);
     this.#errorMessage.set(undefined);
 
-    // TODO(#55): fan out to 3 parallel calls and client-side dedupe once the
-    // backend returns a single batch of N suggestions.
+    const model = this.#formStore.model();
+    const payload: IAiSuggestionRequest = {
+      ...model,
+      key: quadrant as DescartesQuestionsIds,
+      count: AI_SUGGESTION_COUNT_DEFAULT,
+      existing: model[quadrant],
+    };
+
     this.#api
-      .addAISuggestion({ ...this.#formStore.model(), key: quadrant } as never)
+      .addAISuggestion(payload)
       .pipe(
         take(1),
         tap((response: IAiSuggestionResponse) =>
           this.#handleResponse(quadrant, response),
         ),
         catchError((error: HttpErrorResponse) => {
-          this.#errorMessage.set(
-            error.error?.message ??
-              $localize`:@@unknownError:Something went wrong. Please try again later`,
-          );
-          this.#streamingQuadrant.set(undefined);
+          this.#handleError(error);
           return of(null);
         }),
         takeUntilDestroyed(this.#destroyRef),
@@ -95,7 +95,7 @@ export class AiSuggestionsStore {
   }
 
   #handleResponse(quadrant: TFormNames, response: IAiSuggestionResponse): void {
-    this.#streamingQuadrant.set(undefined);
+    this.#streamingQuadrant.set(null);
 
     if (response.isUnclearTitle) {
       this.#errorMessage.set(
@@ -104,12 +104,30 @@ export class AiSuggestionsStore {
       return;
     }
 
-    const text = response.suggestion?.trim();
-    if (!text) return;
+    const fresh = (response.suggestions ?? [])
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (!fresh.length) return;
 
     this.#suggestions.update((map) => ({
       ...map,
-      [quadrant]: [...map[quadrant], text],
+      [quadrant]: [...map[quadrant], ...fresh],
     }));
+  }
+
+  #handleError(error: HttpErrorResponse): void {
+    this.#streamingQuadrant.set(undefined);
+
+    // Quota exhausted — the button-state UI handles messaging via tooltip,
+    // so we flip the flag silently and skip the generic toast.
+    if (error.status === 429) {
+      this.#isQuotaExhausted.set(true);
+      return;
+    }
+
+    this.#errorMessage.set(
+      error.error?.message ??
+        $localize`:@@unknownError:Something went wrong. Please try again later`,
+    );
   }
 }
