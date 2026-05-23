@@ -1,5 +1,4 @@
 import { DescartesQuestionsIds } from '../enums/descartes-questions-ids.enum';
-import { Maybe } from '../types/maybe.type';
 
 export interface IAiSuggestionRequest {
   title: string;
@@ -9,9 +8,11 @@ export interface IAiSuggestionRequest {
   q3: string[];
   q4: string[];
   conclusion: string;
+  count?: number;
+  existing?: string[];
 }
 
 export interface IAiSuggestionResponse {
-  suggestion: Maybe<string>;
+  suggestions: string[];
   isUnclearTitle: boolean;
 }
