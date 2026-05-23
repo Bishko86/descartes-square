@@ -1,3 +1,4 @@
+@let tooltipText = suggestTooltip();
 <ng-template #activeCardTpl>
   @let ctx = activeContext();
   <app-quadrant-card
@@ -9,6 +10,7 @@
     [suggestions]="ctx.suggestions"
     [isStreaming]="ctx.isStreaming"
     [canSuggest]="canSuggest()"
+    [suggestTooltip]="tooltipText"
     (add)="onArgumentAdd(ctx.id)"
     (remove)="onArgumentRemove(ctx.id, $event)"
     (changeArgument)="onArgumentChange(ctx.id, $event.index, $event.value)"
@@ -21,8 +23,14 @@
 
 <header class="descartes-form__header">
   <div class="descartes-form__title-wrap">
-    <label class="descartes-form__title-label" i18n="@@yourDecisionLabel">Your Decision</label>
+    <label
+      class="descartes-form__title-label"
+      for="descartes-form-title"
+      i18n="@@yourDecisionLabel"
+      >Your Decision</label
+    >
     <input
+      id="descartes-form-title"
       type="text"
       class="descartes-form__title"
       [formField]="form.field.title"
@@ -103,6 +111,7 @@
       [suggestions]="suggestionsStore.suggestions()[id]"
       [isStreaming]="suggestionsStore.streamingQuadrant() === id"
       [canSuggest]="canSuggest()"
+      [suggestTooltip]="tooltipText"
       (add)="onArgumentAdd(id)"
       (remove)="onArgumentRemove(id, $event)"
       (changeArgument)="onArgumentChange(id, $event.index, $event.value)"

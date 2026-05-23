@@ -83,12 +83,25 @@ export class DescartesForm implements OnInit {
     DescartesQuestionsIds.Q1,
   );
 
+  readonly isLoggedIn = computed(() => !!this.#authService.currentUser());
+
   readonly canSuggest = computed(
     () =>
-      !!this.#authService.currentUser() &&
+      this.isLoggedIn() &&
+      !this.suggestionsStore.isQuotaExhausted() &&
       !this.form.isLocked() &&
       !this.suggestionsStore.isStreaming(),
   );
+
+  readonly suggestTooltip = computed(() => {
+    if (!this.isLoggedIn()) {
+      return $localize`:@@suggestAiLoggedOutTooltip:Log in to unlock AI suggestions and get 3–5 automated arguments for your decision.`;
+    }
+    if (this.suggestionsStore.isQuotaExhausted()) {
+      return $localize`:@@suggestAiQuotaExhaustedTooltip:You've used all your free AI suggestions for today.`;
+    }
+    return '';
+  });
 
   readonly activeContext = computed(() => {
     const id = this.activeQuadrant();

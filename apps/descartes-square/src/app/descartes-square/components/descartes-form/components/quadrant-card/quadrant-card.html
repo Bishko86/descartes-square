@@ -21,7 +21,9 @@
         matTooltip="Drag to reorder"
         aria-label="Drag to reorder"
       >
-        <span class="quadrant-card__handle-icon"><mat-icon fontIcon="drag_indicator"></mat-icon></span>
+        <span class="quadrant-card__handle-icon"
+          ><mat-icon fontIcon="drag_indicator"></mat-icon
+        ></span>
       </button>
       <div class="quadrant-card__textarea-wrap">
         <textarea
@@ -61,14 +63,21 @@
     <span i18n="@@addArgument">Add argument</span>
   </button>
 
+  @let tooltipText = suggestTooltip();
+  @let isAiStreaming = isStreaming();
+
   <button
     type="button"
     matButton="tonal"
     class="quadrant-card__suggest"
-    [disabled]="!canSuggest() || isStreaming()"
+    [disabled]="!canSuggest() || isAiStreaming"
+    [matTooltip]="tooltipText"
+    [matTooltipDisabled]="!tooltipText"
+    matTooltipPosition="above"
     (click)="requestSuggestion.emit()"
   >
-    @if (isStreaming()) {
+<!--    @todo: make spinner more UX user friendly-->
+    @if (isAiStreaming) {
       <mat-spinner diameter="16"></mat-spinner>
     } @else {
       <mat-icon fontIcon="auto_awesome"></mat-icon>

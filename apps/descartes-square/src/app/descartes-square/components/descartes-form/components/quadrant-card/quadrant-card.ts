@@ -55,6 +55,7 @@ export class QuadrantCard {
   readonly suggestions = input<string[]>([]);
   readonly canSuggest = input<boolean>(false);
   readonly isStreaming = input<boolean>(false);
+  readonly suggestTooltip = input<string>('');
 
   readonly add = output<void>();
   readonly remove = output<number>();
