@@ -66,24 +66,28 @@
   @let tooltipText = suggestTooltip();
   @let isAiStreaming = isStreaming();
 
-  <button
-    type="button"
-    matButton="tonal"
-    class="quadrant-card__suggest"
-    [disabled]="!canSuggest() || isAiStreaming"
+  <span
+    class="quadrant-card__suggest-wrap"
     [matTooltip]="tooltipText"
     [matTooltipDisabled]="!tooltipText"
     matTooltipPosition="above"
-    (click)="requestSuggestion.emit()"
   >
+    <button
+      type="button"
+      matButton="tonal"
+      class="quadrant-card__suggest"
+      [disabled]="!canSuggest() || isAiStreaming"
+      (click)="requestSuggestion.emit()"
+    >
 <!--    @todo: make spinner more UX user friendly-->
-    @if (isAiStreaming) {
-      <mat-spinner diameter="16"></mat-spinner>
-    } @else {
-      <mat-icon fontIcon="auto_awesome"></mat-icon>
-    }
-    <span i18n="@@suggestWithAi">Suggest with AI</span>
-  </button>
+      @if (isAiStreaming) {
+        <mat-spinner diameter="16"></mat-spinner>
+      } @else {
+        <mat-icon fontIcon="auto_awesome"></mat-icon>
+      }
+      <span i18n="@@suggestWithAi">Suggest with AI</span>
+    </button>
+  </span>
 </div>
 
 @if (suggestions().length > 0) {

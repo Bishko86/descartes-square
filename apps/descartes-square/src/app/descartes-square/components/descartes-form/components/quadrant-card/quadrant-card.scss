@@ -222,6 +222,10 @@
   border-radius: var(--radius-md);
 }
 
+.quadrant-card__suggest-wrap {
+  display: inline-flex;
+}
+
 .quadrant-card__suggest {
   border-radius: var(--radius-md);
   ::ng-deep mat-spinner circle { stroke: var(--primary); }

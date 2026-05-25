@@ -4,8 +4,6 @@ import {
   AI_EXISTING_ARG_LENGTH_MAX,
   AI_EXISTING_ARGS_MAX,
   AI_SUGGESTION_COUNT_DEFAULT,
-  AI_SUGGESTION_COUNT_MAX,
-  AI_SUGGESTION_COUNT_MIN,
 } from '@shared/src/lib/consts/ai-suggestion-limits.const';
 import { AiService } from '@ai/services/ai.service';
 import { AiQuotaService } from '@ai/services/ai-quota.service';
@@ -29,8 +27,8 @@ export class DescartesSquareService {
     // Consume quota first so abuse can't run up the Gemini bill.
     await this._aiQuotaService.consume(userId);
 
-    const count = this.#clampCount(payload.count);
-    const existing = this.#sanitizeStrings(payload.existing, {
+    const count = AI_SUGGESTION_COUNT_DEFAULT;
+    const existing = this.#sanitizeStrings(payload[payload.key], {
       maxCount: AI_EXISTING_ARGS_MAX,
       maxLength: AI_EXISTING_ARG_LENGTH_MAX,
     });
@@ -51,17 +49,6 @@ export class DescartesSquareService {
       }),
       isUnclearTitle: false,
     };
-  }
-
-  #clampCount(raw: number | undefined): number {
-    const n =
-      typeof raw === 'number' && Number.isFinite(raw)
-        ? Math.floor(raw)
-        : AI_SUGGESTION_COUNT_DEFAULT;
-    return Math.min(
-      AI_SUGGESTION_COUNT_MAX,
-      Math.max(AI_SUGGESTION_COUNT_MIN, n),
-    );
   }
 
   #sanitizeStrings(

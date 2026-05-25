@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, of, take, tap } from 'rxjs';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { DescartesFormStore } from '@descartes/services/descartes-form-store';
@@ -16,8 +17,8 @@ import {
   IAiSuggestionRequest,
   IAiSuggestionResponse,
 } from '@shared/src';
-import { AI_SUGGESTION_COUNT_DEFAULT } from '@shared/src/lib/consts/ai-suggestion-limits.const';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
+import { SnackbarComponent } from '@core/components/snackbar/snackbar';
 
 interface ISuggestionsMap {
   q1: string[];
@@ -31,6 +32,7 @@ export class AiSuggestionsStore {
   readonly #api = inject(AiSuggestionService);
   readonly #formStore = inject(DescartesFormStore);
   readonly #destroyRef = inject(DestroyRef);
+  readonly #snackBar = inject(MatSnackBar);
 
   readonly #suggestions = signal<ISuggestionsMap>({
     q1: [],
@@ -39,7 +41,6 @@ export class AiSuggestionsStore {
     q4: [],
   });
   readonly #streamingQuadrant = signal<Maybe<TFormNames>>(null);
-  readonly #errorMessage = signal<Maybe<string>>(null);
   readonly #isQuotaExhausted = signal(false);
 
   readonly suggestions = this.#suggestions.asReadonly();
@@ -52,14 +53,11 @@ export class AiSuggestionsStore {
     if (this.isStreaming()) return;
 
     this.#streamingQuadrant.set(quadrant);
-    this.#errorMessage.set(undefined);
 
     const model = this.#formStore.model();
     const payload: IAiSuggestionRequest = {
       ...model,
       key: quadrant as DescartesQuestionsIds,
-      count: AI_SUGGESTION_COUNT_DEFAULT,
-      existing: model[quadrant],
     };
 
     this.#api
@@ -98,7 +96,7 @@ export class AiSuggestionsStore {
     this.#streamingQuadrant.set(null);
 
     if (response.isUnclearTitle) {
-      this.#errorMessage.set(
+      this.#showError(
         $localize`:@@unclearTitle:Please provide a clearer decision title before requesting suggestions.`,
       );
       return;
@@ -120,14 +118,34 @@ export class AiSuggestionsStore {
 
     // Quota exhausted — the button-state UI handles messaging via tooltip,
     // so we flip the flag silently and skip the generic toast.
-    if (error.status === 429) {
+    // Gemini's transient rate-limit shares the 429 status but uses a
+    // different body shape — discriminate so a blip doesn't permanently
+    // disable the button.
+    if (error.status === 429 && error.error?.error === 'AI_QUOTA_EXHAUSTED') {
       this.#isQuotaExhausted.set(true);
       return;
     }
 
-    this.#errorMessage.set(
+    if (error.status === 503) {
+      this.#showError(
+        $localize`:@@aiOverloaded:AI service is currently overloaded. Please try again later.`,
+      );
+      return;
+    }
+
+    this.#showError(
       error.error?.message ??
         $localize`:@@unknownError:Something went wrong. Please try again later`,
     );
+  }
+
+  #showError(message: string): void {
+    this.#snackBar.openFromComponent(SnackbarComponent, {
+      data: { message, type: 'error' },
+      duration: 5000,
+      panelClass: 'error-snackbar',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
   }
 }
