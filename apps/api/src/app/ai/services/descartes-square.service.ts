@@ -51,25 +51,29 @@ export class DescartesSquareService {
     };
   }
 
+  /** Trims, dedupes (case-insensitive, against `exclude` and within batch),
+   * and caps `raw` to a `string[]` of at most `maxCount` non-empty entries;
+   * non-strings are skipped, `maxLength` clips per-item length.
+   * */
   #sanitizeStrings(
-    raw: readonly unknown[] | undefined,
+    raw: readonly unknown[],
     opts: { maxCount: number; maxLength?: number; exclude?: readonly string[] },
   ): string[] {
-    if (!Array.isArray(raw)) return [];
-    const blocked = new Set((opts.exclude ?? []).map((s) => s.toLowerCase()));
-    const seen = new Set<string>();
+    // Seed dedup set with `exclude` so blocked + already-taken share one lookup.
+    const seen = new Set((opts.exclude ?? []).map((s) => s.toLowerCase()));
     const out: string[] = [];
+
     for (const item of raw) {
+      if (out.length >= opts.maxCount) break;
       if (typeof item !== 'string') continue;
       const trimmed = opts.maxLength
         ? item.trim().slice(0, opts.maxLength)
         : item.trim();
       if (!trimmed) continue;
       const key = trimmed.toLowerCase();
-      if (blocked.has(key) || seen.has(key)) continue;
+      if (seen.has(key)) continue;
       seen.add(key);
       out.push(trimmed);
-      if (out.length >= opts.maxCount) break;
     }
     return out;
   }
