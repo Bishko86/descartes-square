@@ -7,6 +7,7 @@ import {
 } from '@shared/src/lib/consts/ai-suggestion-limits.const';
 import { AiService } from '@ai/services/ai.service';
 import { AiQuotaService } from '@ai/services/ai-quota.service';
+import { UsersService } from '@auth/services/users.service';
 
 interface IParsedResponse {
   isUnclearTitle: boolean;
@@ -18,6 +19,7 @@ export class DescartesSquareService {
   constructor(
     private readonly _aiSuggestionsService: AiService,
     private readonly _aiQuotaService: AiQuotaService,
+    private readonly _usersService: UsersService,
   ) {}
 
   async generateDescartesSuggestions(
@@ -33,8 +35,11 @@ export class DescartesSquareService {
       maxLength: AI_EXISTING_ARG_LENGTH_MAX,
     });
 
+    const user = await this._usersService.findUserById(userId);
+    const locale = user?.locale ?? 'en';
+
     const raw = await this._aiSuggestionsService.generateSuggestions(
-      buildSuggestionPrompt(payload, count, existing),
+      buildSuggestionPrompt(payload, count, existing, locale),
     );
     const parsed = this.#parseResponse(raw);
 
@@ -100,10 +105,13 @@ function buildSuggestionPrompt(
   req: IAiSuggestionRequest,
   count: number,
   existing: string[],
+  locale: string,
 ): string {
   const existingBlock = existing.length
     ? existing.map((s, i) => `${i + 1}. ${s}`).join('\n')
     : '(none)';
+
+  const localeName = locale === 'uk' ? 'Ukrainian' : 'English';
 
   return `
       You are a function that returns ONLY raw JSON. Do not include code fences or any text outside JSON.
@@ -115,17 +123,25 @@ function buildSuggestionPrompt(
       - Q3 (What won't happen if it happens?): ${req.q3.join('; ')}
       - Q4 (What won't happen if it doesn't happen?): ${req.q4.join('; ')}
       - User conclusion: ${req.conclusion || '(not provided)'}
+      - User app locale: "${locale}" (${localeName})
 
       Target question to answer: "${req.key}"
 
       Already listed in this quadrant — do NOT repeat, rephrase, or paraphrase any of these:
       ${existingBlock}
 
+      Language rules for the suggestion strings (apply ONLY to the values inside "suggestions"; the JSON keys stay in English):
+      - Detect the dominant language of the Decision title (and Q1–Q4 if the title is too short to tell).
+      - If the detected language is English or Ukrainian, write the suggestions in that language.
+      - If the detected language is something else (e.g., Spanish, German, Polish), write the suggestions in that detected language — do NOT translate the user's content back into ${localeName}.
+      - If the language cannot be confidently detected (e.g., empty, only punctuation/digits, or mixed gibberish), fall back to ${localeName}.
+      - Never mix languages within a single suggestion.
+
       Your job:
       1) If the decision title is UNCLEAR, return an empty suggestions array and flag it.
          Treat the title as UNCLEAR if ANY of the following are true:
          Very short (< 8 characters after trimming) OR mostly punctuation/digits.
-         Placeholder/generic (e.g., "test", "title", "todo", "not sure", "idk", "help", "???", "random", "asdf", "12345").
+         Placeholder/generic in ANY language (e.g., "test", "title", "todo", "not sure", "idk", "help", "???", "random", "asdf", "12345", "тест", "не знаю").
          Any nonsensical or meaningless string (e.g., random letters like "testc", "qwerty", "loremipsum").
          Lacks a concrete decision/action (no clear action like change/move/accept/buy/start/quit/invest/learn/hire; or it's just a single generic noun like "job", "life", "decision").
          Ambiguous scope with no object (e.g., "change", "improve", "do it", "move" without a destination/target).
@@ -139,6 +155,7 @@ function buildSuggestionPrompt(
          - Make each practical: what the user can gain or lose from making or not making the decision.
          - Neutral, supportive tone; do not tell the user what to do.
          - Length: 1–2 sentences each, max 255 characters each.
+         - Write each suggestion in the language chosen by the Language rules above.
 
       Output format (strict):
       Return ONLY valid JSON matching this interface:
