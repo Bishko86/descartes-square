@@ -53,6 +53,7 @@ export class QuadrantCard {
   readonly subtitle = input.required<string>();
   readonly items = input.required<string[]>();
   readonly suggestions = input<string[]>([]);
+  readonly safetyBlocked = input<boolean>(false);
   readonly canSuggest = input<boolean>(false);
   readonly isStreaming = input<boolean>(false);
   readonly suggestTooltip = input<string>('');

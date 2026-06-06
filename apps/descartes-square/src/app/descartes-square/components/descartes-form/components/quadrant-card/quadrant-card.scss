@@ -256,6 +256,33 @@
   border-top: 1px dashed var(--border-subtle);
 }
 
+.quadrant-card__safety-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--small-indent);
+  padding: var(--small-indent) var(--medium-indent);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--warning-border, #fcd34d);
+  background: color-mix(in srgb, var(--warning, #d97706) 10%, transparent);
+  margin-top: var(--x-small-indent);
+  color: var(--warning, #d97706);
+
+  mat-icon {
+    flex-shrink: 0;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+  }
+
+  p {
+    margin: 0;
+    font-size: var(--regular);
+    line-height: 1.5;
+    color: var(--text-muted);
+  }
+}
+
 .cdk-drop-list-dragging .quadrant-card__item:not(.cdk-drag-placeholder) {
   transition: transform 180ms cubic-bezier(0, 0, 0.2, 1);
 }

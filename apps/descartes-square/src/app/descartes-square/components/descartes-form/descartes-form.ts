@@ -113,6 +113,7 @@ export class DescartesForm implements OnInit {
       items: this.form.model()[id],
       suggestions: this.suggestionsStore.suggestions()[id],
       isStreaming: this.suggestionsStore.streamingQuadrant() === id,
+      safetyBlocked: this.suggestionsStore.safetyBlocked()[id] ?? false,
     };
   });
 
@@ -124,6 +125,13 @@ export class DescartesForm implements OnInit {
     if (previous === current) return;
     this.suggestionsStore.clear(previous);
     this.#previousQuadrant.set(current);
+  });
+
+  // Reset safety state whenever the title changes so the notice disappears
+  // and the button re-enables after the user corrects their decision title.
+  readonly #titleEffect = effect(() => {
+    this.form.field.title().value();
+    this.suggestionsStore.resetSafety();
   });
 
   ngOnInit(): void {

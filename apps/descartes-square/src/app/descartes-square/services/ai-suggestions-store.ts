@@ -13,6 +13,7 @@ import { AiSuggestionService } from '@descartes/services/ai-suggestion';
 import { DescartesFormStore } from '@descartes/services/descartes-form-store';
 import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.interface';
 import {
+  AiSafetyTier,
   DescartesQuestionsIds,
   IAiSuggestionRequest,
   IAiSuggestionResponse,
@@ -42,10 +43,12 @@ export class AiSuggestionsStore {
   });
   readonly #streamingQuadrant = signal<Maybe<TFormNames>>(null);
   readonly #isQuotaExhausted = signal(false);
+  readonly #safetyBlocked = signal<Partial<Record<TFormNames, boolean>>>({});
 
   readonly suggestions = this.#suggestions.asReadonly();
   readonly streamingQuadrant = this.#streamingQuadrant.asReadonly();
   readonly isQuotaExhausted = this.#isQuotaExhausted.asReadonly();
+  readonly safetyBlocked = this.#safetyBlocked.asReadonly();
 
   readonly isStreaming = computed(() => !!this.#streamingQuadrant());
 
@@ -53,6 +56,7 @@ export class AiSuggestionsStore {
     if (this.isStreaming()) return;
 
     this.#streamingQuadrant.set(quadrant);
+    this.#safetyBlocked.update((m) => ({ ...m, [quadrant]: false }));
 
     const model = this.#formStore.model();
     const payload: IAiSuggestionRequest = {
@@ -92,8 +96,17 @@ export class AiSuggestionsStore {
     this.#suggestions.set({ q1: [], q2: [], q3: [], q4: [] });
   }
 
+  resetSafety(): void {
+    this.#safetyBlocked.set({});
+  }
+
   #handleResponse(quadrant: TFormNames, response: IAiSuggestionResponse): void {
     this.#streamingQuadrant.set(null);
+
+    if (this.#isSafetyBlocked(response.tier)) {
+      this.#safetyBlocked.update((m) => ({ ...m, [quadrant]: true }));
+      return;
+    }
 
     if (response.isUnclearTitle) {
       this.#showError(
@@ -111,6 +124,10 @@ export class AiSuggestionsStore {
       ...map,
       [quadrant]: [...map[quadrant], ...fresh],
     }));
+  }
+
+  #isSafetyBlocked(tier: AiSafetyTier): boolean {
+    return tier === 'crisis' || tier === 'harm_illegal';
   }
 
   #handleError(error: HttpErrorResponse): void {

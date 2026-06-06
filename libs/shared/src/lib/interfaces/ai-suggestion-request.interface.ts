@@ -10,7 +10,15 @@ export interface IAiSuggestionRequest {
   conclusion: string;
 }
 
+export type AiSafetyTier =
+  | 'crisis'
+  | 'harm_illegal'
+  | 'medical'
+  | 'sensitive_ok'
+  | 'normal';
+
 export interface IAiSuggestionResponse {
   suggestions: string[];
   isUnclearTitle: boolean;
+  tier: AiSafetyTier;
 }

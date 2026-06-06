@@ -76,7 +76,7 @@
       type="button"
       matButton="tonal"
       class="quadrant-card__suggest"
-      [disabled]="!canSuggest() || isAiStreaming"
+      [disabled]="!canSuggest() || isAiStreaming || safetyBlocked()"
       (click)="requestSuggestion.emit()"
     >
 <!--    @todo: make spinner more UX user friendly-->
@@ -90,7 +90,12 @@
   </span>
 </div>
 
-@if (suggestions().length > 0) {
+@if (safetyBlocked()) {
+  <div class="quadrant-card__safety-notice" role="alert">
+    <mat-icon fontIcon="warning_amber"></mat-icon>
+    <p i18n="@@safetyBlocked">This tool isn't designed to help with this type of decision. If you need support, please reach out to someone you trust or a qualified professional.</p>
+  </div>
+} @else if (suggestions().length > 0) {
   <section class="quadrant-card__suggestions" aria-live="polite">
     @for (text of suggestions(); track $index) {
       <app-ai-suggestion-card
