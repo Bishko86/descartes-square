@@ -32,6 +32,7 @@
           cdkTextareaAutosize
           cdkAutosizeMaxRows="6"
           [value]="item"
+          (blur)="blurEvent.emit()"
           (input)="onInput($index, $event)"
           i18n-placeholder="@@argPlaceholder"
           placeholder="Type an argument…"
@@ -79,13 +80,18 @@
       [disabled]="!canSuggest() || isAiStreaming || safetyBlocked()"
       (click)="requestSuggestion.emit()"
     >
-<!--    @todo: make spinner more UX user friendly-->
       @if (isAiStreaming) {
-        <mat-spinner diameter="16"></mat-spinner>
+        <mat-icon
+          class="quadrant-card__suggest-spark"
+          fontIcon="auto_awesome"
+        ></mat-icon>
+        <span class="quadrant-card__suggest-thinking" i18n="@@aiThinking"
+          >Thinking…</span
+        >
       } @else {
         <mat-icon fontIcon="auto_awesome"></mat-icon>
+        <span i18n="@@suggestWithAi">Suggest with AI</span>
       }
-      <span i18n="@@suggestWithAi">Suggest with AI</span>
     </button>
   </span>
 </div>
@@ -93,7 +99,11 @@
 @if (safetyBlocked()) {
   <div class="quadrant-card__safety-notice" role="alert">
     <mat-icon fontIcon="warning_amber"></mat-icon>
-    <p i18n="@@safetyBlocked">This tool isn't designed to help with this type of decision. If you need support, please reach out to someone you trust or a qualified professional.</p>
+    <p i18n="@@safetyBlocked">
+      This tool isn't designed to help with this type of decision. If you need
+      support, please reach out to someone you trust or a qualified
+      professional.
+    </p>
   </div>
 } @else if (suggestions().length > 0) {
   <section class="quadrant-card__suggestions" aria-live="polite">

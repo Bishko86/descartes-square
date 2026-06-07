@@ -189,6 +189,7 @@
     "reviewConcludeBtn": " Переглянути та підбити підсумок → ",
     "saveDraftBtn": " Зберегти чернетку ",
     "suggestWithAi": "Запропонувати через AI",
+    "aiThinking": "Обмірковую…",
     "suggestAiLoggedOutTooltip": "Увійдіть, щоб розблокувати AI-підказки та отримати 3–5 автоматичних аргументів для вашого рішення.",
     "suggestAiQuotaExhaustedTooltip": "Ви використали всі безкоштовні AI-підказки на сьогодні.",
     "titlePlaceholder": "Чи варто мені…?",

@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   effect,
   inject,
   input,
@@ -10,10 +9,8 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormField } from '@angular/forms/signals';
-import { interval, take, tap } from 'rxjs';
 
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
@@ -36,7 +33,6 @@ import { QuadrantPreview } from './components/quadrant-preview/quadrant-preview'
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-const TYPING_INTERVAL_MS = 12;
 const ARROW_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
 
 @Component({
@@ -67,7 +63,6 @@ export class DescartesForm implements OnInit {
   readonly suggestionsStore = inject(AiSuggestionsStore);
 
   readonly #authService = inject(DescartesAuthService);
-  readonly #destroyRef = inject(DestroyRef);
   readonly #route = inject(ActivatedRoute);
 
   readonly order = QUADRANT_ORDER;
@@ -183,7 +178,8 @@ export class DescartesForm implements OnInit {
   ): void {
     const newIndex = this.form.addArgument(quadrant, '');
     this.suggestionsStore.dismiss(quadrant, suggestionIndex);
-    this.#animateTyping(quadrant, newIndex, text);
+    this.form.setArgument(quadrant, newIndex, text);
+    this.form.saveDraft(false);
   }
 
   onArgumentChange(quadrant: TFormNames, index: number, value: string): void {
@@ -202,20 +198,11 @@ export class DescartesForm implements OnInit {
     this.form.reorderArgument(quadrant, from, to);
   }
 
-  onActivate(id: DescartesQuestionsIds): void {
-    this.activeQuadrant.set(id);
+  onArgumentBlur(): void {
+    this.form.saveDraft(false);
   }
 
-  #animateTyping(quadrant: TFormNames, index: number, text: string): void {
-    if (!text) return;
-    interval(TYPING_INTERVAL_MS)
-      .pipe(
-        take(text.length),
-        tap((i) =>
-          this.form.setArgument(quadrant, index, text.substring(0, i + 1)),
-        ),
-        takeUntilDestroyed(this.#destroyRef),
-      )
-      .subscribe();
+  onActivate(id: DescartesQuestionsIds): void {
+    this.activeQuadrant.set(id);
   }
 }

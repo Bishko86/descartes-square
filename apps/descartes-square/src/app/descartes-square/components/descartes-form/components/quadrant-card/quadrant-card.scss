@@ -9,21 +9,37 @@
   box-shadow: var(--shadow-md);
   position: relative;
 
-  &[data-quadrant='q1'] {
+  &[data-quadrant="q1"] {
     border-color: var(--q1);
-    background: linear-gradient(155deg, var(--q1-bg) 0%, var(--bg-elevated) 55%);
+    background: linear-gradient(
+      155deg,
+      var(--q1-bg) 0%,
+      var(--bg-elevated) 55%
+    );
   }
-  &[data-quadrant='q2'] {
+  &[data-quadrant="q2"] {
     border-color: var(--q2);
-    background: linear-gradient(155deg, var(--q2-bg) 0%, var(--bg-elevated) 55%);
+    background: linear-gradient(
+      155deg,
+      var(--q2-bg) 0%,
+      var(--bg-elevated) 55%
+    );
   }
-  &[data-quadrant='q3'] {
+  &[data-quadrant="q3"] {
     border-color: var(--q3);
-    background: linear-gradient(155deg, var(--q3-bg) 0%, var(--bg-elevated) 55%);
+    background: linear-gradient(
+      155deg,
+      var(--q3-bg) 0%,
+      var(--bg-elevated) 55%
+    );
   }
-  &[data-quadrant='q4'] {
+  &[data-quadrant="q4"] {
     border-color: var(--q4);
-    background: linear-gradient(155deg, var(--q4-bg) 0%, var(--bg-elevated) 55%);
+    background: linear-gradient(
+      155deg,
+      var(--q4-bg) 0%,
+      var(--bg-elevated) 55%
+    );
   }
 }
 
@@ -42,10 +58,18 @@
   padding-top: var(--x-small-indent);
 }
 
-:host[data-quadrant='q1'] .quadrant-card__number { color: var(--q1); }
-:host[data-quadrant='q2'] .quadrant-card__number { color: var(--q2); }
-:host[data-quadrant='q3'] .quadrant-card__number { color: var(--q3); }
-:host[data-quadrant='q4'] .quadrant-card__number { color: var(--q4); }
+:host[data-quadrant="q1"] .quadrant-card__number {
+  color: var(--q1);
+}
+:host[data-quadrant="q2"] .quadrant-card__number {
+  color: var(--q2);
+}
+:host[data-quadrant="q3"] .quadrant-card__number {
+  color: var(--q3);
+}
+:host[data-quadrant="q4"] .quadrant-card__number {
+  color: var(--q4);
+}
 
 .quadrant-card__titles {
   flex: 1;
@@ -86,16 +110,22 @@
   border-radius: var(--radius-md);
   background: var(--surface);
   border: 1px solid var(--border-subtle);
-  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    background-color 0.15s ease;
 
-  &:hover { background: var(--surface-hover); }
+  &:hover {
+    background: var(--surface-hover);
+  }
 
   &.cdk-drag-preview {
     box-shadow: var(--shadow-lg);
     background: var(--bg-elevated);
   }
 
-  &.cdk-drag-placeholder { opacity: 0.3; }
+  &.cdk-drag-placeholder {
+    opacity: 0.3;
+  }
 }
 
 .quadrant-card__handle,
@@ -118,7 +148,10 @@
     height: 18px;
   }
 
-  &:hover { color: var(--text); background: var(--surface-hover); }
+  &:hover {
+    color: var(--text);
+    background: var(--surface-hover);
+  }
 
   &:focus-visible {
     outline: 2px solid var(--focus-ring);
@@ -129,10 +162,12 @@
 .quadrant-card__handle {
   cursor: grab;
   position: relative;
-  transition: color 0.15s ease, background-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     width: 8px;
     height: 8px;
@@ -153,18 +188,27 @@
   transition: opacity 0.15s ease;
 }
 
-.quadrant-card__handle:active { cursor: grabbing; }
+.quadrant-card__handle:active {
+  cursor: grabbing;
+}
 
 .quadrant-card__remove {
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
 .quadrant-card__item:hover,
 .quadrant-card__item:focus-within {
-  .quadrant-card__handle::before { opacity: 0; }
-  .quadrant-card__handle-icon { opacity: 1; }
+  .quadrant-card__handle::before {
+    opacity: 0;
+  }
+  .quadrant-card__handle-icon {
+    opacity: 1;
+  }
 
   .quadrant-card__remove {
     opacity: 1;
@@ -172,10 +216,18 @@
   }
 }
 
-:host[data-quadrant='q1'] .quadrant-card__handle::before { background: var(--q1); }
-:host[data-quadrant='q2'] .quadrant-card__handle::before { background: var(--q2); }
-:host[data-quadrant='q3'] .quadrant-card__handle::before { background: var(--q3); }
-:host[data-quadrant='q4'] .quadrant-card__handle::before { background: var(--q4); }
+:host[data-quadrant="q1"] .quadrant-card__handle::before {
+  background: var(--q1);
+}
+:host[data-quadrant="q2"] .quadrant-card__handle::before {
+  background: var(--q2);
+}
+:host[data-quadrant="q3"] .quadrant-card__handle::before {
+  background: var(--q3);
+}
+:host[data-quadrant="q4"] .quadrant-card__handle::before {
+  background: var(--q4);
+}
 
 .quadrant-card__textarea-wrap {
   flex: 1;
@@ -207,7 +259,9 @@
     outline: none;
   }
 
-  &::placeholder { color: var(--text-subtle); }
+  &::placeholder {
+    color: var(--text-subtle);
+  }
 }
 
 .quadrant-card__actions {
@@ -228,24 +282,121 @@
 
 .quadrant-card__suggest {
   border-radius: var(--radius-md);
-  ::ng-deep mat-spinner circle { stroke: var(--primary); }
 }
 
-:host[data-quadrant='q1'] {
-  .quadrant-card__add { color: var(--q1); border-color: var(--q1); }
-  .quadrant-card__suggest { background-color: var(--q1-bg); color: var(--q1); }
+// Twinkling sparkle while the AI request is in flight — on-brand alternative
+// to a generic spinner.
+.quadrant-card__suggest-spark {
+  animation: suggest-spark-twinkle 1.3s ease-in-out infinite;
+  transform-origin: center;
 }
-:host[data-quadrant='q2'] {
-  .quadrant-card__add { color: var(--q2); border-color: var(--q2); }
-  .quadrant-card__suggest { background-color: var(--q2-bg); color: var(--q2); }
+
+// Shimmer sweep across the "Thinking…" label.
+.quadrant-card__suggest-thinking {
+  background: linear-gradient(
+    90deg,
+    currentColor 20%,
+    color-mix(in srgb, currentColor 25%, transparent) 50%,
+    currentColor 80%
+  );
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: suggest-thinking-shimmer 1.5s linear infinite;
 }
-:host[data-quadrant='q3'] {
-  .quadrant-card__add { color: var(--q3); border-color: var(--q3); }
-  .quadrant-card__suggest { background-color: var(--q3-bg); color: var(--q3); }
+
+@keyframes suggest-spark-twinkle {
+  0%,
+  100% {
+    transform: scale(0.9) rotate(0deg);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 1;
+  }
 }
-:host[data-quadrant='q4'] {
-  .quadrant-card__add { color: var(--q4); border-color: var(--q4); }
-  .quadrant-card__suggest { background-color: var(--q4-bg); color: var(--q4); }
+
+@keyframes suggest-thinking-shimmer {
+  0% {
+    background-position: 220% 0;
+  }
+  100% {
+    background-position: -220% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quadrant-card__suggest-spark {
+    animation: suggest-spark-pulse 1.6s ease-in-out infinite;
+  }
+  .quadrant-card__suggest-thinking {
+    animation: none;
+  }
+}
+
+@keyframes suggest-spark-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+:host .quadrant-card__suggest ::ng-deep {
+  .mdc-button__label {
+    display: flex;
+    align-items: center;
+    column-gap: var(--small-indent);
+  }
+
+  .mat-tonal-button {
+    padding: 0 10px;
+  }
+}
+
+:host[data-quadrant="q1"] {
+  .quadrant-card__add {
+    color: var(--q1);
+    border-color: var(--q1);
+  }
+  .quadrant-card__suggest {
+    background-color: var(--q1-bg);
+    color: var(--q1);
+  }
+}
+:host[data-quadrant="q2"] {
+  .quadrant-card__add {
+    color: var(--q2);
+    border-color: var(--q2);
+  }
+  .quadrant-card__suggest {
+    background-color: var(--q2-bg);
+    color: var(--q2);
+  }
+}
+:host[data-quadrant="q3"] {
+  .quadrant-card__add {
+    color: var(--q3);
+    border-color: var(--q3);
+  }
+  .quadrant-card__suggest {
+    background-color: var(--q3-bg);
+    color: var(--q3);
+  }
+}
+:host[data-quadrant="q4"] {
+  .quadrant-card__add {
+    color: var(--q4);
+    border-color: var(--q4);
+  }
+  .quadrant-card__suggest {
+    background-color: var(--q4-bg);
+    color: var(--q4);
+  }
 }
 
 .quadrant-card__suggestions {

@@ -75,6 +75,7 @@
     "removeArgument": "Remove",
     "addArgument": "Add argument",
     "suggestWithAi": "Suggest with AI",
+    "aiThinking": "Thinking…",
     "quadrantEmpty": " No arguments yet — open to add some. ",
     "moreOverflow": " +{$INTERPOLATION} more ",
     "yourDecisionLabel": "Your Decision",

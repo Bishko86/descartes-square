@@ -16,6 +16,7 @@
     (remove)="onArgumentRemove(ctx.id, $event)"
     (changeArgument)="onArgumentChange(ctx.id, $event.index, $event.value)"
     (reorder)="onArgumentReorder(ctx.id, $event.from, $event.to)"
+    (blurEvent)="onArgumentBlur()"
     (requestSuggestion)="onRequestSuggestion(ctx.id)"
     (acceptSuggestion)="onAcceptSuggestion(ctx.id, $event, 0)"
     (dismissSuggestion)="onDismissSuggestion(ctx.id, $event)"
@@ -96,6 +97,7 @@
   }
 </section>
 
+<!--Mobile version-->
 <section
   class="descartes-form__mobile"
   [class.is-locked]="form.isLocked()"

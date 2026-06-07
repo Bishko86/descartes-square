@@ -19,7 +19,6 @@ import {
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { padQuadrantNumber } from '@descartes/definitions/utils/pad-quadrant-number.util';
 import { DescartesQuestionsIds } from '@shared/src';
@@ -34,7 +33,6 @@ import { AiSuggestionCard } from '../ai-suggestion-card/ai-suggestion-card';
     CdkTextareaAutosize,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule,
     MatTooltipModule,
     AiSuggestionCard,
   ],
@@ -65,9 +63,11 @@ export class QuadrantCard {
   readonly requestSuggestion = output<void>();
   readonly acceptSuggestion = output<string>();
   readonly dismissSuggestion = output<number>();
+  readonly blurEvent = output<void>();
 
-  protected readonly textareas =
+  protected readonly textarea =
     viewChildren<ElementRef<HTMLTextAreaElement>>('argInput');
+
   readonly #injector = inject(Injector);
 
   readonly numberLabel = computed(() =>
@@ -90,7 +90,7 @@ export class QuadrantCard {
   }
 
   #focusLast(): void {
-    const textareas = this.textareas();
-    textareas[textareas.length - 1]?.nativeElement.focus();
+    const textarea = this.textarea();
+    textarea[textarea.length - 1]?.nativeElement.focus();
   }
 }
