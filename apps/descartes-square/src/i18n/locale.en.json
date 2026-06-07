@@ -156,6 +156,7 @@
     "confidenceConfident": "Confident",
     "unclearTitle": "Please provide a clearer decision title before requesting suggestions.",
     "aiOverloaded": "AI service is currently overloaded. Please try again later.",
+    "aiQuotaExhausted": "You've used all your free AI suggestions for today.",
     "unknownError": "Something went wrong. Please try again later",
     "synthesisTopQ1": "benefits of acting",
     "synthesisTopQ2": "comforts of staying put",

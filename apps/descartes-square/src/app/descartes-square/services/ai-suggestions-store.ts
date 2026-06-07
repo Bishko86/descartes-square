@@ -133,13 +133,17 @@ export class AiSuggestionsStore {
   #handleError(error: HttpErrorResponse): void {
     this.#streamingQuadrant.set(undefined);
 
-    // Quota exhausted — the button-state UI handles messaging via tooltip,
-    // so we flip the flag silently and skip the generic toast.
+    // Quota exhausted — flip the flag (disables the button + shows its
+    // tooltip) AND surface a toast so the user gets immediate feedback on
+    // the attempt that hit the limit.
     // Gemini's transient rate-limit shares the 429 status but uses a
     // different body shape — discriminate so a blip doesn't permanently
     // disable the button.
     if (error.status === 429 && error.error?.error === 'AI_QUOTA_EXHAUSTED') {
       this.#isQuotaExhausted.set(true);
+      this.#showError(
+        $localize`:@@aiQuotaExhausted:You've used all your free AI suggestions for today.`,
+      );
       return;
     }
 
