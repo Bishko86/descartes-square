@@ -65,7 +65,7 @@ export class QuadrantCard {
   readonly dismissSuggestion = output<number>();
   readonly blurEvent = output<void>();
 
-  protected readonly textarea =
+  protected readonly textareas =
     viewChildren<ElementRef<HTMLTextAreaElement>>('argInput');
 
   readonly #injector = inject(Injector);
@@ -90,7 +90,7 @@ export class QuadrantCard {
   }
 
   #focusLast(): void {
-    const textarea = this.textarea();
-    textarea[textarea.length - 1]?.nativeElement.focus();
+    const textareas = this.textareas();
+    textareas[textareas.length - 1]?.nativeElement.focus();
   }
 }

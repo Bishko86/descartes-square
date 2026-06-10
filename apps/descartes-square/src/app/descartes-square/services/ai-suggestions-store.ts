@@ -131,7 +131,7 @@ export class AiSuggestionsStore {
   }
 
   #handleError(error: HttpErrorResponse): void {
-    this.#streamingQuadrant.set(undefined);
+    this.#streamingQuadrant.set(null);
 
     // Quota exhausted — flip the flag (disables the button + shows its
     // tooltip) AND surface a toast so the user gets immediate feedback on
