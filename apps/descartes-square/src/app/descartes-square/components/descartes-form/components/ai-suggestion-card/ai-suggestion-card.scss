@@ -36,9 +36,7 @@
   transition: background-color 0.15s ease, color 0.15s ease;
 
   mat-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    font-size: 20px;
   }
 
   &:focus-visible {
@@ -47,10 +45,10 @@
   }
 
   &--accept {
-    background: var(--success-bg);
-    color: var(--success);
+    background: transparent;
+    color: var(--primary);
 
-    &:hover { background: var(--success-border); }
+    &:hover { color: var(--highlighted-text); }
   }
 
   &--dismiss {
