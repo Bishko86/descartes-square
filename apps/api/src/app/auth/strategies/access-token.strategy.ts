@@ -15,8 +15,8 @@ export class AccessTokenStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate<T extends { userId: string; email: string }>(payload: T) {
-    return { userId: payload.userId, email: payload.email };
+  async validate(payload: { userId: string; username: string }) {
+    return { userId: payload.userId, username: payload.username };
   }
 }
 
