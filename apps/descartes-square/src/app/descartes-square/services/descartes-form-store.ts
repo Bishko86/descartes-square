@@ -127,9 +127,12 @@ export class DescartesFormStore {
     this.#router.navigate(['descartes-square']);
   }
 
-  saveDraft(): void {
+  saveDraft(isSnackbarShown = true): void {
     this.#persist();
-    this.#showInfoSnackbar($localize`:@@draftSaved:Draft saved`);
+
+    if (isSnackbarShown) {
+      this.#showInfoSnackbar($localize`:@@draftSaved:Draft saved`);
+    }
   }
 
   reviewAndConclude(): void {

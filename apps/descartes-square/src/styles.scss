@@ -46,7 +46,11 @@ body {
   .mdc-snackbar__surface {
     position: relative;
     overflow: hidden;
-    background-color: var(#{$bg-var}) !important;
+    // Layer the (possibly translucent in dark mode) tint over an opaque base
+    // so the floating snackbar is never see-through. In light mode the tint is
+    // already opaque, so this is visually identical there.
+    background-color: var(--bg-elevated) !important;
+    background-image: linear-gradient(var(#{$bg-var}), var(#{$bg-var})) !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 16px var(--shadow) !important;
     padding: 8px 16px;

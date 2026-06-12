@@ -1,3 +1,4 @@
+@let tooltipText = suggestTooltip();
 <ng-template #activeCardTpl>
   @let ctx = activeContext();
   <app-quadrant-card
@@ -7,12 +8,15 @@
     [subtitle]="ctx.subtitle"
     [items]="ctx.items"
     [suggestions]="ctx.suggestions"
+    [safetyBlocked]="ctx.safetyBlocked"
     [isStreaming]="ctx.isStreaming"
     [canSuggest]="canSuggest()"
+    [suggestTooltip]="tooltipText"
     (add)="onArgumentAdd(ctx.id)"
     (remove)="onArgumentRemove(ctx.id, $event)"
     (changeArgument)="onArgumentChange(ctx.id, $event.index, $event.value)"
     (reorder)="onArgumentReorder(ctx.id, $event.from, $event.to)"
+    (blurEvent)="onArgumentBlur()"
     (requestSuggestion)="onRequestSuggestion(ctx.id)"
     (acceptSuggestion)="onAcceptSuggestion(ctx.id, $event, 0)"
     (dismissSuggestion)="onDismissSuggestion(ctx.id, $event)"
@@ -21,8 +25,14 @@
 
 <header class="descartes-form__header">
   <div class="descartes-form__title-wrap">
-    <label class="descartes-form__title-label" i18n="@@yourDecisionLabel">Your Decision</label>
+    <label
+      class="descartes-form__title-label"
+      for="descartes-form-title"
+      i18n="@@yourDecisionLabel"
+      >Your Decision</label
+    >
     <input
+      id="descartes-form-title"
       type="text"
       class="descartes-form__title"
       [formField]="form.field.title"
@@ -87,6 +97,7 @@
   }
 </section>
 
+<!--Mobile version-->
 <section
   class="descartes-form__mobile"
   [class.is-locked]="form.isLocked()"
@@ -101,8 +112,10 @@
       [subtitle]="subtitles.get(id) ?? ''"
       [items]="form.model()[id]"
       [suggestions]="suggestionsStore.suggestions()[id]"
+      [safetyBlocked]="suggestionsStore.safetyBlocked()[id] ?? false"
       [isStreaming]="suggestionsStore.streamingQuadrant() === id"
       [canSuggest]="canSuggest()"
+      [suggestTooltip]="tooltipText"
       (add)="onArgumentAdd(id)"
       (remove)="onArgumentRemove(id, $event)"
       (changeArgument)="onArgumentChange(id, $event.index, $event.value)"

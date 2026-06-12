@@ -57,6 +57,6 @@ import { MailService } from '@auth/services/mail.service';
     PasswordResetTokenService,
     MailService,
   ],
-  exports: [AccessTokenGuard],
+  exports: [AccessTokenGuard, UsersService],
 })
 export class AuthModule {}

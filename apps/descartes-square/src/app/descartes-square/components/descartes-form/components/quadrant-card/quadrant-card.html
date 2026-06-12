@@ -21,7 +21,9 @@
         matTooltip="Drag to reorder"
         aria-label="Drag to reorder"
       >
-        <span class="quadrant-card__handle-icon"><mat-icon fontIcon="drag_indicator"></mat-icon></span>
+        <span class="quadrant-card__handle-icon"
+          ><mat-icon fontIcon="drag_indicator"></mat-icon
+        ></span>
       </button>
       <div class="quadrant-card__textarea-wrap">
         <textarea
@@ -30,6 +32,7 @@
           cdkTextareaAutosize
           cdkAutosizeMaxRows="6"
           [value]="item"
+          (blur)="blurEvent.emit()"
           (input)="onInput($index, $event)"
           i18n-placeholder="@@argPlaceholder"
           placeholder="Type an argument…"
@@ -61,23 +64,48 @@
     <span i18n="@@addArgument">Add argument</span>
   </button>
 
-  <button
-    type="button"
-    matButton="tonal"
-    class="quadrant-card__suggest"
-    [disabled]="!canSuggest() || isStreaming()"
-    (click)="requestSuggestion.emit()"
+  @let tooltipText = suggestTooltip();
+  @let isAiStreaming = isStreaming();
+
+  <span
+    class="quadrant-card__suggest-wrap"
+    [matTooltip]="tooltipText"
+    [matTooltipDisabled]="!tooltipText"
+    matTooltipPosition="above"
   >
-    @if (isStreaming()) {
-      <mat-spinner diameter="16"></mat-spinner>
-    } @else {
-      <mat-icon fontIcon="auto_awesome"></mat-icon>
-    }
-    <span i18n="@@suggestWithAi">Suggest with AI</span>
-  </button>
+    <button
+      type="button"
+      matButton="tonal"
+      class="quadrant-card__suggest"
+      [disabled]="!canSuggest() || isAiStreaming || safetyBlocked()"
+      (click)="requestSuggestion.emit()"
+    >
+      @if (isAiStreaming) {
+        <mat-icon
+          class="quadrant-card__suggest-spark"
+          fontIcon="auto_awesome"
+        ></mat-icon>
+        <span class="quadrant-card__suggest-thinking" i18n="@@aiThinking"
+          >Thinking…</span
+        >
+      } @else {
+        <mat-icon fontIcon="auto_awesome"></mat-icon>
+        <span i18n="@@suggestWithAi">Suggest with AI</span>
+      }
+    </button>
+  </span>
 </div>
 
-@if (suggestions().length > 0) {
+@if (safetyBlocked()) {
+  <div class="quadrant-card__safety-notice" role="alert">
+    <mat-icon fontIcon="warning_amber"></mat-icon>
+    <p i18n="@@safetyBlocked">
+      This tool isn't designed to help with this type of decision. If you need
+      support, please reach out to someone you trust or a qualified
+      professional.
+    </p>
+  </div>
+} @else if (suggestions().length > 0) {
   <section class="quadrant-card__suggestions" aria-live="polite">
     @for (text of suggestions(); track $index) {
       <app-ai-suggestion-card

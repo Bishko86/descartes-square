@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   effect,
   inject,
   input,
@@ -10,10 +9,8 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormField } from '@angular/forms/signals';
-import { interval, take, tap } from 'rxjs';
 
 import { DescartesAuthService } from '@auth/services/descartes-auth.service';
 import { AiSuggestionService } from '@descartes/services/ai-suggestion';
@@ -36,7 +33,6 @@ import { QuadrantPreview } from './components/quadrant-preview/quadrant-preview'
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-const TYPING_INTERVAL_MS = 12;
 const ARROW_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
 
 @Component({
@@ -67,7 +63,6 @@ export class DescartesForm implements OnInit {
   readonly suggestionsStore = inject(AiSuggestionsStore);
 
   readonly #authService = inject(DescartesAuthService);
-  readonly #destroyRef = inject(DestroyRef);
   readonly #route = inject(ActivatedRoute);
 
   readonly order = QUADRANT_ORDER;
@@ -83,12 +78,25 @@ export class DescartesForm implements OnInit {
     DescartesQuestionsIds.Q1,
   );
 
+  readonly isLoggedIn = computed(() => !!this.#authService.currentUser());
+
   readonly canSuggest = computed(
     () =>
-      !!this.#authService.currentUser() &&
+      this.isLoggedIn() &&
+      !this.suggestionsStore.isQuotaExhausted() &&
       !this.form.isLocked() &&
       !this.suggestionsStore.isStreaming(),
   );
+
+  readonly suggestTooltip = computed(() => {
+    if (!this.isLoggedIn()) {
+      return $localize`:@@suggestAiLoggedOutTooltip:Log in to unlock AI suggestions and get 3–5 automated arguments for your decision.`;
+    }
+    if (this.suggestionsStore.isQuotaExhausted()) {
+      return $localize`:@@suggestAiQuotaExhaustedTooltip:You've used all your free AI suggestions for today.`;
+    }
+    return '';
+  });
 
   readonly activeContext = computed(() => {
     const id = this.activeQuadrant();
@@ -100,6 +108,7 @@ export class DescartesForm implements OnInit {
       items: this.form.model()[id],
       suggestions: this.suggestionsStore.suggestions()[id],
       isStreaming: this.suggestionsStore.streamingQuadrant() === id,
+      safetyBlocked: this.suggestionsStore.safetyBlocked()[id] ?? false,
     };
   });
 
@@ -111,6 +120,13 @@ export class DescartesForm implements OnInit {
     if (previous === current) return;
     this.suggestionsStore.clear(previous);
     this.#previousQuadrant.set(current);
+  });
+
+  // Reset safety state whenever the title changes so the notice disappears
+  // and the button re-enables after the user corrects their decision title.
+  readonly #titleEffect = effect(() => {
+    this.form.field.title().value();
+    this.suggestionsStore.resetSafety();
   });
 
   ngOnInit(): void {
@@ -162,7 +178,8 @@ export class DescartesForm implements OnInit {
   ): void {
     const newIndex = this.form.addArgument(quadrant, '');
     this.suggestionsStore.dismiss(quadrant, suggestionIndex);
-    this.#animateTyping(quadrant, newIndex, text);
+    this.form.setArgument(quadrant, newIndex, text);
+    this.form.saveDraft(false);
   }
 
   onArgumentChange(quadrant: TFormNames, index: number, value: string): void {
@@ -181,20 +198,11 @@ export class DescartesForm implements OnInit {
     this.form.reorderArgument(quadrant, from, to);
   }
 
-  onActivate(id: DescartesQuestionsIds): void {
-    this.activeQuadrant.set(id);
+  onArgumentBlur(): void {
+    this.form.saveDraft(false);
   }
 
-  #animateTyping(quadrant: TFormNames, index: number, text: string): void {
-    if (!text) return;
-    interval(TYPING_INTERVAL_MS)
-      .pipe(
-        take(text.length),
-        tap((i) =>
-          this.form.setArgument(quadrant, index, text.substring(0, i + 1)),
-        ),
-        takeUntilDestroyed(this.#destroyRef),
-      )
-      .subscribe();
+  onActivate(id: DescartesQuestionsIds): void {
+    this.activeQuadrant.set(id);
   }
 }

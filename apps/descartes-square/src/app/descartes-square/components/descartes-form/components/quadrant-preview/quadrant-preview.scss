@@ -22,21 +22,11 @@
     outline-offset: 2px;
   }
 
-  &[data-quadrant="q1"] {
-    background: var(--q1-bg);
-    border-color: var(--q1-border);
-  }
-  &[data-quadrant="q2"] {
-    background: var(--q2-bg);
-    border-color: var(--q2-border);
-  }
-  &[data-quadrant="q3"] {
-    background: var(--q3-bg);
-    border-color: var(--q3-border);
-  }
-  &[data-quadrant="q4"] {
-    background: var(--q4-bg);
-    border-color: var(--q4-border);
+  @each $q in q1, q2, q3, q4 {
+    &[data-quadrant="#{$q}"] {
+      background: var(--#{$q}-bg);
+      border-color: var(--#{$q}-border);
+    }
   }
 }
 
