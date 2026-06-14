@@ -37,7 +37,8 @@ export class DescartesList implements OnInit {
 
   // The selected tab lives in the URL (`?filter=`), so it survives a refresh
   // and stays consistent however the page was reached.
-  readonly filter = input<ListFilter, string>('all', {
+  readonly statusFilter = input<ListFilter, string>('all', {
+    alias: 'filter',
     transform: (value) =>
       value === 'drafts' || value === 'solutions' ? value : 'all',
   });
@@ -51,7 +52,7 @@ export class DescartesList implements OnInit {
 
   readonly filteredSolutions = computed(() => {
     const items = this.dataSource();
-    switch (this.filter()) {
+    switch (this.statusFilter()) {
       case 'drafts':
         return items.filter((item) => !isSolution(item));
       case 'solutions':

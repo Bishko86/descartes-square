@@ -11,15 +11,19 @@
   </header>
 
   @if (dataSource().length) {
-    @let activeFilter = filter();
+    @let activeFilter = statusFilter();
     <div class="descartes-list__toolbar">
-      <div class="descartes-list__filter" role="tablist">
+      <div
+        class="descartes-list__filter"
+        role="group"
+        i18n-aria-label="@@list.filterGroupAria"
+        aria-label="Filter decisions by status"
+      >
         <button
           type="button"
-          role="tab"
           class="descartes-list__filter-btn"
           [class.descartes-list__filter-btn--active]="activeFilter === 'all'"
-          [attr.aria-selected]="activeFilter === 'all'"
+          [attr.aria-pressed]="activeFilter === 'all'"
           (click)="setFilter('all')"
         >
           <ng-container i18n="@@list.filterAll">All</ng-container>
@@ -29,12 +33,11 @@
         </button>
         <button
           type="button"
-          role="tab"
           class="descartes-list__filter-btn"
           [class.descartes-list__filter-btn--active]="
             activeFilter === 'solutions'
           "
-          [attr.aria-selected]="activeFilter === 'solutions'"
+          [attr.aria-pressed]="activeFilter === 'solutions'"
           (click)="setFilter('solutions')"
         >
           <ng-container i18n="@@list.filterSolutions">Solutions</ng-container>
@@ -45,12 +48,11 @@
 
         <button
           type="button"
-          role="tab"
           class="descartes-list__filter-btn"
           [class.descartes-list__filter-btn--active]="
             activeFilter === 'drafts'
           "
-          [attr.aria-selected]="activeFilter === 'drafts'"
+          [attr.aria-pressed]="activeFilter === 'drafts'"
           (click)="setFilter('drafts')"
         >
           <ng-container i18n="@@list.filterDrafts">Drafts</ng-container>
