@@ -1,43 +1,105 @@
 <article class="solution-card">
-  <div class="solution-card__content">
-    <h3 class="solution-card__title">{{ solution().title }}</h3>
-    @if (solution().createdAt) {
-      <span class="solution-card__date">
-        {{ solution().createdAt | date : 'mediumDate' }}
-      </span>
+  <div
+    class="solution-card__strip"
+    [class.solution-card__strip--empty]="!total()"
+    aria-hidden="true"
+  >
+    @if (total()) {
+      @for (seg of accentBar(); track seg.quadrant) {
+        @if (seg.pct > 0) {
+          <span
+            class="solution-card__strip-seg"
+            [attr.data-quadrant]="seg.quadrant"
+            [style.flex-grow]="seg.pct"
+          ></span>
+        }
+      }
     }
   </div>
-  <div class="solution-card__actions">
-    <button
-      mat-icon-button
-      [attr.aria-label]="viewLabel"
-      [matTooltip]="viewLabel"
-      matTooltipPosition="above"
-      [matTooltipShowDelay]="400"
-      (click)="view.emit(solution().id!)"
-    >
-      <mat-icon>visibility</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      [attr.aria-label]="editLabel"
-      [matTooltip]="editLabel"
-      matTooltipPosition="above"
-      [matTooltipShowDelay]="400"
-      (click)="edit.emit(solution().id!)"
-    >
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      class="solution-card__action-btn--danger"
-      [attr.aria-label]="deleteLabel"
-      [matTooltip]="deleteLabel"
-      matTooltipPosition="above"
-      [matTooltipShowDelay]="400"
-      (click)="remove.emit(solution().id!)"
-    >
-      <mat-icon>delete</mat-icon>
-    </button>
+
+  <div class="solution-card__body">
+    <div class="solution-card__meta">
+      @if (isSolution()) {
+        <span class="solution-card__badge solution-card__badge--solution">
+          <mat-icon class="solution-card__badge-icon">check</mat-icon>
+          <ng-container i18n="@@card.statusSolution">Solution</ng-container>
+        </span>
+      } @else {
+        <span class="solution-card__badge solution-card__badge--draft">
+          <span class="solution-card__badge-dot" aria-hidden="true"></span>
+          <ng-container i18n="@@card.statusDraft">Draft</ng-container>
+        </span>
+      }
+      @if (solution().createdAt) {
+        <span class="solution-card__date">
+          {{ solution().createdAt | date : 'mediumDate' }}
+        </span>
+      }
+    </div>
+
+    <h3 class="solution-card__title">{{ solution().title }}</h3>
+
+    <div class="solution-card__chips">
+      @for (quadrant of quadrants(); track quadrant.id) {
+        <span class="solution-card__chip" [attr.data-quadrant]="quadrant.id">
+          <span class="solution-card__chip-dot" aria-hidden="true"></span>
+          {{ quadrant.count }}
+        </span>
+      }
+    </div>
+
+    <div class="solution-card__foot">
+      <span class="solution-card__lean" [attr.data-lean]="lean() ?? 'none'">
+        <span class="solution-card__lean-dot" aria-hidden="true"></span>
+        @switch (lean()) {
+          @case ('act') {
+            <ng-container i18n="@@card.leanAct">Leans toward acting</ng-container>
+          }
+          @case ('stay') {
+            <ng-container i18n="@@card.leanStay">Leans toward staying</ng-container>
+          }
+          @case ('even') {
+            <ng-container i18n="@@card.leanEven">Evenly split</ng-container>
+          }
+          @default {
+            <ng-container i18n="@@card.leanNone">No arguments yet</ng-container>
+          }
+        }
+      </span>
+
+      <div class="solution-card__actions">
+        <button
+          mat-icon-button
+          [attr.aria-label]="viewLabel"
+          [matTooltip]="viewLabel"
+          matTooltipPosition="above"
+          [matTooltipShowDelay]="400"
+          (click)="view.emit(solution().id!)"
+        >
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          [attr.aria-label]="editLabel"
+          [matTooltip]="editLabel"
+          matTooltipPosition="above"
+          [matTooltipShowDelay]="400"
+          (click)="edit.emit(solution().id!)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          class="solution-card__action-btn--danger"
+          [attr.aria-label]="deleteLabel"
+          [matTooltip]="deleteLabel"
+          matTooltipPosition="above"
+          [matTooltipShowDelay]="400"
+          (click)="remove.emit(solution().id!)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
   </div>
 </article>
