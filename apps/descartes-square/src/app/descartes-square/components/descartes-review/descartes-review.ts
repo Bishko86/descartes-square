@@ -80,8 +80,13 @@ export class DescartesReview implements OnInit {
     return c.q1 + c.q2 + c.q3 + c.q4;
   });
 
+  readonly hasConclusion = computed(
+    () => (this.entity()?.conclusion?.trim().length ?? 0) > 0,
+  );
+
   readonly canSave = computed(
-    () => this.title().length > 0 && this.totalArgs() > 0,
+    () =>
+      this.title().length > 0 && this.totalArgs() > 0 && this.hasConclusion(),
   );
 
   readonly quadrantItems = computed<Record<DescartesQuestionsIds, string[]>>(
@@ -159,15 +164,22 @@ export class DescartesReview implements OnInit {
   }
 
   onSaveDraft(): void {
+    this.entity.update((e) => (e ? { ...e, status: 'draft' } : e));
     this.#persist();
     this.#showInfoSnackbar($localize`:@@draftSaved:Draft saved`);
+    this.#router.navigate(['descartes-square', 'list'], {
+      queryParams: { filter: 'drafts' },
+    });
   }
 
   onSaveDecision(): void {
     if (!this.canSave()) return;
+    this.entity.update((e) => (e ? { ...e, status: 'solution' } : e));
     this.#persist();
     this.#showInfoSnackbar($localize`:@@decisionSaved:Decision saved`);
-    this.#router.navigate(['descartes-square', 'list']);
+    this.#router.navigate(['descartes-square', 'list'], {
+      queryParams: { filter: 'solutions' },
+    });
   }
 
   onBackToList(): void {

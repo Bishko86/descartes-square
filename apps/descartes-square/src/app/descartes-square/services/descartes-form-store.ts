@@ -11,7 +11,10 @@ import {
 } from '@angular/forms/signals';
 
 import { SnackbarComponent } from '@core/components/snackbar/snackbar';
-import { IDescartesSolution } from '@descartes/definitions/interfaces/descartes-solution.interface';
+import {
+  IDescartesSolution,
+  SolutionStatus,
+} from '@descartes/definitions/interfaces/descartes-solution.interface';
 import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.interface';
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 
@@ -128,7 +131,10 @@ export class DescartesFormStore {
   }
 
   saveDraft(isSnackbarShown = true): void {
-    this.#persist();
+    // An explicit "Save draft" click marks the card a draft; the silent
+    // autosaves (argument blur, accepting a suggestion) only persist and
+    // must not change an already-concluded card's status.
+    this.#persist(isSnackbarShown ? 'draft' : undefined);
 
     if (isSnackbarShown) {
       this.#showInfoSnackbar($localize`:@@draftSaved:Draft saved`);
@@ -150,12 +156,16 @@ export class DescartesFormStore {
     });
   }
 
-  #persist(): string {
+  #persist(status?: SolutionStatus): string {
     const currentId = this.#id();
     const payload = this.#sanitize(this.model());
 
     if (currentId) {
-      this.#repository.upsert({ ...payload, id: currentId });
+      this.#repository.upsert({
+        ...payload,
+        id: currentId,
+        ...(status ? { status } : {}),
+      });
       return currentId;
     }
 
@@ -163,6 +173,7 @@ export class DescartesFormStore {
     this.#repository.upsert({
       ...payload,
       id: newId,
+      status: status ?? 'draft',
       createdAt: new Date().toISOString(),
     });
     this.#id.set(newId);

@@ -1,24 +1,93 @@
 <section class="descartes-list">
+  <header class="descartes-list__header">
+    <span class="descartes-list__eyebrow" i18n="@@list.eyebrow">
+      Your decisions
+    </span>
+    <h1 class="descartes-list__title" i18n="@@list.title">Descartes Square</h1>
+    <p class="descartes-list__subtitle" i18n="@@list.subtitle">
+      Every square you've weighed — drafts in progress and decisions you've
+      concluded.
+    </p>
+  </header>
+
   @if (dataSource().length) {
-    <div class="descartes-list__header">
+    @let activeFilter = filter();
+    <div class="descartes-list__toolbar">
+      <div class="descartes-list__filter" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          class="descartes-list__filter-btn"
+          [class.descartes-list__filter-btn--active]="activeFilter === 'all'"
+          [attr.aria-selected]="activeFilter === 'all'"
+          (click)="setFilter('all')"
+        >
+          <ng-container i18n="@@list.filterAll">All</ng-container>
+          <span class="descartes-list__filter-count">
+            {{ dataSource().length }}
+          </span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          class="descartes-list__filter-btn"
+          [class.descartes-list__filter-btn--active]="
+            activeFilter === 'solutions'
+          "
+          [attr.aria-selected]="activeFilter === 'solutions'"
+          (click)="setFilter('solutions')"
+        >
+          <ng-container i18n="@@list.filterSolutions">Solutions</ng-container>
+          <span class="descartes-list__filter-count">
+            {{ solutionCount() }}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          role="tab"
+          class="descartes-list__filter-btn"
+          [class.descartes-list__filter-btn--active]="
+            activeFilter === 'drafts'
+          "
+          [attr.aria-selected]="activeFilter === 'drafts'"
+          (click)="setFilter('drafts')"
+        >
+          <ng-container i18n="@@list.filterDrafts">Drafts</ng-container>
+          <span class="descartes-list__filter-count">{{ draftCount() }}</span>
+        </button>
+      </div>
+
       <button
-        matButton="elevated"
-        class="descartes-list__add-data"
-        i18n="@@addBtn"
+        type="button"
+        class="descartes-list__new-square"
         (click)="addData()"
       >
-        Add data
+        <mat-icon>add</mat-icon>
+        <ng-container i18n="@@list.newSquare">New square</ng-container>
       </button>
     </div>
 
     <div class="descartes-list__grid">
-      @for (item of dataSource(); track item.id) {
+      @for (item of filteredSolutions(); track item.id) {
         <app-descartes-solution-card
           [solution]="item"
           (view)="view($event)"
           (edit)="update($event)"
           (remove)="delete($event)"
         />
+      } @empty {
+        <div class="descartes-list__filter-empty">
+          @if (activeFilter === "drafts") {
+            <p i18n="@@list.emptyDrafts">
+              No drafts — every square here is concluded.
+            </p>
+          } @else {
+            <p i18n="@@list.emptySolutions">
+              No solutions yet — finish a draft to see it here.
+            </p>
+          }
+        </div>
       }
     </div>
   } @else {
