@@ -89,8 +89,13 @@ export class QuadrantCard {
     afterNextRender(() => this.#focusLast(), { injector: this.#injector });
   }
 
+  // Public so the parent form can focus a specific argument (e.g. the first
+  // invalid one when concluding) without reaching into this card's DOM.
+  focusArgument(index: number): void {
+    this.textareas()[index]?.nativeElement.focus();
+  }
+
   #focusLast(): void {
-    const textareas = this.textareas();
-    textareas[textareas.length - 1]?.nativeElement.focus();
+    this.focusArgument(this.textareas().length - 1);
   }
 }

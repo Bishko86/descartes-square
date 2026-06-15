@@ -10,9 +10,7 @@ import { Maybe } from '@shared/src/lib/types/maybe.type';
 @Injectable({ providedIn: 'root' })
 export class SolutionsRepository {
   list(): IDescartesSolution[] {
-    const stored: IDescartesSolution[] = JSON.parse(
-      localStorage.getItem(LocalStorageKeys.LIST) ?? '[]',
-    );
+    const stored = this.#read();
     const migrated = stored.map((item) => this.#ensureStatus(item));
     const changed = migrated.some(
       (item, index) => item.status !== stored[index].status,
@@ -43,6 +41,20 @@ export class SolutionsRepository {
     const next = this.list().filter((item) => item.id !== id);
     this.#write(next);
     return next;
+  }
+
+  // Corrupted or non-array storage (manual edits, partial writes, foreign
+  // data on the key) would otherwise crash the whole list view — degrade to
+  // an empty list instead.
+  #read(): IDescartesSolution[] {
+    try {
+      const parsed: unknown = JSON.parse(
+        localStorage.getItem(LocalStorageKeys.LIST) ?? '[]',
+      );
+      return Array.isArray(parsed) ? (parsed as IDescartesSolution[]) : [];
+    } catch {
+      return [];
+    }
   }
 
   #write(list: IDescartesSolution[]): void {

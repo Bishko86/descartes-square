@@ -180,6 +180,7 @@
     "descartesSquareAria": "Квадрат Декарта",
     "dismissSuggestion": "Відхилити",
     "draftSaved": "Чернетку збережено",
+    "argLengthInvalid": "Кожен аргумент має містити від 3 до 255 символів. Виправте або видаліть закороткі перед завершенням.",
     "dragToReorder": "Перетягніть, щоб змінити порядок",
     "errRequired": "Це поле обов'язкове",
     "exploredCounter": " {$INTERPOLATION} / 4 опрацьовано\n",
