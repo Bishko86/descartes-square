@@ -14,11 +14,7 @@
   gap: var(--small-indent);
   width: 100%;
   padding: var(--basic-indent) var(--medium-indent);
-  background: linear-gradient(
-    135deg,
-    var(--primary-soft) 0%,
-    transparent 70%
-  );
+  background: linear-gradient(135deg, var(--primary-soft) 0%, transparent 70%);
   border: none;
   text-align: left;
   cursor: pointer;
@@ -40,19 +36,19 @@
 }
 
 .review-synthesis-card__cta-icon {
-  font-size: var(--big);
+  font-size: var(--text-base);
   color: var(--primary);
 }
 
 .review-synthesis-card__cta-text {
   flex: 1;
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   font-weight: 600;
   color: var(--text);
 }
 
 .review-synthesis-card__cta-sub {
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   color: var(--text-muted);
 
   @media (max-width: $mobile) {
@@ -65,11 +61,7 @@
   flex-direction: column;
   gap: var(--small-indent);
   padding: var(--medium-indent);
-  background: linear-gradient(
-    135deg,
-    var(--primary-soft) 0%,
-    transparent 70%
-  );
+  background: linear-gradient(135deg, var(--primary-soft) 0%, transparent 70%);
 }
 
 .review-synthesis-card__head {
@@ -86,7 +78,7 @@
   flex: 1;
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--big);
+  font-size: var(--text-base);
   font-weight: 600;
   letter-spacing: -0.005em;
   color: var(--text);
@@ -126,7 +118,7 @@
 
 .review-synthesis-card__text {
   margin: 0;
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   line-height: 1.6;
   color: var(--text);
 }
@@ -159,12 +151,16 @@
 }
 
 @keyframes synthesis-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .review-synthesis-card__disclaimer {
   margin: var(--x-small-indent) 0 0;
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   color: var(--text-subtle);
 }

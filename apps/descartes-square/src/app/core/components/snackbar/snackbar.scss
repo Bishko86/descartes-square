@@ -38,7 +38,7 @@
 
   .snackbar-message {
     flex: 1;
-    font-size: 14px;
+    font-size: var(--text-sm);
     font-weight: 500;
     line-height: 1.4;
   }

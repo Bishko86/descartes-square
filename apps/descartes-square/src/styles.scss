@@ -1,11 +1,9 @@
 @use "styles/indentation.scss";
-@use "styles/colors.scss";
-@use "styles/theme.scss";       // v1 — @deprecated
-@use "styles/theme-v2.scss";    // v2 — overrides shared property names
+@use "styles/theme-v2.scss"; // v2 design tokens — canonical source
 @use "styles/fonts.scss";
 @use "styles/material.scss";
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=JetBrains+Mono:wght@400;500&display=swap");
 
 html,
 body {
@@ -19,7 +17,7 @@ body {
 body {
   line-height: 1;
   color: var(--text);
-  background-color: var(--background);
+  background-color: var(--bg);
 }
 
 ol,
@@ -50,9 +48,12 @@ body {
     // so the floating snackbar is never see-through. In light mode the tint is
     // already opaque, so this is visually identical there.
     background-color: var(--bg-elevated) !important;
-    background-image: linear-gradient(var(#{$bg-var}), var(#{$bg-var})) !important;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 16px var(--shadow) !important;
+    background-image: linear-gradient(
+      var(#{$bg-var}),
+      var(#{$bg-var})
+    ) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-md) !important;
     padding: 8px 16px;
 
     &::after {

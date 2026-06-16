@@ -82,7 +82,7 @@
 
   &__cta {
     position: relative;
-    font-size: 1rem;
+    font-size: var(--text-base);
     padding: var(--small-indent) var(--large-indent);
   }
 }
@@ -131,13 +131,13 @@
   }
 
   &__card {
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: var(--medium-indent);
     border: 1px solid var(--border);
     transition: box-shadow 0.2s ease;
 
     &:hover {
-      box-shadow: 0 4px 20px var(--shadow);
+      box-shadow: var(--shadow-md);
     }
 
     @each $q in q1, q2, q3, q4 {
@@ -169,12 +169,12 @@
     background: var(--primary);
     color: var(--primary-contrast);
     font-weight: 700;
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     margin-bottom: var(--small-indent);
   }
 
   &__card-title {
-    font-size: 1.1rem;
+    font-size: var(--text-lg);
     font-weight: 600;
     color: var(--text);
     margin: 0 0 var(--x-small-indent);
@@ -182,8 +182,8 @@
 
   &__card-subtitle {
     display: block;
-    font-size: 0.8rem;
-    color: var(--muted);
+    font-size: var(--text-xs);
+    color: var(--text-muted);
     font-style: italic;
     margin-bottom: var(--small-indent);
   }
@@ -191,17 +191,17 @@
   &__card-desc {
     color: var(--text-secondary);
     line-height: 1.6;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     margin: 0 0 var(--small-indent);
   }
 
   &__example {
     margin: 0;
     padding: var(--small-indent) var(--basic-indent);
-    border-left: 2px solid var(--muted);
-    color: var(--muted);
+    border-left: 2px solid var(--text-muted);
+    color: var(--text-muted);
     font-style: italic;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     line-height: 1.5;
   }
 }
@@ -241,12 +241,12 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: var(--text-base);
     margin-bottom: var(--small-indent);
   }
 
   &__step-title {
-    font-size: 1rem;
+    font-size: var(--text-base);
     font-weight: 600;
     color: var(--text);
     margin: 0 0 var(--x-small-indent);
@@ -254,7 +254,7 @@
 
   &__step-desc {
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     line-height: 1.5;
     margin: 0;
     padding: 0 var(--x-small-indent);
@@ -275,19 +275,19 @@
 
   &__tag {
     padding: var(--small-indent) var(--basic-indent);
-    border-radius: 100px;
+    border-radius: var(--radius-pill);
     background: var(--primary-soft);
     border: 1px solid var(--primary-border);
-    color: var(--highlighted-text);
-    font-size: 0.875rem;
+    color: var(--primary);
+    font-size: var(--text-sm);
     font-weight: 500;
     white-space: nowrap;
   }
 
   &__tip {
-    background: var(--tip-bg);
-    border: 1px solid var(--tip-border);
-    border-radius: 8px;
+    background: var(--primary-soft);
+    border: 1px solid var(--primary-border);
+    border-radius: var(--radius-md);
     padding: var(--basic-indent) var(--medium-indent);
     display: flex;
     align-items: baseline;
@@ -296,7 +296,7 @@
     p {
       margin: 0;
       color: var(--text-secondary);
-      font-size: 0.9rem;
+      font-size: var(--text-sm);
       line-height: 1.6;
     }
   }
@@ -304,7 +304,7 @@
   &__tip-label {
     font-weight: 700;
     color: var(--primary);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     white-space: nowrap;
   }
 }
@@ -323,7 +323,7 @@
   }
 
   &__btn {
-    font-size: 1rem;
+    font-size: var(--text-base);
     padding: var(--small-indent) var(--large-indent);
   }
 }

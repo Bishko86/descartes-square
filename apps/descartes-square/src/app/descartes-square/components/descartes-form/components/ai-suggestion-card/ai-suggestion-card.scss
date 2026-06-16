@@ -7,7 +7,7 @@
   border: 1px solid var(--primary-border);
   border-radius: var(--radius-md);
   color: var(--text);
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   animation: ai-card-in 180ms ease-out;
 }
 
@@ -33,7 +33,9 @@
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 
   mat-icon {
     font-size: 20px;
@@ -48,18 +50,29 @@
     background: transparent;
     color: var(--primary);
 
-    &:hover { color: var(--highlighted-text); }
+    &:hover {
+      color: var(--primary);
+    }
   }
 
   &--dismiss {
     background: transparent;
     color: var(--text-muted);
 
-    &:hover { color: var(--text); background: var(--surface-hover); }
+    &:hover {
+      color: var(--text);
+      background: var(--surface-hover);
+    }
   }
 }
 
 @keyframes ai-card-in {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

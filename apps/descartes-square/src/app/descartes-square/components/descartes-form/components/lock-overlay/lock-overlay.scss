@@ -47,13 +47,13 @@
 
 .lock-overlay__title {
   margin: 0;
-  font-size: var(--title-font-size);
+  font-size: var(--text-lg);
   font-weight: 600;
 }
 
 .lock-overlay__body {
   margin: 0;
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   color: var(--text-muted);
   line-height: 1.5;
 }

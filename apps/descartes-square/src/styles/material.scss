@@ -1,16 +1,18 @@
 // @deprecated — Angular Material M3 theme (v1 palette).
 // Will be replaced by material-v2.scss when component migration is complete (DS-56).
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
 
   font: var(--mat-sys-body-medium);
 
@@ -21,11 +23,11 @@ html {
   }
 
   .mdc-button.mat-mdc-button-base {
-    color: var(--highlighted-text);
+    color: var(--primary);
     background-color: var(--surface);
   }
 
   .confirm-dialog-panel .mat-mdc-dialog-container .mdc-dialog__surface {
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
   }
 }

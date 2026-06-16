@@ -21,10 +21,18 @@
   min-width: 0;
   transition: flex 0.4s ease;
 
-  &[data-quadrant="q1"] { background: var(--q1); }
-  &[data-quadrant="q2"] { background: var(--q2); }
-  &[data-quadrant="q3"] { background: var(--q3); }
-  &[data-quadrant="q4"] { background: var(--q4); }
+  &[data-quadrant="q1"] {
+    background: var(--q1);
+  }
+  &[data-quadrant="q2"] {
+    background: var(--q2);
+  }
+  &[data-quadrant="q3"] {
+    background: var(--q3);
+  }
+  &[data-quadrant="q4"] {
+    background: var(--q4);
+  }
 }
 
 .review-balance-card__body {
@@ -60,7 +68,7 @@
   align-items: center;
   gap: var(--x-small-indent);
   font-family: var(--font-mono);
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -101,7 +109,7 @@
 
 .review-balance-card__explanation {
   margin: 0;
-  font-size: var(--big);
+  font-size: var(--text-base);
   line-height: 1.55;
   color: var(--text-secondary);
   max-width: 56ch;
@@ -130,7 +138,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--small-indent);
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   color: var(--text-muted);
 
   dt {
@@ -158,8 +166,12 @@
   border-radius: 50%;
   flex-shrink: 0;
 
-  .review-balance-card__stat[data-side="act"] & { background: var(--q1); }
-  .review-balance-card__stat[data-side="stay"] & { background: var(--q2); }
+  .review-balance-card__stat[data-side="act"] & {
+    background: var(--q1);
+  }
+  .review-balance-card__stat[data-side="stay"] & {
+    background: var(--q2);
+  }
 }
 
 .review-balance-card__chart {
@@ -219,14 +231,14 @@
 
 .review-balance-card__chart-word {
   font-family: var(--font-mono);
-  font-size: var(--small);
+  font-size: var(--text-xs);
   letter-spacing: 0.18em;
   color: var(--text-muted);
 }
 
 .review-balance-card__chart-vs {
   font-family: var(--font-mono);
-  font-size: var(--small);
+  font-size: var(--text-xs);
   letter-spacing: 0.08em;
   color: var(--text-subtle);
   margin-top: 2px;
@@ -272,8 +284,12 @@
       border-top: none;
     }
 
-    &[data-side="act"] dd { color: var(--q1); }
-    &[data-side="stay"] dd { color: var(--q2); }
+    &[data-side="act"] dd {
+      color: var(--q1);
+    }
+    &[data-side="stay"] dd {
+      color: var(--q2);
+    }
   }
 
   .review-balance-card__stat-dot {
@@ -291,6 +307,6 @@
   }
 
   .review-balance-card__chart-word {
-    font-size: var(--semi-small);
+    font-size: var(--text-xs);
   }
 }

@@ -11,19 +11,35 @@
   min-width: 0;
 
   &[data-quadrant="q1"] {
-    background: linear-gradient(180deg, var(--q1-bg) 0%, var(--bg-elevated) 60%);
+    background: linear-gradient(
+      180deg,
+      var(--q1-bg) 0%,
+      var(--bg-elevated) 60%
+    );
     border-color: var(--q1-border);
   }
   &[data-quadrant="q2"] {
-    background: linear-gradient(180deg, var(--q2-bg) 0%, var(--bg-elevated) 60%);
+    background: linear-gradient(
+      180deg,
+      var(--q2-bg) 0%,
+      var(--bg-elevated) 60%
+    );
     border-color: var(--q2-border);
   }
   &[data-quadrant="q3"] {
-    background: linear-gradient(180deg, var(--q3-bg) 0%, var(--bg-elevated) 60%);
+    background: linear-gradient(
+      180deg,
+      var(--q3-bg) 0%,
+      var(--bg-elevated) 60%
+    );
     border-color: var(--q3-border);
   }
   &[data-quadrant="q4"] {
-    background: linear-gradient(180deg, var(--q4-bg) 0%, var(--bg-elevated) 60%);
+    background: linear-gradient(
+      180deg,
+      var(--q4-bg) 0%,
+      var(--bg-elevated) 60%
+    );
     border-color: var(--q4-border);
   }
 }
@@ -44,20 +60,28 @@
 
 .review-quadrant-card__number {
   font-family: var(--font-serif);
-  font-size: 13px;
+  font-size: var(--text-xs);
   font-weight: 600;
   font-variant-numeric: lining-nums;
 
-  :host[data-quadrant="q1"] & { color: var(--q1); }
-  :host[data-quadrant="q2"] & { color: var(--q2); }
-  :host[data-quadrant="q3"] & { color: var(--q3); }
-  :host[data-quadrant="q4"] & { color: var(--q4); }
+  :host[data-quadrant="q1"] & {
+    color: var(--q1);
+  }
+  :host[data-quadrant="q2"] & {
+    color: var(--q2);
+  }
+  :host[data-quadrant="q3"] & {
+    color: var(--q3);
+  }
+  :host[data-quadrant="q4"] & {
+    color: var(--q4);
+  }
 }
 
 .review-quadrant-card__title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: var(--big);
+  font-size: var(--text-base);
   font-weight: 600;
   color: var(--text);
   letter-spacing: -0.005em;
@@ -70,11 +94,11 @@
   min-width: 26px;
   height: 26px;
   padding: 0 var(--x-small-indent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--surface);
   border: 1px solid var(--border);
   font-family: var(--font-mono);
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   color: var(--text-muted);
 
   &.is-empty {
@@ -96,7 +120,7 @@
   align-items: flex-start;
   gap: var(--small-indent);
   padding: var(--small-indent) var(--basic-indent);
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--text);
   background: var(--bg-elevated);
@@ -113,10 +137,18 @@
   background: var(--border-strong);
   flex-shrink: 0;
 
-  :host[data-quadrant="q1"] & { background: var(--q1); }
-  :host[data-quadrant="q2"] & { background: var(--q2); }
-  :host[data-quadrant="q3"] & { background: var(--q3); }
-  :host[data-quadrant="q4"] & { background: var(--q4); }
+  :host[data-quadrant="q1"] & {
+    background: var(--q1);
+  }
+  :host[data-quadrant="q2"] & {
+    background: var(--q2);
+  }
+  :host[data-quadrant="q3"] & {
+    background: var(--q3);
+  }
+  :host[data-quadrant="q4"] & {
+    background: var(--q4);
+  }
 }
 
 .review-quadrant-card__text {
@@ -130,7 +162,7 @@
   flex-wrap: wrap;
   gap: var(--x-small-indent);
   padding: var(--basic-indent) 0;
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   color: var(--text-muted);
 }
 
@@ -165,7 +197,7 @@
 
 .review-quadrant-card__helper {
   margin: calc(var(--x-small-indent) * -0.5) 0 0;
-  font-size: var(--regular);
+  font-size: var(--text-sm);
   color: var(--text-muted);
   line-height: 1.4;
 }
@@ -175,11 +207,11 @@
   align-items: center;
   gap: 6px;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   border: 1px dashed currentcolor;
   background: transparent;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 500;
   color: var(--text-muted);
   cursor: pointer;
@@ -192,19 +224,27 @@
 
   :host[data-quadrant="q1"] & {
     color: var(--q1);
-    &:hover { background: var(--q1-bg); }
+    &:hover {
+      background: var(--q1-bg);
+    }
   }
   :host[data-quadrant="q2"] & {
     color: var(--q2);
-    &:hover { background: var(--q2-bg); }
+    &:hover {
+      background: var(--q2-bg);
+    }
   }
   :host[data-quadrant="q3"] & {
     color: var(--q3);
-    &:hover { background: var(--q3-bg); }
+    &:hover {
+      background: var(--q3-bg);
+    }
   }
   :host[data-quadrant="q4"] & {
     color: var(--q4);
-    &:hover { background: var(--q4-bg); }
+    &:hover {
+      background: var(--q4-bg);
+    }
   }
 }
 
