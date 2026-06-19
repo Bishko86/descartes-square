@@ -1,0 +1,19 @@
+// Typography tokens — font families and type scale.
+// Icon-glyph sizes and one-off hero/display sizes stay as literals in
+// component SCSS; everything that is body/label text uses --text-*.
+
+:root {
+  // font families
+  --font-sans: "Inter", "Open Sans", system-ui, -apple-system, sans-serif;
+  --font-body: "Open Sans", "Inter", system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  // type scale
+  --text-xs: 0.75rem;   // 12px
+  --text-sm: 0.875rem;  // 14px
+  --text-base: 1rem;    // 16px
+  --text-lg: 1.125rem;  // 18px
+  --text-xl: 1.25rem;   // 20px
+  --text-2xl: 1.5rem;   // 24px
+}
