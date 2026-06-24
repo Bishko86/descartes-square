@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+
 .open-sans-regular {
   font-family: "Open Sans", sans-serif;
   font-optical-sizing: auto;
@@ -6,4 +8,12 @@
   font-variation-settings: "wdth" 100;
   color: var(--text-secondary);
   font-size: var(--text-sm);
+}
+
+.noto-sans-regular {
+  font-family: "Noto Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
