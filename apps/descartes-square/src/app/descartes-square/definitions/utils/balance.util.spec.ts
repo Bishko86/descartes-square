@@ -1,5 +1,3 @@
-import '@angular/localize/init';
-
 import {
   ACT_THRESHOLD,
   STAY_THRESHOLD,

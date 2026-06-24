@@ -34,7 +34,8 @@
             "input": "apps/descartes-square/public"
           }
         ],
-        "outputPath": "dist/descartes-square"
+        "outputPath": "dist/descartes-square",
+        "polyfills": ["@angular/localize/init"]
       },
       "configurations": {
         "production": {
@@ -131,7 +132,6 @@
         ]
       },
       "outputs": ["{options.outputFile}"]
-    },
-    "polyfills": ["@angular/localize/init"]
+    }
   }
 }
