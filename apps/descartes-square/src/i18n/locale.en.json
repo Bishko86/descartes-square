@@ -144,6 +144,7 @@
     "reviewSaveDraftBtn": " Save draft ",
     "reviewSaveDecisionBtn": " Save decision ",
     "draftSaved": "Draft saved",
+    "argLengthInvalid": "Each argument must be 3–255 characters. Fix or remove the short ones before concluding.",
     "decisionSaved": "Decision saved",
     "card.statusSolution": "Solution",
     "card.statusDraft": "Draft",

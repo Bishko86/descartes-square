@@ -26,7 +26,7 @@
 }
 
 .descartes-form__title-label {
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -91,7 +91,7 @@
 .descartes-form__axis {
   position: absolute;
   font-family: var(--font-mono);
-  font-size: var(--semi-small);
+  font-size: var(--text-xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -194,7 +194,9 @@
   }
 }
 
-.descartes-form__btn--draft { border-style: dashed; }
+.descartes-form__btn--draft {
+  border-style: dashed;
+}
 
 .descartes-form__btn.mat-mdc-unelevated-button {
   transition: background-color 0.15s ease;

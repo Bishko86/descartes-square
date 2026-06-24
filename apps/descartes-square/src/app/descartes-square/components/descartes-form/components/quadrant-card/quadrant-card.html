@@ -36,6 +36,7 @@
           (input)="onInput($index, $event)"
           i18n-placeholder="@@argPlaceholder"
           placeholder="Type an argument…"
+          minlength="3"
           maxlength="255"
         ></textarea>
       </div>
@@ -81,16 +82,20 @@
       (click)="requestSuggestion.emit()"
     >
       @if (isAiStreaming) {
-        <mat-icon
-          class="quadrant-card__suggest-spark"
-          fontIcon="auto_awesome"
-        ></mat-icon>
-        <span class="quadrant-card__suggest-thinking" i18n="@@aiThinking"
-          >Thinking…</span
-        >
+        <ng-container>
+          <mat-icon
+            class="quadrant-card__suggest-spark"
+            fontIcon="auto_awesome"
+          ></mat-icon>
+          <span class="quadrant-card__suggest-thinking" i18n="@@aiThinking"
+            >Thinking…</span
+          >
+        </ng-container>
       } @else {
-        <mat-icon fontIcon="auto_awesome"></mat-icon>
-        <span i18n="@@suggestWithAi">Suggest with AI</span>
+        <ng-container>
+          <mat-icon fontIcon="auto_awesome"></mat-icon>
+          <span i18n="@@suggestWithAi">Suggest with AI</span>
+        </ng-container>
       }
     </button>
   </span>

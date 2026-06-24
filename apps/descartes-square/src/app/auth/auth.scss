@@ -14,30 +14,30 @@
     max-width: 480px;
     width: 100%;
     padding: 3rem 2.5rem;
-    border-radius: 16px;
-    background: var(--mat-sys-surface-container-low);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    border-radius: var(--radius-lg);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-md);
     text-align: center;
 
     .success-icon {
       font-size: 56px;
       width: 56px;
       height: 56px;
-      color: var(--mat-sys-primary, #6750a4);
+      color: var(--primary);
     }
 
     h2 {
       margin: 0;
-      font-size: 1.5rem;
+      font-size: var(--text-2xl);
       font-weight: 600;
-      color: var(--mat-sys-on-surface, #1c1b1f);
+      color: var(--text);
     }
 
     p {
       margin: 0;
-      font-size: 1rem;
+      font-size: var(--text-base);
       line-height: 1.6;
-      color: var(--mat-sys-on-surface-variant, #49454f);
+      color: var(--text-secondary);
     }
 
     .back-link {

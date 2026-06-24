@@ -19,6 +19,7 @@ import { TFormNames } from '@descartes/definitions/interfaces/descartes-form.int
 import { Maybe } from '@shared/src/lib/types/maybe.type';
 
 import { SolutionsRepository } from './solutions-repository';
+import { IArgumentLocation } from '@descartes/definitions/interfaces/descartes-square-argument-location.interface';
 
 interface IFormModel {
   title: string;
@@ -29,13 +30,17 @@ interface IFormModel {
   conclusion: string;
 }
 
+const QUADRANTS: readonly TFormNames[] = ['q1', 'q2', 'q3', 'q4'];
+
 const MIN_TITLE_LENGTH = 3;
 const MAX_TITLE_LENGTH = 255;
 const MIN_ARG_LENGTH = 3;
 const MAX_ARG_LENGTH = 255;
 
+// No `required` here on purpose: a blank argument row is allowed (it's
+// dropped on save). `minLength`/`maxLength` skip empty values, so the schema
+// flags only partially-typed entries (1–2 chars) or over-long ones.
 const argumentSchema = schema<string>((item) => {
-  required(item, { message: $localize`:@@errRequired:This field is required` });
   minLength(item, MIN_ARG_LENGTH);
   maxLength(item, MAX_ARG_LENGTH);
 });
@@ -134,16 +139,49 @@ export class DescartesFormStore {
     // An explicit "Save draft" click marks the card a draft; the silent
     // autosaves (argument blur, accepting a suggestion) only persist and
     // must not change an already-concluded card's status.
-    this.#persist(isSnackbarShown ? 'draft' : undefined);
+    const id = this.#persist(isSnackbarShown ? 'draft' : undefined);
 
-    if (isSnackbarShown) {
+    if (isSnackbarShown && id) {
       this.#showInfoSnackbar($localize`:@@draftSaved:Draft saved`);
     }
   }
 
-  reviewAndConclude(): void {
+  // Returns the first invalid argument's location when the form can't be
+  // concluded (and surfaces a snackbar) so the caller can focus it; returns
+  // `undefined` once the card is saved.
+  reviewAndConclude(): Maybe<IArgumentLocation> {
+    // Empty argument slots are dropped on save, but partially-typed entries
+    // (1–2 chars) would persist as invalid data — block the conclusion and
+    // tell the user why rather than silently saving a malformed card.
+    const invalid = this.#firstInvalidArgument();
+    if (invalid) {
+      this.#showErrorSnackbar(
+        $localize`:@@argLengthInvalid:Each argument must be 3–255 characters. Fix or remove the short ones before concluding.`,
+      );
+      return invalid;
+    }
+
     const id = this.#persist();
+    if (!id) return undefined;
+
     this.#router.navigate(['descartes-square', 'list', id, 'review']);
+    return undefined;
+  }
+
+  // Lean on the declared schema instead of re-checking lengths by hand: an
+  // argument item is invalid when it fails `minLength`/`maxLength` (both skip
+  // empty values, so blank rows never count).
+  #firstInvalidArgument(): Maybe<IArgumentLocation> {
+    for (const quadrant of QUADRANTS) {
+      const field = this.field[quadrant];
+      const length = this.model()[quadrant].length;
+      for (let index = 0; index < length; index++) {
+        if (field[index]?.().invalid()) {
+          return { quadrant, index };
+        }
+      }
+    }
+    return undefined;
   }
 
   #showInfoSnackbar(message: string): void {
@@ -156,31 +194,50 @@ export class DescartesFormStore {
     });
   }
 
-  #persist(status?: SolutionStatus): string {
+  #showErrorSnackbar(message: string): void {
+    this.#snackBar.openFromComponent(SnackbarComponent, {
+      data: { message, type: 'error' },
+      duration: 5000,
+      panelClass: 'error-snackbar',
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+    });
+  }
+
+  // Returns the persisted id, or `undefined` when the write failed (e.g.
+  // storage quota exceeded) so callers can abort navigation/feedback.
+  #persist(status?: SolutionStatus): Maybe<string> {
     const currentId = this.#id();
     const payload = this.#sanitize(this.model());
 
-    if (currentId) {
+    try {
+      if (currentId) {
+        this.#repository.upsert({
+          ...payload,
+          id: currentId,
+          ...(status ? { status } : {}),
+        });
+        return currentId;
+      }
+
+      const newId = crypto.randomUUID();
       this.#repository.upsert({
         ...payload,
-        id: currentId,
-        ...(status ? { status } : {}),
+        id: newId,
+        status: status ?? 'draft',
+        createdAt: new Date().toISOString(),
       });
-      return currentId;
+      this.#id.set(newId);
+      this.#router.navigate(['descartes-square', 'list', newId, 'edit'], {
+        replaceUrl: true,
+      });
+      return newId;
+    } catch {
+      this.#showErrorSnackbar(
+        $localize`:@@unknownError:Something went wrong. Please try again later`,
+      );
+      return undefined;
     }
-
-    const newId = crypto.randomUUID();
-    this.#repository.upsert({
-      ...payload,
-      id: newId,
-      status: status ?? 'draft',
-      createdAt: new Date().toISOString(),
-    });
-    this.#id.set(newId);
-    this.#router.navigate(['descartes-square', 'list', newId, 'edit'], {
-      replaceUrl: true,
-    });
-    return newId;
   }
 
   #loadById(id: string): Maybe<IDescartesSolution> {

@@ -1,12 +1,15 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   effect,
   inject,
+  Injector,
   input,
   OnInit,
   signal,
+  viewChildren,
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgTemplateOutlet } from '@angular/common';
@@ -64,6 +67,9 @@ export class DescartesForm implements OnInit {
 
   readonly #authService = inject(DescartesAuthService);
   readonly #route = inject(ActivatedRoute);
+  readonly #injector = inject(Injector);
+
+  private readonly quadrantCards = viewChildren(QuadrantCard);
 
   readonly order = QUADRANT_ORDER;
   readonly shortLabels = DescartesQuestionShortLabels;
@@ -204,5 +210,31 @@ export class DescartesForm implements OnInit {
 
   onActivate(id: DescartesQuestionsIds): void {
     this.activeQuadrant.set(id);
+  }
+
+  onConclude(): void {
+    const invalid = this.form.reviewAndConclude();
+    if (invalid) {
+      this.#focusArgument(invalid.quadrant, invalid.index);
+    }
+  }
+
+  // Desktop renders only the active quadrant, so switch to the offending one
+  // first, then ask its card to focus the argument once it's in the DOM. The
+  // grid + mobile layouts both render a card for the quadrant; focusing the
+  // one in the hidden (display:none) layout is a no-op, so calling both is
+  // safe and only the visible card actually takes focus.
+  #focusArgument(quadrant: TFormNames, index: number): void {
+    const target = quadrant as DescartesQuestionsIds;
+    this.activeQuadrant.set(target);
+
+    afterNextRender(
+      () => {
+        this.quadrantCards()
+          .filter((card) => card.questionId() === target)
+          .forEach((card) => card.focusArgument(index));
+      },
+      { injector: this.#injector },
+    );
   }
 }
