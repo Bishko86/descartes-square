@@ -11,7 +11,7 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormField } from '@angular/forms/signals';
 
@@ -43,6 +43,7 @@ const ARROW_KEYS = new Set(['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown']);
   imports: [
     NgTemplateOutlet,
     FormField,
+    RouterLink,
     MatButtonModule,
     MatSnackBarModule,
     LockOverlay,

@@ -25,6 +25,19 @@
   gap: var(--x-small-indent);
 }
 
+.descartes-form__how-link {
+  align-self: center;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-muted);
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--primary);
+    text-decoration: underline;
+  }
+}
+
 .descartes-form__title-label {
   font-size: var(--text-xs);
   font-weight: 600;

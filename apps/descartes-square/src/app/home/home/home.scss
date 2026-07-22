@@ -1,82 +1,59 @@
-// Fade-in animation for scroll-triggered sections
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+@use "breakpoints" as *;
 
 .home {
   max-width: 900px;
   margin: 0 auto;
   padding: 0 var(--basic-indent);
+  font-family: var(--font-body);
+}
 
-  section {
-    opacity: 0;
-    transform: translateY(30px);
-    transition:
-      opacity 0.6s ease-out,
-      transform 0.6s ease-out;
+// Layer 2 scroll-reveal — sections start hidden, fade/slide in on .visible.
+.how-it-works {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.section-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: var(--small-indent);
-  text-align: center;
+// Honour reduced-motion: show immediately, no transition (belt-and-suspenders
+// with the same check in home.ts, which also skips the IntersectionObserver).
+@media (prefers-reduced-motion: reduce) {
+  .how-it-works {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
-.section-subtitle {
-  color: var(--text-secondary);
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto var(--large-indent);
-  line-height: 1.6;
-}
-
-// Hero
+// ── Layer 1 — Hero ──────────────────────────────────────────────────────────
 .hero {
   position: relative;
   text-align: center;
-  padding: var(--x-large-indent) 0;
-  overflow: hidden;
-
-  &__grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.4;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
-  }
+  padding: var(--x-large-indent) 0 var(--large-indent);
+  border-bottom: 1px solid var(--border);
 
   &__title {
     position: relative;
+    font-family: var(--font-serif);
     font-size: 3rem;
-    font-weight: 800;
+    font-weight: 600;
     color: var(--text);
     margin: 0 0 var(--basic-indent);
     letter-spacing: -0.02em;
   }
 
-  &__tagline {
+  &__subtitle {
     position: relative;
+    max-width: 620px;
+    margin: 0 auto var(--large-indent);
     font-size: 1.2rem;
     color: var(--text-secondary);
-    margin: 0 0 var(--large-indent);
     line-height: 1.5;
   }
 
@@ -87,159 +64,126 @@
   }
 }
 
-// What Is It
-.what-is {
-  padding: var(--x-large-indent) 0;
-  text-align: center;
-
-  &__icon {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto var(--medium-indent);
-    border-radius: 50%;
-    background: var(--primary-soft);
-    border: 2px solid var(--primary-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-  }
-
-  &__text {
-    max-width: 680px;
-    margin: 0 auto var(--basic-indent);
-    color: var(--text-secondary);
-    line-height: 1.7;
-    text-align: left;
-
-    &:last-of-type {
-      margin-bottom: 0;
-    }
-  }
-}
-
-// Four Questions
-.questions {
-  padding: var(--x-large-indent) 0;
+// ── Layer 1 — Compact 2×2 preview ───────────────────────────────────────────
+.preview {
+  position: relative;
+  margin-top: var(--large-indent);
 
   &__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--basic-indent);
+    gap: var(--small-indent);
+    max-width: 620px;
+    margin: 0 auto;
   }
 
-  &__card {
+  &__cell {
+    display: flex;
+    flex-direction: column;
+    gap: var(--x-small-indent);
+    padding: var(--medium-indent) var(--basic-indent);
     border-radius: var(--radius-lg);
-    padding: var(--medium-indent);
-    border: 1px solid var(--border);
-    transition: box-shadow 0.2s ease;
-
-    &:hover {
-      box-shadow: var(--shadow-md);
-    }
+    text-align: left;
 
     @each $q in q1, q2, q3, q4 {
       &--#{$q} {
-        overflow: hidden;
-        position: relative;
         background: var(--#{$q}-bg);
-
-        &::before {
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          top: 0;
-          width: 3px;
-          background-color: var(--#{$q}-accent);
-        }
+        border: 1px solid var(--#{$q}-border);
       }
     }
   }
 
-  &__number {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--primary);
-    color: var(--primary-contrast);
-    font-weight: 700;
-    font-size: var(--text-sm);
-    margin-bottom: var(--small-indent);
+  &__axis {
+    font-size: var(--text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
   }
 
-  &__card-title {
+  &__title {
     font-size: var(--text-lg);
     font-weight: 600;
     color: var(--text);
-    margin: 0 0 var(--x-small-indent);
   }
 
-  &__card-subtitle {
-    display: block;
-    font-size: var(--text-xs);
+  &__caption {
+    margin: var(--basic-indent) 0 0;
+    text-align: center;
+    font-size: var(--text-sm);
     color: var(--text-muted);
     font-style: italic;
-    margin-bottom: var(--small-indent);
-  }
-
-  &__card-desc {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    font-size: var(--text-sm);
-    margin: 0 0 var(--small-indent);
-  }
-
-  &__example {
-    margin: 0;
-    padding: var(--small-indent) var(--basic-indent);
-    border-left: 2px solid var(--text-muted);
-    color: var(--text-muted);
-    font-style: italic;
-    font-size: var(--text-sm);
-    line-height: 1.5;
   }
 }
 
-// How to Use
-.how-to {
+// ── Layer 2 — How it works ──────────────────────────────────────────────────
+.how-it-works {
   padding: var(--x-large-indent) 0;
+  text-align: center;
 
-  &__steps {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    margin-top: var(--large-indent);
+  &__intro {
+    max-width: 620px;
+    margin: 0 auto var(--large-indent);
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    line-height: 1.6;
   }
 
-  &__connector {
-    flex-shrink: 0;
-    width: 40px;
+  // Two-line layout: row 1 is the number nodes joined by a connector line,
+  // row 2 is the text blocks. Equal columns (no gap) put each node at a column
+  // centre — 1/6, 1/2, 5/6 of the width.
+  &__timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 760px;
+    margin: 0 auto var(--large-indent);
+    padding: 0;
+  }
+
+  // Connector segments between the nodes, at node-centre height (top: 20px).
+  // Each segment stops short of the circles by the node radius (20px) plus a
+  // 10px gap, so the line never touches the numbers.
+  &__timeline::before,
+  &__timeline::after {
+    content: "";
+    position: absolute;
+    top: 20px;
     height: 2px;
     background: var(--border);
-    margin-top: 20px;
+  }
+
+  // node 1 → node 2 (column centres at 1/6 and 1/2)
+  &__timeline::before {
+    left: calc(16.667% + 30px);
+    right: calc(50% + 30px);
+  }
+
+  // node 2 → node 3 (column centres at 1/2 and 5/6)
+  &__timeline::after {
+    left: calc(50% + 30px);
+    right: calc(16.667% + 30px);
   }
 
   &__step {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
-    min-width: 0;
+    padding: 0 var(--basic-indent);
   }
 
-  &__step-number {
+  &__node {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background: var(--primary);
     color: var(--primary-contrast);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     font-weight: 700;
     font-size: var(--text-base);
     margin-bottom: var(--small-indent);
@@ -249,6 +193,10 @@
     font-size: var(--text-base);
     font-weight: 600;
     color: var(--text);
+    line-height: 1.3;
+    // Reserve two lines so single-line titles occupy the same height as the
+    // two-line ones — keeps every description starting at the same baseline.
+    min-height: 2.6em;
     margin: 0 0 var(--x-small-indent);
   }
 
@@ -259,126 +207,53 @@
     margin: 0;
     padding: 0 var(--x-small-indent);
   }
-}
 
-// When to Use
-.when-to {
-  padding: var(--x-large-indent) 0;
-
-  &__tags {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: var(--small-indent);
-    margin-bottom: var(--large-indent);
-  }
-
-  &__tag {
-    padding: var(--small-indent) var(--basic-indent);
-    border-radius: var(--radius-pill);
-    background: var(--primary-soft);
-    border: 1px solid var(--primary-border);
+  &__method-link {
+    display: inline-block;
     color: var(--primary);
-    font-size: var(--text-sm);
-    font-weight: 500;
-    white-space: nowrap;
-  }
-
-  &__tip {
-    background: var(--primary-soft);
-    border: 1px solid var(--primary-border);
-    border-radius: var(--radius-md);
-    padding: var(--basic-indent) var(--medium-indent);
-    display: flex;
-    align-items: baseline;
-    gap: var(--small-indent);
-
-    p {
-      margin: 0;
-      color: var(--text-secondary);
-      font-size: var(--text-sm);
-      line-height: 1.6;
-    }
-  }
-
-  &__tip-label {
-    font-weight: 700;
-    color: var(--primary);
-    font-size: var(--text-sm);
-    white-space: nowrap;
-  }
-}
-
-// Final CTA
-.final-cta {
-  text-align: center;
-  padding: var(--x-large-indent) 0;
-  margin-bottom: var(--large-indent);
-
-  &__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--text);
-    margin: 0 0 var(--medium-indent);
-  }
-
-  &__btn {
     font-size: var(--text-base);
-    padding: var(--small-indent) var(--large-indent);
+    font-weight: 600;
+    padding-top: var(--medium-indent);
+
+    &:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
   }
 }
 
-// Responsive
-@media (max-width: 768px) {
-  .hero {
-    padding: var(--large-indent) 0;
-
-    &__title {
-      font-size: 2rem;
-    }
-
-    &__tagline {
-      font-size: 1rem;
-    }
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: $mobile) {
+  .hero__title {
+    font-size: 2rem;
   }
 
-  .section-title {
-    font-size: 1.4rem;
+  .hero__subtitle {
+    font-size: 1rem;
   }
 
-  .questions__grid {
+  .how-it-works__timeline {
     grid-template-columns: 1fr;
+    row-gap: var(--large-indent);
+    max-width: 320px;
   }
 
-  .how-to {
-    &__steps {
-      flex-direction: column;
-      align-items: center;
-      gap: var(--basic-indent);
-    }
-
-    &__connector {
-      width: 2px;
-      height: 24px;
-      margin: 0;
-    }
-
-    &__step {
-      max-width: 320px;
-    }
+  // No horizontal connector line when the steps stack vertically.
+  .how-it-works__timeline::before,
+  .how-it-works__timeline::after {
+    display: none;
   }
 
-  .when-to__tag {
-    white-space: normal;
-    text-align: center;
+  // Single-line titles no longer need reserved two-line height when stacked.
+  .how-it-works__step-title {
+    min-height: 0;
   }
+}
 
-  .when-to__tip {
-    flex-direction: column;
-    gap: var(--x-small-indent);
-  }
-
-  .final-cta__title {
-    font-size: 1.4rem;
+// Below ~500px the 2×2 grid gets cramped — stack the four cells into a single
+// column (one under another), covering the 400–500px band and everything below.
+@media (max-width: 500px) {
+  .preview__grid {
+    grid-template-columns: 1fr;
   }
 }

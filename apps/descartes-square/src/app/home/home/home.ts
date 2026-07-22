@@ -23,6 +23,18 @@ export class Home implements AfterViewInit {
   readonly #destroyRef = inject(DestroyRef);
 
   ngAfterViewInit(): void {
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+
+    // Reduced motion: reveal every section immediately, no observer.
+    if (prefersReducedMotion) {
+      this.sections.forEach((section) =>
+        section.nativeElement.classList.add('visible'),
+      );
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
