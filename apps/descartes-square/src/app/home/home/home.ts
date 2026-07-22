@@ -5,6 +5,7 @@ import {
   ElementRef,
   inject,
   QueryList,
+  signal,
   ViewChildren,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
@@ -20,6 +21,9 @@ export class Home implements AfterViewInit {
   @ViewChildren('animatedSection')
   sections: QueryList<ElementRef<HTMLElement>>;
 
+  // Scroll hint below the hero — hidden once the next section is revealed.
+  readonly showScrollHint = signal(true);
+
   readonly #destroyRef = inject(DestroyRef);
 
   ngAfterViewInit(): void {
@@ -32,6 +36,7 @@ export class Home implements AfterViewInit {
       this.sections.forEach((section) =>
         section.nativeElement.classList.add('visible'),
       );
+      this.showScrollHint.set(false);
       return;
     }
 
@@ -40,6 +45,7 @@ export class Home implements AfterViewInit {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add('visible');
+            this.showScrollHint.set(false);
             observer.unobserve(entry.target);
           }
         });

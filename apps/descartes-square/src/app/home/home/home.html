@@ -9,7 +9,7 @@
     <a
       mat-flat-button
       class="hero__cta"
-      routerLink="/descartes-square"
+      routerLink="/descartes-square/create"
       i18n="@@home.heroCta"
     >
       Try it now
@@ -51,6 +51,27 @@
         Four angles. One honest view of your choice.
       </p>
     </div>
+
+    @if (showScrollHint()) {
+      <div class="scroll-hint" aria-hidden="true">
+        <svg
+          class="scroll-hint__icon"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 9l6 6 6-6"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </div>
+    }
   </section>
 
   <!-- Layer 2 — How it works (scroll-revealed, always in the DOM) -->

@@ -61,6 +61,61 @@
     position: relative;
     font-size: var(--text-base);
     padding: var(--small-indent) var(--large-indent);
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__cta {
+      transition: none;
+
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+}
+
+// ── Scroll hint — bouncing arrow below the hero, hidden once Layer 2 shows ───
+.scroll-hint {
+  position: fixed;
+  bottom: var(--medium-indent);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  pointer-events: none;
+  animation: scroll-hint-bounce 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-hint-bounce {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+
+  50% {
+    transform: translate(-50%, 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint {
+    animation: none;
   }
 }
 
@@ -84,11 +139,29 @@
     padding: var(--medium-indent) var(--basic-indent);
     border-radius: var(--radius-lg);
     text-align: left;
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out;
 
     @each $q in q1, q2, q3, q4 {
       &--#{$q} {
         background: var(--#{$q}-bg);
         border: 1px solid var(--#{$q}-border);
+      }
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__cell {
+      transition: none;
+
+      &:hover {
+        transform: none;
       }
     }
   }
@@ -196,7 +269,7 @@
     line-height: 1.3;
     // Reserve two lines so single-line titles occupy the same height as the
     // two-line ones — keeps every description starting at the same baseline.
-    min-height: 2.6em;
+    //min-height: 2.6em;
     margin: 0 0 var(--x-small-indent);
   }
 
