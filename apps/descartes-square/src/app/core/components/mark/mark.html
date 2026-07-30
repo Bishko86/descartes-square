@@ -1,0 +1,25 @@
+@if (isSmall()) {
+  <!--
+    Small variant (≤20px): dots thickened and the row-to-row size contrast
+    reduced (4.0 vs 4.9 radius) so the "not acting" pair still reads at 16px.
+    Lattice pitch is widened to 11 to keep a visible gap between the dots.
+  -->
+  <svg class="mark__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="6.5" cy="6.5" r="4.9" fill="var(--mark-q1)" />
+    <circle cx="17.5" cy="6.5" r="4.9" fill="var(--mark-q3)" />
+    <circle cx="6.5" cy="17.5" r="4" fill="var(--mark-q2)" />
+    <circle cx="17.5" cy="17.5" r="4" fill="var(--mark-q4)" />
+  </svg>
+} @else {
+  <!--
+    Large variant (≥26px): true proportions. The acting row (q1 gain, q3 risk)
+    is drawn at 4.4 against 2.9 for the not-acting row, on a centred pitch-10
+    lattice.
+  -->
+  <svg class="mark__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="7" cy="7" r="4.4" fill="var(--mark-q1)" />
+    <circle cx="17" cy="7" r="4.4" fill="var(--mark-q3)" />
+    <circle cx="7" cy="17" r="2.9" fill="var(--mark-q2)" />
+    <circle cx="17" cy="17" r="2.9" fill="var(--mark-q4)" />
+  </svg>
+}

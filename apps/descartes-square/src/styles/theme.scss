@@ -67,6 +67,13 @@
   --q4-bg: rgba(239, 68, 68, 0.06);
   --q4-border: rgba(239, 68, 68, 0.22);
 
+  // mark dot fills — aliased to the quadrant accents. Override with explicit
+  // values here (not in the SVG) if the accents read thin or muddy at 16–20px.
+  --mark-q1: var(--q1);
+  --mark-q2: var(--q2);
+  --mark-q3: var(--q3);
+  --mark-q4: var(--q4);
+
   // effects
   --focus-ring: rgba(59, 130, 246, 0.35);
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04);
@@ -131,6 +138,13 @@
   --q4: #f87171;
   --q4-bg: rgba(248, 113, 113, 0.1);
   --q4-border: rgba(248, 113, 113, 0.28);
+
+  // mark dot fills — the dark accents are already brightened, so the mark
+  // brightens with them; geometry is identical across themes.
+  --mark-q1: var(--q1);
+  --mark-q2: var(--q2);
+  --mark-q3: var(--q3);
+  --mark-q4: var(--q4);
 
   // effects
   --focus-ring: rgba(96, 165, 250, 0.45);

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    App icon / favicon — the ONLY place the mark is allowed a container tile.
+    In-app the dots sit directly on the surface (see core/components/mark).
+
+    Hex is intentional here: a static asset cannot read CSS custom properties.
+    Values mirror --surface-alt / --q1..--q4 from styles/theme.scss; keep them in
+    sync by hand if those tokens change.
+  -->
+  <style>
+    .tile { fill: #eef3ff; }
+    .q1 { fill: #3b82f6; }
+    .q2 { fill: #8b5cf6; }
+    .q3 { fill: #f59e0b; }
+    .q4 { fill: #ef4444; }
+
+    /* Dark browser chrome: ink tile, brightened fills — the mark never sits on
+       a light container on dark. */
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #0b1220; }
+      .q1 { fill: #60a5fa; }
+      .q2 { fill: #a78bfa; }
+      .q3 { fill: #fbbf24; }
+      .q4 { fill: #f87171; }
+    }
+  </style>
+
+  <rect class="tile" width="64" height="64" rx="14" />
+
+  <!-- Large-variant geometry, scaled 1.5× into a 36px content area. -->
+  <circle class="q1" cx="24.5" cy="24.5" r="6.6" />
+  <circle class="q3" cx="39.5" cy="24.5" r="6.6" />
+  <circle class="q2" cx="24.5" cy="39.5" r="4.35" />
+  <circle class="q4" cx="39.5" cy="39.5" r="4.35" />
+</svg>
