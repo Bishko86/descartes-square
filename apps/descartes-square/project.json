@@ -110,6 +110,7 @@
       "executor": "@angular/build:karma",
       "options": {
         "tsConfig": "apps/descartes-square/tsconfig.spec.json",
+        "polyfills": ["@angular/localize/init"],
         "inlineStyleLanguage": "scss",
         "stylePreprocessorOptions": {
           "includePaths": ["apps/descartes-square/src/styles"]
