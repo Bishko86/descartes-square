@@ -6,8 +6,16 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="google-site-verification" content="ra0hrJ8U-OOYUAX3GUSx2pZHu_HTcyGM6f-ZoxoZb0w" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    <!--
+      Paths are deliberately relative, not root-relative. Localized production
+      builds set <base href="/en/"> and <base href="/uk/"> and receive their own
+      copy of these assets; "/favicon.svg" would resolve to the domain root,
+      where no favicon exists. Editors that resolve hrefs against src/ will flag
+      these as unresolved, because the files live in public/ and are copied to the
+      output root at build time — that warning is expected.
+    -->
+    <link rel="icon" type="image/svg+xml" sizes="any" href="favicon.svg" />
+    <link rel="icon" type="image/png" sizes="64x64" href="favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

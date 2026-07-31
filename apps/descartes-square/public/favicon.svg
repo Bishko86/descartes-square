@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  width="64"
+  height="64"
+>
   <!--
     App icon / favicon. This is the ONLY place the mark is allowed a container
     tile; in-app the dots sit directly on the surface (core/components/mark).
