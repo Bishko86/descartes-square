@@ -1,16 +1,48 @@
 <footer class="footer">
-  <span class="footer__copyright" i18n="@@footer.copyright">
-    &copy; {{ currentYear }} Descartes Square
-  </span>
-  <a
-    href="https://github.com/Bishko86/descartes-square"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="footer__github"
-    i18n-aria-label="@@footer.githubAriaLabel"
-    aria-label="GitHub Repository"
-  >
-    <mat-icon>code</mat-icon>
-    <span i18n="@@footer.github">GitHub</span>
-  </a>
+  <div class="footer__inner">
+    <div class="footer__brand">
+      <!-- App lockup: mark + wordmark in the sans face at 600. -->
+      <a class="footer__lockup" [routerLink]="homeRoute">
+        <app-mark [size]="20" />
+        <span class="footer__wordmark" i18n="@@footer.wordmark"
+          >Descartes Square</span
+        >
+      </a>
+
+      <!-- Full attribution on desktop; the short form below replaces it on
+           mobile, where it merges onto the copyright line. -->
+      <span class="footer__attribution" i18n="@@footer.attribution">
+        A decision-making method attributed to René Descartes.
+      </span>
+    </div>
+
+    <div class="footer__meta">
+      <nav
+        class="footer__links"
+        i18n-aria-label="@@footer.navAriaLabel"
+        aria-label="Footer"
+      >
+        <a
+          class="footer__link"
+          [routerLink]="homeRoute"
+          [fragment]="methodFragment"
+          i18n="@@footer.method"
+          >The method</a
+        >
+        <a class="footer__link" [routerLink]="privacyRoute" i18n="@@footer.privacy"
+          >Privacy</a
+        >
+        <a class="footer__link" [href]="feedbackHref" i18n="@@footer.feedback"
+          >Feedback</a
+        >
+      </nav>
+
+      <p class="footer__copyright">
+        <span class="footer__attribution-short" i18n="@@footer.attributionShort"
+          >A method attributed to René Descartes.</span
+        >
+        <span i18n="@@footer.copyright">&copy; {{ currentYear }}</span>
+      </p>
+    </div>
+  </div>
 </footer>

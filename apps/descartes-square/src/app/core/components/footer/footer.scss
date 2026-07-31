@@ -4,31 +4,133 @@
   display: block;
 }
 
+// Hairline top border and NOTHING else — no fill, no elevation. A boxed grey
+// slab here would compete with the quadrant colours above it.
 .footer {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--small-indent) var(--basic-indent);
-  border-top: 1px solid var(--border);
-  background-color: var(--surface);
-  color: var(--text-muted);
-  font-size: var(--text-xs);
+  gap: var(--basic-indent);
+  // Aligned to the same column as the header and the page content.
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: var(--basic-indent);
+  box-sizing: border-box;
+}
 
-  @media (max-width: breakpoints.$mobile) {
-    flex-direction: column;
-    gap: var(--small-indent);
-    text-align: center;
+.footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  min-width: 0;
+}
+
+.footer__lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--small-indent);
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
   }
 }
 
-.footer__github {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--x-small-indent);
+.footer__wordmark {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.footer__attribution {
   color: var(--text-muted);
-  text-decoration: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+// Hidden on desktop; on mobile it replaces the long form and sits on the
+// copyright line.
+.footer__attribution-short {
+  display: none;
+}
+
+.footer__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--basic-indent);
+}
+
+.footer__links {
+  display: flex;
+  align-items: center;
+  gap: var(--basic-indent);
+}
+
+.footer__link {
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  transition: color 0.15s ease;
 
   &:hover {
     color: var(--primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+// Flex with a gap rather than markup whitespace, which would otherwise have to
+// live inside a translated span. On desktop there is only one child, so the gap
+// is inert; on mobile it separates the short attribution from the year.
+.footer__copyright {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--x-small-indent);
+  margin: 0;
+  color: var(--text-subtle);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+@media (max-width: breakpoints.$mobile) {
+  // Stacked and left-aligned, with the attribution shortened and merged onto
+  // the copyright line.
+  .footer__inner,
+  .footer__brand,
+  .footer__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--small-indent);
+  }
+
+  .footer__attribution {
+    display: none;
+  }
+
+  .footer__attribution-short {
+    display: inline;
+  }
+
+  .footer__copyright {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer__link {
+    transition: none;
   }
 }

@@ -55,6 +55,11 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
   },
   {
+    path: MenuRoutes.PRIVACY,
+    loadComponent: () =>
+      import('./privacy/privacy').then((mod) => mod.Privacy),
+  },
+  {
     path: MenuRoutes.SIGN_IN,
     canActivate: [guestGuard],
     loadComponent: () => import('./auth/auth').then((mod) => mod.Auth),

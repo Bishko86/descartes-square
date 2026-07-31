@@ -7,4 +7,6 @@ export enum MenuRoutes {
   VERIFY_EMAIL = 'auth/verify-email',
   FORGOT_PASSWORD = 'forgot-password',
   RESET_PASSWORD = 'auth/reset-password',
+  // Footer-only — deliberately absent from MENU_ITEMS.
+  PRIVACY = 'privacy',
 }
