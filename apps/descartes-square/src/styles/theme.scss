@@ -19,6 +19,14 @@
 }
 
 .light {
+  // Angular Material emits every one of its colour tokens as
+  // `light-dark(light, dark)` (see material.scss). Those resolve against the
+  // CSS `color-scheme` property, NOT against this class — so without these two
+  // declarations every Material surface stayed on its light value in dark mode,
+  // which is why the account menu rendered a light panel under white text.
+  // Also gives us dark native scrollbars and form controls for free.
+  color-scheme: light;
+
   // surface
   --bg: #ffffff;
   --bg-elevated: #ffffff;
@@ -91,6 +99,9 @@
 }
 
 .dark {
+  // Flips Material's light-dark() tokens; see the note in .light above.
+  color-scheme: dark;
+
   // surface
   --bg: #0b1220;
   --bg-elevated: #111a2e;

@@ -16,6 +16,17 @@ html {
 
   font: var(--mat-sys-body-medium);
 
+  // Menus render in the CDK overlay, so they use Material's own surface rather
+  // than inheriting ours the way our components do — left alone, the panel is
+  // Material's neutral grey inside a navy app. These map onto our tokens, which
+  // are theme-aware, so the panel follows light/dark with everything else.
+  --mat-menu-container-color: var(--bg-elevated);
+  --mat-menu-item-label-text-color: var(--text-secondary);
+  --mat-menu-item-icon-color: var(--text-muted);
+  --mat-menu-divider-color: var(--border-subtle);
+  --mat-menu-item-hover-state-layer-color: var(--surface-hover);
+  --mat-menu-item-focus-state-layer-color: var(--surface-hover);
+
   .mat-mdc-row,
   .mat-mdc-header-row {
     background-color: var(--surface);
