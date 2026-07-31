@@ -1,20 +1,27 @@
-<div class="language-switcher">
-  @let lang = currentLanguage();
+@let lang = currentLanguage();
 
-  <button class="current-language">
-    {{ languageMap.get(lang)?.flag }}
-  </button>
+<button
+  class="lang-switch__trigger"
+  [matMenuTriggerFor]="menu"
+  i18n-aria-label="@@langSwitch.ariaLabel"
+  aria-label="Change language"
+>
+  <span class="lang-switch__code">{{ currentLabel() }}</span>
+  <mat-icon class="lang-switch__chevron">expand_more</mat-icon>
+</button>
 
-  <ul class="language-menu">
-    @for (language of languages; track language.code) {
-      <li
-        tabindex="0"
-        [class.active]="language.code === lang"
-        (keydown.enter)="switchLanguage(language.code)"
-        (click)="switchLanguage(language.code)"
-      >
-        {{ language.flag }} {{ language.name }}
-      </li>
-    }
-  </ul>
-</div>
+<mat-menu #menu="matMenu">
+  @for (language of languages; track language.code) {
+    <button
+      mat-menu-item
+      [class.lang-switch__item--active]="language.code === lang"
+      [attr.aria-current]="language.code === lang ? 'true' : null"
+      (click)="switchLanguage(language.code)"
+    >
+      <span class="lang-switch__flag" aria-hidden="true">{{
+        language.flag
+      }}</span>
+      <span>{{ language.name }}</span>
+    </button>
+  }
+</mat-menu>

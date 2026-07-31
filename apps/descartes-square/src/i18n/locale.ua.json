@@ -6,7 +6,6 @@
     "signOut": " Вийти ",
     "signIn": " Увійти ",
     "signUp": " Зареєструватися ",
-    "themeBtn": " 🌓 Змінити тему ",
     "home": "Головна",
     "descartesSquare": "Квадрат Декарта",
     "confirm.defaultMessage": "Ви впевнені, що хочете видалити цей запис?",
@@ -242,6 +241,16 @@
     "synthesisLeanEven": "Обидві сторони майже рівні за вагою",
     "synthesisDetailWith": "Найбільше деталей ви вклали в {$topLabel} — зокрема: «{$topArgs}».",
     "synthesisDetailWithout": "Найбільше деталей ви вклали в {$topLabel}.",
-    "synthesisTail": "Якщо ці деталі здаються правильними — це сигнал. Якщо ви не наповнили протилежний квадрант так само ретельно, зробіть це перш ніж вирішувати."
+    "synthesisTail": "Якщо ці деталі здаються правильними — це сигнал. Якщо ви не наповнили протилежний квадрант так само ретельно, зробіть це перш ніж вирішувати.",
+    "app.skipToContent": "Перейти до вмісту",
+    "header.brandAriaLabel": "Квадрат Декарта — головна",
+    "header.navAriaLabel": "Основна навігація",
+    "header.themeToDark": "Перейти на темну тему",
+    "header.themeToLight": "Перейти на світлу тему",
+    "header.accountMenu": "Меню акаунта",
+    "header.mySquares": "Мої квадрати",
+    "header.openMenu": "Відкрити меню",
+    "header.closeMenu": "Закрити меню",
+    "langSwitch.ariaLabel": "Змінити мову"
   }
 }

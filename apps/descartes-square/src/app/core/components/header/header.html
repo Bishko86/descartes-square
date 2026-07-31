@@ -1,117 +1,209 @@
-<header>
-  <div class="right-section">
-    <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto" />
+<header class="header">
+  <div class="header__inner">
+    <!-- Mark only — the wordmark lives in the footer. -->
+    <a
+      class="header__brand"
+      [routerLink]="homeRoute"
+      i18n-aria-label="@@header.brandAriaLabel"
+      aria-label="Descartes Square — home"
+    >
+      <app-mark [size]="26" />
+    </a>
 
-    <nav class="desktop-nav">
-      @for (item of menuItems; track item.name) {
-        <a
-          class="menu-link"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          >{{ item.name }}</a
-        >
-      }
+    <nav
+      class="header__nav"
+      i18n-aria-label="@@header.navAriaLabel"
+      aria-label="Main navigation"
+    >
+      <ng-container
+        [ngTemplateOutlet]="navLinks"
+        [ngTemplateOutletContext]="{ variant: 'desktop' }"
+      />
     </nav>
+
+    <!--
+      Fixed order: language → theme → divider → auth. Language and theme sit
+      OUTSIDE the auth branch, so the bar's right edge does not shift when the
+      user signs in or out — only the auth slot swaps.
+    -->
+    <div class="header__actions">
+      <lib-lang-switch />
+
+      <button
+        class="header__theme"
+        [matTooltip]="themeLabel()"
+        [attr.aria-label]="themeLabel()"
+        (click)="changeTheme()"
+      >
+        <mat-icon class="header__theme-icon">{{ themeIcon() }}</mat-icon>
+      </button>
+
+      <span class="header__divider" aria-hidden="true"></span>
+
+      <ng-container
+        [ngTemplateOutlet]="authBlock"
+        [ngTemplateOutletContext]="{ variant: 'desktop' }"
+      />
+    </div>
+
+    <button
+      #burger
+      class="header__burger"
+      [class.header__burger--active]="panelOpen()"
+      [attr.aria-expanded]="panelOpen()"
+      [attr.aria-label]="panelOpen() ? closeMenuLabel : openMenuLabel"
+      aria-controls="header-panel"
+      (click)="togglePanel()"
+    >
+      <mat-icon>{{ panelOpen() ? closeIcon : menuIcon }}</mat-icon>
+    </button>
   </div>
+</header>
 
-  <div class="left-section">
-    @let user = currentUser();
+@if (panelOpen()) {
+  <!--
+    Sits outside the focus trap so it never becomes a tab stop; Escape and the
+    trigger are the keyboard paths out.
+  -->
+  <button
+    class="header__backdrop"
+    [attr.aria-label]="closeMenuLabel"
+    (click)="closePanel()"
+  ></button>
 
-    @if (user) {
-      <div class="user-info">
-        <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
-        <span class="user-email">{{ user.email }}</span>
-        <span>{{ user.username }}</span>
+  <div
+    id="header-panel"
+    class="header__panel"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
+  >
+    <nav
+      class="header__panel-nav"
+      i18n-aria-label="@@header.navAriaLabel"
+      aria-label="Main navigation"
+    >
+      <ng-container
+        [ngTemplateOutlet]="navLinks"
+        [ngTemplateOutletContext]="{ variant: 'mobile' }"
+      />
+    </nav>
+
+    <ng-container
+      [ngTemplateOutlet]="authBlock"
+      [ngTemplateOutletContext]="{ variant: 'mobile' }"
+    />
+  </div>
+}
+
+<!--
+  Nav links and the auth block are declared ONCE and mounted twice, styled by
+  data-variant. The previous markup kept hand-maintained desktop and mobile
+  copies, which is why they had already drifted.
+-->
+<ng-template #navLinks let-variant="variant">
+  @for (item of menuItems; track item.route) {
+    <a
+      class="header__link"
+      [attr.data-variant]="variant"
+      [routerLink]="item.route"
+      routerLinkActive="header__link--active"
+      >{{ item.name }}</a
+    >
+  }
+</ng-template>
+
+<ng-template #authBlock let-variant="variant">
+  @let user = currentUser();
+
+  @if (variant === 'desktop') {
+    <!--
+      Both auth states share a single grid cell, so the slot is always as wide as
+      the wider of the two and the language and theme controls never move when
+      the user signs in or out. The inactive state is visibility:hidden — it
+      still contributes its width, but leaves the tab order and the
+      accessibility tree. This keeps the reservation correct in every locale
+      without hardcoding a width.
+    -->
+    <div class="header__auth-slot">
+      <div class="header__auth" [class.header__auth--reserved]="user">
+        <ng-container [ngTemplateOutlet]="authButtons" />
       </div>
 
       <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signOut"
-        (click)="signOut()"
+        class="header__avatar"
+        [class.header__avatar--reserved]="!user"
+        [matMenuTriggerFor]="accountMenu"
+        [attr.aria-label]="accountLabel"
       >
-        Sign Out
-      </button>
-    } @else {
-      <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signIn"
-        [routerLink]="['/sign-in']"
-      >
-        Sign In
-      </button>
-      <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signUp"
-        [routerLink]="['/sign-up']"
-      >
-        Sign Up
-      </button>
-    }
-
-    @if (!isDevMode) {
-      <lib-lang-switch></lib-lang-switch>
-    }
-
-    <button
-      matButton="elevated"
-      class="open-sans-regular"
-      i18n="@@themeBtn"
-      (click)="changeTheme()"
-    >
-      🌓 Change theme
-    </button>
-  </div>
-
-  <button mat-icon-button class="hamburger" (click)="toggleMobileMenu()" aria-label="Toggle menu">
-    <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
-  </button>
-</header>
-
-@if (mobileMenuOpen()) {
-  <div class="mobile-menu">
-    <nav>
-      @for (item of menuItems; track item.name) {
-        <a
-          class="menu-link"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          (click)="closeMobileMenu()"
-          >{{ item.name }}</a
-        >
-      }
-    </nav>
-
-    <div class="mobile-actions">
-      @let user = currentUser();
-
-      @if (user) {
-        <div class="user-info">
-          <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
-          <span class="user-email">{{ user.email }}</span>
-          <span>{{ user.username }}</span>
-        </div>
-        <button matButton="elevated" i18n="@@signOut" (click)="signOut(); closeMobileMenu()">
-          Sign Out
-        </button>
-      } @else {
-        <button matButton="elevated" i18n="@@signIn" [routerLink]="['/sign-in']" (click)="closeMobileMenu()">
-          Sign In
-        </button>
-        <button matButton="elevated" i18n="@@signUp" [routerLink]="['/sign-up']" (click)="closeMobileMenu()">
-          Sign Up
-        </button>
-      }
-
-      @if (!isDevMode) {
-        <lib-lang-switch></lib-lang-switch>
-      }
-
-      <button matButton="elevated" i18n="@@themeBtn" (click)="changeTheme(); closeMobileMenu()">
-        🌓 Change theme
+        @if (initials()) {
+          <span class="header__initials">{{ initials() }}</span>
+        } @else {
+          <mat-icon class="header__avatar-fallback">{{ profileIcon }}</mat-icon>
+        }
+        <mat-icon class="header__avatar-chevron">{{ chevronIcon }}</mat-icon>
       </button>
     </div>
+  } @else if (user) {
+    <!-- Mobile shows the account rows inline; there is no menu to nest. -->
+    <div class="header__account">
+      <div class="header__identity">
+        <ng-container [ngTemplateOutlet]="identity" />
+      </div>
+
+      <a class="header__account-row" [routerLink]="squaresRoute">{{
+        mySquaresLabel
+      }}</a>
+
+      <button
+        class="header__account-row header__account-row--danger"
+        (click)="signOut()"
+      >
+        {{ signOutLabel }}
+      </button>
+    </div>
+  } @else {
+    <div class="header__auth" data-variant="mobile">
+      <ng-container [ngTemplateOutlet]="authButtons" />
+    </div>
+  }
+</ng-template>
+
+<!-- The auth pair is declared once and reused by the bar and the mobile panel. -->
+<ng-template #authButtons>
+  <a matButton class="header__signin" [routerLink]="signInRoute" i18n="@@signIn"
+    >Sign In</a
+  >
+  <a
+    matButton="filled"
+    class="header__signup"
+    [routerLink]="signUpRoute"
+    i18n="@@signUp"
+    >Sign Up</a
+  >
+</ng-template>
+
+<!-- Identity is shared by the desktop menu header and the mobile panel. -->
+<ng-template #identity>
+  @let user = currentUser();
+
+  @if (user) {
+    <span class="header__account-name">{{ user.username }}</span>
+    <span class="header__account-email">{{ user.email }}</span>
+  }
+</ng-template>
+
+<mat-menu #accountMenu="matMenu">
+  <div class="header__menu-head">
+    <ng-container [ngTemplateOutlet]="identity" />
   </div>
-}
+
+  <mat-divider />
+
+  <a mat-menu-item [routerLink]="squaresRoute">{{ mySquaresLabel }}</a>
+
+  <mat-divider />
+
+  <button mat-menu-item class="header__menu-signout" (click)="signOut()">
+    {{ signOutLabel }}
+  </button>
+</mat-menu>

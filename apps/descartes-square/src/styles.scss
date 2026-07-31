@@ -15,6 +15,12 @@ body {
   overflow-y: auto;
 }
 
+html {
+  // The header is sticky, so anchor targets (e.g. /home#how-it-works) would
+  // otherwise scroll to sit underneath it.
+  scroll-padding-top: calc(var(--header-height) + var(--basic-indent));
+}
+
 body {
   line-height: 1;
   color: var(--text);

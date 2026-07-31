@@ -3,6 +3,14 @@
 // Material system tokens come from material.scss.
 
 :root {
+  // Width of the page content column. The header aligns its inner row to this
+  // so the mark lines up with the content it frames — keep both on the token.
+  --content-max-width: 1280px;
+
+  // Height of the sticky header. Also drives scroll-padding-top, so in-page
+  // anchors don't land underneath the bar.
+  --header-height: 64px;
+
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;

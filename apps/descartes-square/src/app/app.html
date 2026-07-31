@@ -1,5 +1,10 @@
+<!-- First focusable element on every route — keyboard users skip the bar. -->
+<a class="skip-link" href="#main-content" i18n="@@app.skipToContent"
+  >Skip to content</a
+>
+
 <app-header />
-<main class="container">
+<main id="main-content" class="container" tabindex="-1">
   <router-outlet></router-outlet>
 </main>
 
