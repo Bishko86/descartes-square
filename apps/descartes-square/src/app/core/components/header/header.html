@@ -117,31 +117,33 @@
 
   @if (variant === 'desktop') {
     <!--
-      Both auth states share a single grid cell, so the slot is always as wide as
-      the wider of the two and the language and theme controls never move when
-      the user signs in or out. The inactive state is visibility:hidden — it
-      still contributes its width, but leaves the tab order and the
-      accessibility tree. This keeps the reservation correct in every locale
-      without hardcoding a width.
+      Only the applicable state is rendered, so the cluster packs tight against
+      the divider and ends at the bar's right edge — matching the mocks, which
+      do not width-match the two states. The consequence is deliberate: the
+      language and theme controls sit further right when signed in, because the
+      avatar is narrower than the Sign in / Sign up pair.
     -->
     <div class="header__auth-slot">
-      <div class="header__auth" [class.header__auth--reserved]="user">
-        <ng-container [ngTemplateOutlet]="authButtons" />
-      </div>
-
-      <button
-        class="header__avatar"
-        [class.header__avatar--reserved]="!user"
-        [matMenuTriggerFor]="accountMenu"
-        [attr.aria-label]="accountLabel"
-      >
-        @if (initials()) {
-          <span class="header__initials">{{ initials() }}</span>
-        } @else {
-          <mat-icon class="header__avatar-fallback">{{ profileIcon }}</mat-icon>
-        }
-        <mat-icon class="header__avatar-chevron">{{ chevronIcon }}</mat-icon>
-      </button>
+      @if (user) {
+        <button
+          class="header__avatar"
+          [matMenuTriggerFor]="accountMenu"
+          [attr.aria-label]="accountLabel"
+        >
+          @if (initials()) {
+            <span class="header__initials">{{ initials() }}</span>
+          } @else {
+            <mat-icon class="header__avatar-fallback">{{
+              profileIcon
+            }}</mat-icon>
+          }
+          <mat-icon class="header__avatar-chevron">{{ chevronIcon }}</mat-icon>
+        </button>
+      } @else {
+        <div class="header__auth">
+          <ng-container [ngTemplateOutlet]="authButtons" />
+        </div>
+      }
     </div>
   } @else if (user) {
     <!-- Mobile shows the account rows inline; there is no menu to nest. -->
