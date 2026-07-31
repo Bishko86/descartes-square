@@ -1,11 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <!--
-    App icon / favicon — the ONLY place the mark is allowed a container tile.
-    In-app the dots sit directly on the surface (see core/components/mark).
+    App icon / favicon. This is the ONLY place the mark is allowed a container
+    tile; in-app the dots sit directly on the surface (core/components/mark).
 
-    Hex is intentional here: a static asset cannot read CSS custom properties.
-    Values mirror --surface-alt / --q1..--q4 from styles/theme.scss; keep them in
-    sync by hand if those tokens change.
+    Proportions measured from the design frames (issue 67): the dot cluster
+    occupies ~69.6% of the tile (44.5 of 64), centred, with the same diagonal
+    weighting as the mark, where q1 (top left) and q4 (bottom right) are the
+    large pair. Corner radius is ~21% of the tile.
+
+    Hex is intentional: a static asset cannot read CSS custom properties. These
+    values mirror the theme tokens named surface-alt, bg and q1 to q4 in
+    styles/theme.scss, so keep them in sync by hand if those tokens change.
+
+    NB: no double hyphens anywhere in this file's comments. XML forbids them, and
+    an invalid comment makes the whole icon fail to parse.
   -->
   <style>
     .tile { fill: #eef3ff; }
@@ -14,8 +22,8 @@
     .q3 { fill: #f59e0b; }
     .q4 { fill: #ef4444; }
 
-    /* Dark browser chrome: ink tile, brightened fills — the mark never sits on
-       a light container on dark. */
+    /* Dark browser chrome: ink tile, brightened fills, so the mark never sits
+       on a light container on dark. */
     @media (prefers-color-scheme: dark) {
       .tile { fill: #0b1220; }
       .q1 { fill: #60a5fa; }
@@ -25,11 +33,10 @@
     }
   </style>
 
-  <rect class="tile" width="64" height="64" rx="14" />
+  <rect class="tile" width="64" height="64" rx="13.5" />
 
-  <!-- Large-variant geometry, scaled 1.5× into a 36px content area. -->
-  <circle class="q1" cx="24.5" cy="24.5" r="6.6" />
-  <circle class="q3" cx="39.5" cy="24.5" r="6.6" />
-  <circle class="q2" cx="24.5" cy="39.5" r="4.35" />
-  <circle class="q4" cx="39.5" cy="39.5" r="4.35" />
+  <circle class="q1" cx="20.9" cy="20.9" r="11.1" />
+  <circle class="q3" cx="43.1" cy="20.9" r="8.6" />
+  <circle class="q2" cx="20.9" cy="43.1" r="8.6" />
+  <circle class="q4" cx="43.1" cy="43.1" r="11.1" />
 </svg>

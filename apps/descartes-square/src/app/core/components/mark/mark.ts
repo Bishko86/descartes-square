@@ -14,13 +14,16 @@ const SMALL_MARK_MAX_SIZE = 20;
 
 /**
  * The Descartes Square mark — four dots on a 2×2 lattice in the quadrant
- * accents, with the two "acting" quadrants (q1 gain, q3 risk) drawn larger so
- * the mark reads as a weighted decision rather than a plain grid.
+ * accents, with one diagonal drawn larger so the mark reads as a weighted
+ * decision rather than a plain grid.
+ *
+ * The heavy diagonal is q1 (top left) and q4 (bottom right): the "reasons to
+ * act" side of the square — pros of acting plus the cost of not acting — which
+ * is the same pairing the review screen's balance bar weighs.
  *
  * Two variants ship because the difference is an optical correction rather than
- * a scale: at or below 20px the dots are thickened and the row-to-row size
- * contrast is reduced, so the smaller pair does not vanish. A single scaled SVG
- * cannot do that.
+ * a scale: at or below 20px the light diagonal is thickened so it does not
+ * vanish. A single scaled SVG cannot do that.
  *
  * Fills come from `--mark-q1..--mark-q4` (theme.scss), so the mark follows the
  * light/dark palette without a container tile — it sits directly on the surface.
