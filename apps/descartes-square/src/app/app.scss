@@ -1,3 +1,33 @@
+// Parked off-screen with a transform rather than `display: none`, which would
+// make it unfocusable. z-index clears the sticky header.
+.skip-link {
+  position: fixed;
+  top: var(--basic-indent);
+  left: var(--basic-indent);
+  z-index: 20;
+  padding: var(--small-indent) var(--basic-indent);
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--primary-border);
+  border-radius: var(--radius-md);
+  color: var(--primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  transform: translateY(-300%);
+  transition: transform 0.15s ease;
+
+  &:focus {
+    transform: none;
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skip-link {
+    transition: none;
+  }
+}
+
 :host {
   display: flex;
   flex-direction: column;
@@ -8,7 +38,7 @@
     flex: 1;
     padding: var(--basic-indent);
     width: 100%;
-    max-width: 1280px;
+    max-width: var(--content-max-width);
     margin: 0 auto;
     box-sizing: border-box;
   }

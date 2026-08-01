@@ -1,0 +1,74 @@
+// Narrower than the 1280px page container on purpose — this is prose, and the
+// same 900px measure the home page reads at.
+.privacy {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--large-indent) var(--basic-indent);
+  font-family: var(--font-body);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.privacy__eyebrow {
+  margin: 0 0 var(--small-indent);
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.privacy__title {
+  margin: 0 0 var(--basic-indent);
+  color: var(--text);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.privacy__lead {
+  margin: 0 0 var(--large-indent);
+  color: var(--text);
+  font-size: var(--text-lg);
+}
+
+.privacy__section {
+  margin-bottom: var(--medium-indent);
+
+  p {
+    margin: 0;
+  }
+}
+
+.privacy__heading {
+  margin: 0 0 var(--small-indent);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.privacy__link {
+  display: inline-block;
+  margin-top: var(--small-indent);
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.privacy__note {
+  margin: var(--large-indent) 0 0;
+  padding-top: var(--basic-indent);
+  border-top: 1px solid var(--border-subtle);
+  color: var(--text-subtle);
+  font-size: var(--text-xs);
+}

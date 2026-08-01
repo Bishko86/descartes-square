@@ -1,0 +1,32 @@
+<!--
+  Geometry measured from the design frames (issue #67, "The mark").
+
+  Dot centres sit at 25% / 75% of the box — 6 and 18 in a 24 unit viewBox — and
+  the large dots have a radius of 6, so the mark fills its box edge to edge.
+
+  The weighted pair is DIAGONAL: q1 (top left) and q4 (bottom right), which is
+  the "reasons to act" side of the square — pros of acting plus the cost of not
+  acting, the same pairing the review screen's balance uses. The q3/q2 diagonal
+  is drawn smaller at a ratio of about 0.77.
+-->
+@if (isSmall()) {
+  <!--
+    Small variant (≤20px): the light diagonal is thickened to r=5 so it still
+    reads at 16px. The large dots already touch the edges and cannot grow, so
+    closing the gap is what "dots thicken at small sizes" means here.
+  -->
+  <svg class="mark__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="6" cy="6" r="6" fill="var(--mark-q1)" />
+    <circle cx="18" cy="6" r="5" fill="var(--mark-q3)" />
+    <circle cx="6" cy="18" r="5" fill="var(--mark-q2)" />
+    <circle cx="18" cy="18" r="6" fill="var(--mark-q4)" />
+  </svg>
+} @else {
+  <!-- Large variant (≥26px): true proportions, 6 against 4.6. -->
+  <svg class="mark__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="6" cy="6" r="6" fill="var(--mark-q1)" />
+    <circle cx="18" cy="6" r="4.6" fill="var(--mark-q3)" />
+    <circle cx="6" cy="18" r="4.6" fill="var(--mark-q2)" />
+    <circle cx="18" cy="18" r="6" fill="var(--mark-q4)" />
+  </svg>
+}

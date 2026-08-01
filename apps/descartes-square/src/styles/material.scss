@@ -16,6 +16,66 @@ html {
 
   font: var(--mat-sys-body-medium);
 
+  // Menus render in the CDK overlay, so they use Material's own surface rather
+  // than inheriting ours the way our components do — left alone, the panel is
+  // Material's neutral grey inside a navy app. These map onto our tokens, which
+  // are theme-aware, so the panel follows light/dark with everything else.
+  --mat-menu-container-color: var(--bg-elevated);
+  --mat-menu-item-label-text-color: var(--text-secondary);
+  --mat-menu-item-icon-color: var(--text-muted);
+  --mat-menu-divider-color: var(--border-subtle);
+  --mat-menu-item-hover-state-layer-color: var(--surface-hover);
+  --mat-menu-item-focus-state-layer-color: var(--surface-hover);
+  // Material's panel is barely rounded; the mocks draw a soft-cornered card.
+  --mat-menu-container-shape: var(--radius-lg);
+
+  // mat-icon defaults to the legacy `Material Icons` family, which has filled
+  // shapes only. The mocks are line art throughout, so point it at Material
+  // Symbols Outlined (loaded in index.html) — same ligature names, unfilled.
+  .mat-icon {
+    font-family: "Material Symbols Outlined";
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+
+    // Everything below came from the Material Icons stylesheet we no longer load.
+    // Angular's own .mat-icon rule sets a 24px *box* but no glyph metrics, so
+    // without these an icon that doesn't size itself inherited the body font —
+    // rendering at ~13px and sitting high in its box, because the inherited
+    // line-height no longer matched the box. line-height 1 makes the line box
+    // equal the em box, which is what centres the glyph.
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  // The panel is an overlay child of <body>, so it is reachable from here but
+  // not from any component's styles.
+  .mat-mdc-menu-panel {
+    border: 1px solid var(--border);
+  }
+
+  // Material anchors a menu to its trigger, so a 34px control centred in the
+  // 64px bar leaves the panel overlapping the bar's lower half. The mocks hang
+  // these panels clear of it: drop by the distance from the control's bottom
+  // edge to the bar's, plus the air the mocks leave underneath.
+  // Only when the overlay actually opened downwards: if the CDK ever flips a
+  // panel above its trigger, this margin would shove it back over the bar.
+  .header-menu.mat-menu-below {
+    margin-top: calc(
+      (var(--header-height) - var(--header-control-size)) / 2 +
+        var(--small-indent)
+    );
+  }
+
   .mat-mdc-row,
   .mat-mdc-header-row {
     background-color: var(--surface);

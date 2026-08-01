@@ -1,11 +1,29 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  signal,
+} from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 import { LangOptionsMap } from './definitions/consts/lang-options.const';
 import { LangCode } from './definitions/enums/lang-code.enum';
 
+/**
+ * Locale switcher, rendered as a bordered `EN ⌄` pill.
+ *
+ * Presentation is a MatMenu rather than the previous CSS `:hover` dropdown: the
+ * panel could not be opened from the keyboard at all, so the control was
+ * unreachable without a pointer.
+ *
+ * Switching locale is a full page load by design — every locale is a separate
+ * Angular i18n build served under its own path prefix, so there is no
+ * client-side route to navigate to.
+ */
 @Component({
   selector: 'lib-lang-switch',
-  imports: [],
+  imports: [MatMenu, MatMenuItem, MatMenuTrigger, MatIconModule],
   templateUrl: './lang-switch.component.html',
   styleUrl: './lang-switch.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,6 +34,9 @@ export class LangSwitchComponent {
   languageMap = LangOptionsMap;
 
   currentLanguage = signal(LangCode.EN);
+
+  /** Locale code shown on the pill, e.g. `EN`. */
+  readonly currentLabel = computed(() => this.currentLanguage().toUpperCase());
 
   constructor() {
     this.#detectCurrentLanguage();

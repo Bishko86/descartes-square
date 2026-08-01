@@ -1,117 +1,258 @@
-<header>
-  <div class="right-section">
-    <img [src]="'logo/logo.png'" alt="Logo" width="164" height="auto" />
+<header class="header">
+  <div class="header__inner">
+    <!-- Mark only — the wordmark lives in the footer. -->
+    <a
+      class="header__brand"
+      [routerLink]="homeRoute"
+      i18n-aria-label="@@header.brandAriaLabel"
+      aria-label="Descartes Square — home"
+    >
+      <app-mark [size]="26" />
+    </a>
 
-    <nav class="desktop-nav">
-      @for (item of menuItems; track item.name) {
-        <a
-          class="menu-link"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          >{{ item.name }}</a
-        >
-      }
+    <nav
+      class="header__nav"
+      i18n-aria-label="@@header.navAriaLabel"
+      aria-label="Main navigation"
+    >
+      <ng-container
+        [ngTemplateOutlet]="navLinks"
+        [ngTemplateOutletContext]="{ variant: 'desktop' }"
+      />
     </nav>
-  </div>
 
-  <div class="left-section">
-    @let user = currentUser();
+    <!--
+      Fixed order: language → theme → divider → auth. Language and theme sit
+      OUTSIDE the auth branch, so the bar's right edge does not shift when the
+      user signs in or out — only the auth slot swaps.
+    -->
+    <div class="header__actions">
+      <lib-lang-switch />
 
-    @if (user) {
-      <div class="user-info">
-        <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
-        <span class="user-email">{{ user.email }}</span>
-        <span>{{ user.username }}</span>
+      <button
+        class="header__theme"
+        [matTooltip]="themeLabel()"
+        [attr.aria-label]="themeLabel()"
+        (click)="changeTheme()"
+      >
+        <mat-icon class="header__theme-icon">{{ themeIcon() }}</mat-icon>
+      </button>
+
+      <!--
+        Signed in, the divider separates the utility controls from the violet
+        identity disc. Signed out the account control is the same hairline
+        square-family button as the theme toggle, so a rule between two
+        identical-looking controls would read as arbitrary — the mocks omit it
+        there too.
+      -->
+      @if (currentUser()) {
+        <span class="header__divider" aria-hidden="true"></span>
+      }
+
+      <!--
+        Only the applicable state is rendered, so the cluster packs tight against
+        the divider and ends at the bar's right edge — matching the mocks, which
+        do not width-match the two states. The consequence is deliberate: the
+        language and theme controls sit further right when signed in, because the
+        avatar is narrower than the account button.
+      -->
+      <div class="header__auth-slot">
+        @if (currentUser()) {
+          <button
+            class="header__avatar"
+            [matMenuTriggerFor]="accountMenu"
+            [attr.aria-label]="accountLabel"
+          >
+            <ng-container [ngTemplateOutlet]="avatarDisc" />
+            <mat-icon class="header__avatar-chevron">{{
+              chevronIcon
+            }}</mat-icon>
+          </button>
+        } @else {
+          <!--
+            One quiet control instead of the Sign in / Sign up pair — the bar
+            keeps no persistent colour when nobody is signed in, and the two
+            routes move into its menu.
+          -->
+          <button
+            class="header__account-btn"
+            [matMenuTriggerFor]="authMenu"
+            [attr.aria-label]="authLabel"
+          >
+            <mat-icon class="header__account-icon">{{ profileIcon }}</mat-icon>
+          </button>
+        }
       </div>
-
-      <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signOut"
-        (click)="signOut()"
-      >
-        Sign Out
-      </button>
-    } @else {
-      <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signIn"
-        [routerLink]="['/sign-in']"
-      >
-        Sign In
-      </button>
-      <button
-        matButton="elevated"
-        class="open-sans-regular"
-        i18n="@@signUp"
-        [routerLink]="['/sign-up']"
-      >
-        Sign Up
-      </button>
-    }
-
-    @if (!isDevMode) {
-      <lib-lang-switch></lib-lang-switch>
-    }
+    </div>
 
     <button
-      matButton="elevated"
-      class="open-sans-regular"
-      i18n="@@themeBtn"
-      (click)="changeTheme()"
+      #burger
+      class="header__burger"
+      [class.header__burger--active]="panelOpen()"
+      [attr.aria-expanded]="panelOpen()"
+      [attr.aria-label]="panelOpen() ? closeMenuLabel : openMenuLabel"
+      aria-controls="header-panel"
+      (click)="togglePanel()"
     >
-      🌓 Change theme
+      <mat-icon class="header__burger-icon">{{
+        panelOpen() ? closeIcon : menuIcon
+      }}</mat-icon>
     </button>
   </div>
-
-  <button mat-icon-button class="hamburger" (click)="toggleMobileMenu()" aria-label="Toggle menu">
-    <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
-  </button>
 </header>
 
-@if (mobileMenuOpen()) {
-  <div class="mobile-menu">
-    <nav>
-      @for (item of menuItems; track item.name) {
-        <a
-          class="menu-link"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          (click)="closeMobileMenu()"
-          >{{ item.name }}</a
-        >
-      }
+@if (panelOpen()) {
+  <!--
+    Sits outside the focus trap so it never becomes a tab stop; Escape and the
+    trigger are the keyboard paths out.
+  -->
+  <button
+    class="header__backdrop"
+    [attr.aria-label]="closeMenuLabel"
+    (click)="closePanel()"
+  ></button>
+
+  <div
+    id="header-panel"
+    class="header__panel"
+    cdkTrapFocus
+    [cdkTrapFocusAutoCapture]="true"
+  >
+    @let user = currentUser();
+
+    <!--
+      Order is the mock's: the sheet opens with who you are, then the two tabs,
+      then the q4-red Sign out. Signed out there is no identity block and the
+      auth pair takes Sign out's place.
+    -->
+    @if (user) {
+      <div class="header__panel-identity">
+        <ng-container [ngTemplateOutlet]="avatarDisc" />
+
+        <div class="header__identity">
+          <ng-container [ngTemplateOutlet]="identity" />
+        </div>
+      </div>
+
+      <hr class="header__panel-divider" />
+    }
+
+    <nav
+      class="header__panel-nav"
+      i18n-aria-label="@@header.navAriaLabel"
+      aria-label="Main navigation"
+    >
+      <ng-container
+        [ngTemplateOutlet]="navLinks"
+        [ngTemplateOutletContext]="{ variant: 'mobile' }"
+      />
     </nav>
 
-    <div class="mobile-actions">
-      @let user = currentUser();
+    @if (user) {
+      <hr class="header__panel-divider" />
 
-      @if (user) {
-        <div class="user-info">
-          <mat-icon class="user-icon">{{ userIcon }}</mat-icon>
-          <span class="user-email">{{ user.email }}</span>
-          <span>{{ user.username }}</span>
-        </div>
-        <button matButton="elevated" i18n="@@signOut" (click)="signOut(); closeMobileMenu()">
-          Sign Out
-        </button>
-      } @else {
-        <button matButton="elevated" i18n="@@signIn" [routerLink]="['/sign-in']" (click)="closeMobileMenu()">
-          Sign In
-        </button>
-        <button matButton="elevated" i18n="@@signUp" [routerLink]="['/sign-up']" (click)="closeMobileMenu()">
-          Sign Up
-        </button>
-      }
-
-      @if (!isDevMode) {
-        <lib-lang-switch></lib-lang-switch>
-      }
-
-      <button matButton="elevated" i18n="@@themeBtn" (click)="changeTheme(); closeMobileMenu()">
-        🌓 Change theme
+      <!--
+        No `My squares` row here: it points at the same route as the Descartes
+        Square tab two lines above it, which is why the mock drops it.
+      -->
+      <button
+        class="header__account-row header__account-row--danger"
+        (click)="signOut()"
+      >
+        {{ signOutLabel }}
       </button>
-    </div>
+    } @else {
+      <!--
+        The panel keeps the full pair: it has the room, and a menu nested inside
+        an already-open panel would be a second layer for no gain.
+      -->
+      <div class="header__auth">
+        <a
+          matButton
+          class="header__signin"
+          [routerLink]="signInRoute"
+          i18n="@@signIn"
+          >Sign In</a
+        >
+        <a
+          matButton="filled"
+          class="header__signup"
+          [routerLink]="signUpRoute"
+          i18n="@@signUp"
+          >Sign Up</a
+        >
+      </div>
+    }
   </div>
 }
+
+<!--
+  Nav links are declared ONCE and mounted twice, styled by data-variant. The
+  previous markup kept hand-maintained desktop and mobile copies, which is why
+  they had already drifted.
+-->
+<ng-template #navLinks let-variant="variant">
+  @for (item of menuItems; track item.route) {
+    <a
+      class="header__link"
+      [attr.data-variant]="variant"
+      [routerLink]="item.route"
+      routerLinkActive="header__link--active"
+      >{{ item.name }}</a
+    >
+  }
+</ng-template>
+
+<!--
+  Shared by the bar's trigger and the panel's identity row. The disc is always
+  the container — an initial-less account gets the person glyph inside it rather
+  than a bare icon, so identity looks the same wherever it appears.
+-->
+<ng-template #avatarDisc>
+  <span class="header__avatar-disc">
+    @if (initials()) {
+      {{ initials() }}
+    } @else {
+      <mat-icon class="header__avatar-fallback">{{ profileIcon }}</mat-icon>
+    }
+  </span>
+</ng-template>
+
+<!-- Identity is shared by the desktop menu header and the mobile panel. -->
+<ng-template #identity>
+  @let user = currentUser();
+
+  @if (user) {
+    <span class="header__account-name">{{ user.username }}</span>
+    <span class="header__account-email">{{ user.email }}</span>
+  }
+</ng-template>
+
+<!-- Reuses the @@signIn / @@signUp units, so no new translations are needed. -->
+<mat-menu #authMenu="matMenu" xPosition="before" class="header-menu">
+  <a mat-menu-item class="header__auth-item" [routerLink]="signInRoute">
+    <mat-icon>{{ signInIcon }}</mat-icon>
+    <span i18n="@@signIn">Sign In</span>
+  </a>
+
+  <a mat-menu-item class="header__auth-item" [routerLink]="signUpRoute">
+    <mat-icon>{{ signUpIcon }}</mat-icon>
+    <span i18n="@@signUp">Sign Up</span>
+  </a>
+</mat-menu>
+
+<mat-menu #accountMenu="matMenu" xPosition="before" class="header-menu">
+  <div class="header__menu-head">
+    <ng-container [ngTemplateOutlet]="identity" />
+  </div>
+
+  <mat-divider />
+
+  <a mat-menu-item [routerLink]="squaresRoute">{{ mySquaresLabel }}</a>
+
+  <mat-divider />
+
+  <button mat-menu-item class="header__menu-signout" (click)="signOut()">
+    {{ signOutLabel }}
+  </button>
+</mat-menu>

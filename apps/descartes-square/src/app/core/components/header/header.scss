@@ -1,137 +1,491 @@
 @use "breakpoints";
 
-header {
+// Structural dimensions, not colour or type — kept as literals per the note at
+// the top of typography.scss. The bar height and the control size are tokens
+// (--header-height, --header-control-size) because styles.scss and material.scss
+// need them for scroll-padding-top and the menu drop.
+$avatar-size: 30px;
+$panel-avatar-size: 48px;
+$icon-glyph: 18px;
+$panel-icon-glyph: 24px;
+// Material's menu min-width is 112px, which makes a two-word row look cramped;
+// the mock's panel is roughly this wide.
+$auth-item-width: 150px;
+
+:host {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: block;
+  // Opaque, so content scrolling underneath never shows through.
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.header__inner {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: var(--basic-indent);
-  background-color: var(--surface);
+  gap: var(--medium-indent);
+  height: var(--header-height);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+  padding: 0 var(--basic-indent);
+  box-sizing: border-box;
+}
 
-  .right-section {
-    display: flex;
-    align-items: center;
-    column-gap: var(--basic-indent);
+.header__brand {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 4px;
   }
+}
 
-  .desktop-nav {
-    display: flex;
-    align-items: center;
-    column-gap: var(--basic-indent);
-  }
+.header__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--x-small-indent);
+}
 
-  .left-section {
-    display: flex;
-    align-items: center;
-    column-gap: var(--basic-indent);
+// Quiet text tabs. Active state is a soft chip — shape AND colour, so it never
+// relies on colour alone.
+.header__link {
+  padding: var(--small-indent) var(--basic-indent);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 
-    .user-info {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      grid-template-rows: 20px 20px;
-      color: var(--text-secondary);
-    }
-
-    .user-icon {
-      grid-column: 1;
-      grid-row: 1/3;
-      align-self: center;
-      border-radius: 50%;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: var(--x-small-indent);
-    }
-
-    .user-email {
-      font-size: var(--text-xs);
-    }
-  }
-
-  .menu-link {
-    font-size: 22px;
+  &:hover {
+    background-color: var(--surface-hover);
     color: var(--text);
+  }
 
-    &.active {
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  &--active {
+    background-color: var(--primary-soft);
+    color: var(--primary);
+
+    &:hover {
+      background-color: var(--primary-soft-hover);
       color: var(--primary);
     }
   }
 
-  .hamburger {
-    display: none;
+  // Taller rows and a softer chip in the sheet, per the mock — and a touch
+  // target worth tapping.
+  &[data-variant="mobile"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: var(--basic-indent);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+  }
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  // Pushes the whole utility cluster to the right edge.
+  margin-left: auto;
+}
+
+// Icon buttons with a hairline border and no elevation — same family as the
+// language pill, so the whole right cluster reads as one set of quiet controls.
+.header__theme,
+.header__account-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--header-control-size);
+  height: var(--header-control-size);
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+.header__theme {
+  border-radius: var(--radius-md);
+}
+
+// Round, per the mock — the only shape difference from the theme control, and
+// enough to mark it as being about a person rather than a setting.
+.header__account-btn {
+  border-radius: var(--radius-pill);
+}
+
+// One glyph size for every control in the bar. Setting all four properties keeps
+// the line box equal to the em box, which is what centres the glyph — an icon
+// left on Material's default 24px box inherits a mismatched line-height and
+// rides high.
+.header__theme-icon,
+.header__account-icon,
+.header__burger-icon {
+  width: $icon-glyph;
+  height: $icon-glyph;
+  font-size: $icon-glyph;
+  line-height: $icon-glyph;
+}
+
+.header__divider {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border);
+}
+
+// Single mount point for whichever auth state applies — sized by its content,
+// so the cluster stays tight. It exists as one element only so the mobile query
+// below has a single thing to hide.
+.header__auth-slot {
+  display: flex;
+  align-items: center;
+}
+
+// Mobile panel only — the bar itself now shows a single account button. Side by
+// side in one row, filling the panel width.
+.header__auth {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  width: 100%;
+
+  .header__signin,
+  .header__signup {
+    flex: 1;
+  }
+
+  // In the panel the pair carries weight, so `Sign in` is outlined rather than
+  // the ghost it used to be in the bar.
+  .header__signin.mdc-button.mat-mdc-button-base {
+    border: 1px solid var(--border);
+  }
+}
+
+// The deprecated global rule in material.scss (`html .mdc-button.mat-mdc-button-base`)
+// paints EVERY Material button `--surface` with primary text, which is the real
+// reason the four old header buttons were indistinguishable. These selectors
+// out-specify it — without !important — so the pair gets an actual hierarchy.
+//
+// Soft blue rather than solid: the mock's panel keeps `Sign up` as the weightier
+// of the two without turning it into the page's loudest element, and the bar no
+// longer carries a filled action to match.
+.header__signup.mdc-button.mat-mdc-button-base {
+  background-color: var(--primary-soft);
+  color: var(--primary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+
+  &:hover {
+    background-color: var(--primary-soft-hover);
+  }
+}
+
+.header__signin.mdc-button.mat-mdc-button-base {
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+
+  &:hover {
+    background-color: var(--surface-hover);
     color: var(--text);
   }
+}
 
-  @media (max-width: breakpoints.$mobile) {
-    .desktop-nav,
-    .left-section {
-      display: none;
-    }
+.header__avatar {
+  display: inline-flex;
+  align-items: center;
+  // Matches the mock, which gives the chevron real air rather than tucking it
+  // against the disc.
+  gap: var(--small-indent);
+  height: var(--header-control-size);
+  padding: 0 var(--x-small-indent) 0 0;
+  background-color: transparent;
+  border: none;
+  border-radius: var(--radius-pill);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 
-    .hamburger {
-      display: flex;
-    }
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
   }
 }
 
-img {
-  height: 56px;
-  width: 56px;
+.header__avatar-disc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: $avatar-size;
+  height: $avatar-size;
+  border-radius: var(--radius-pill);
+  // Violet, per the mocks: #eeedfe disc / #534ab7 initials on light, #252b48 /
+  // #9c94e8 on dark — and no ring. The avatar is identity, not an action, so it
+  // deliberately sits off the bar's blue accent. --info-bg is the closest token
+  // pair and, unlike the 8%-alpha --primary-soft it replaces, reads as a disc on
+  // its own without needing a hairline.
+  background-color: var(--info-bg);
+  color: var(--info);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
-.mobile-menu {
-  display: none;
-  flex-direction: column;
-  background-color: var(--surface);
-  border-top: 1px solid var(--border);
-  padding: var(--basic-indent);
-  gap: var(--basic-indent);
+.header__avatar-fallback,
+.header__avatar-chevron {
+  width: $icon-glyph;
+  height: $icon-glyph;
+  font-size: $icon-glyph;
+  line-height: $icon-glyph;
+}
 
-  nav {
-    display: flex;
-    flex-direction: column;
+.header__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--header-control-size);
+  height: var(--header-control-size);
+  padding: 0;
+  background-color: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  // Open state is filled, so the ✕ reads as active — but neutral, not blue. The
+  // mocks keep it grey, and the bar is meant to hold one point of colour.
+  &--active {
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+}
+
+.header__backdrop {
+  position: fixed;
+  inset: var(--header-height) 0 0;
+  z-index: 8;
+  padding: 0;
+  border: none;
+  background-color: var(--overlay);
+  cursor: pointer;
+}
+
+.header__panel {
+  position: fixed;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  gap: var(--basic-indent);
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  padding: var(--basic-indent);
+  box-sizing: border-box;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-md);
+  animation: header-panel-in 0.18s ease-out;
+}
+
+.header__panel-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--x-small-indent);
+}
+
+// The sheet's first row: a larger disc beside the name and email. The disc and
+// glyph are scaled here rather than duplicated, so the violet treatment stays
+// defined in one place.
+.header__panel-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--basic-indent);
+  padding: var(--small-indent) var(--basic-indent);
+
+  .header__avatar-disc {
+    width: $panel-avatar-size;
+    height: $panel-avatar-size;
+    font-size: var(--text-base);
+  }
+
+  .header__avatar-fallback {
+    width: $panel-icon-glyph;
+    height: $panel-icon-glyph;
+    font-size: $panel-icon-glyph;
+    line-height: $panel-icon-glyph;
+  }
+
+  // The name leads the sheet, so it carries more weight here than in the
+  // desktop menu's cramped header.
+  .header__account-name {
+    font-size: var(--text-lg);
+  }
+
+  .header__account-email {
+    font-size: var(--text-sm);
+  }
+}
+
+.header__identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--extra-small-indent);
+  // Long addresses must not push the disc out of the row.
+  min-width: 0;
+}
+
+.header__panel-divider {
+  width: 100%;
+  height: 0;
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--border-subtle);
+}
+
+// Sized like the nav rows above it, so the sheet reads as one list.
+.header__account-row {
+  padding: var(--basic-indent);
+  border: none;
+  border-radius: var(--radius-lg);
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--surface-hover);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  // Sign out is destructive — q4 red, matching the quadrant accent.
+  &--danger {
+    color: var(--q4);
+  }
+}
+
+// Flat classes: mat-menu relocates its content into an overlay, so only
+// selectors matching the element itself still apply.
+.header__menu-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--extra-small-indent);
+  padding: var(--small-indent) var(--basic-indent);
+}
+
+.header__account-name {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+// Email is out of the persistent bar and only shown here.
+.header__account-email {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  // A long address wraps rather than widening the sheet.
+  overflow-wrap: anywhere;
+}
+
+.header__menu-signout {
+  color: var(--q4);
+}
+
+// The panel sizes to its widest row, so widening the rows is what widens the
+// menu — reachable from here because projected content keeps this component's
+// encapsulation attribute, unlike the panel itself.
+.header__auth-item {
+  min-width: $auth-item-width;
+}
+
+@keyframes header-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: breakpoints.$mobile) {
+  // Language and theme stay in the collapsed bar; only nav and auth move into
+  // the panel, so neither control is ever duplicated.
+  .header__nav,
+  .header__divider,
+  .header__auth-slot {
+    display: none;
+  }
+
+  .header__burger {
+    display: inline-flex;
+  }
+
+  .header__inner {
     gap: var(--small-indent);
   }
+}
 
-  .menu-link {
-    font-size: 18px;
-    color: var(--text);
-    padding: var(--small-indent) 0;
-    border-bottom: 1px solid var(--border);
-
-    &.active {
-      color: var(--primary);
-    }
+@media (prefers-reduced-motion: reduce) {
+  .header__link,
+  .header__theme,
+  .header__account-btn,
+  .header__avatar {
+    transition: none;
   }
 
-  .mobile-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--basic-indent);
-
-    .user-info {
-      display: grid;
-      grid-template-columns: 40px 1fr;
-      grid-template-rows: 20px 20px;
-      color: var(--text-secondary);
-    }
-
-    .user-icon {
-      grid-column: 1;
-      grid-row: 1/3;
-      align-self: center;
-      border-radius: 50%;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .user-email {
-      font-size: var(--text-xs);
-    }
-
-    button {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: breakpoints.$mobile) {
-    display: flex;
+  .header__panel {
+    animation: none;
   }
 }

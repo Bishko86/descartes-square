@@ -3,6 +3,19 @@
 // Material system tokens come from material.scss.
 
 :root {
+  // Width of the page content column. The header aligns its inner row to this
+  // so the mark lines up with the content it frames — keep both on the token.
+  --content-max-width: 1280px;
+
+  // Height of the sticky header. Also drives scroll-padding-top, so in-page
+  // anchors don't land underneath the bar.
+  --header-height: 64px;
+
+  // Edge of the bar's icon controls — language pill, theme toggle, account
+  // button, hamburger. A token because material.scss needs it to work out how
+  // far a menu must drop to clear the bar, and the two must not drift.
+  --header-control-size: 34px;
+
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
@@ -11,6 +24,14 @@
 }
 
 .light {
+  // Angular Material emits every one of its colour tokens as
+  // `light-dark(light, dark)` (see material.scss). Those resolve against the
+  // CSS `color-scheme` property, NOT against this class — so without these two
+  // declarations every Material surface stayed on its light value in dark mode,
+  // which is why the account menu rendered a light panel under white text.
+  // Also gives us dark native scrollbars and form controls for free.
+  color-scheme: light;
+
   // surface
   --bg: #ffffff;
   --bg-elevated: #ffffff;
@@ -67,6 +88,13 @@
   --q4-bg: rgba(239, 68, 68, 0.06);
   --q4-border: rgba(239, 68, 68, 0.22);
 
+  // mark dot fills — aliased to the quadrant accents. Override with explicit
+  // values here (not in the SVG) if the accents read thin or muddy at 16–20px.
+  --mark-q1: var(--q1);
+  --mark-q2: var(--q2);
+  --mark-q3: var(--q3);
+  --mark-q4: var(--q4);
+
   // effects
   --focus-ring: rgba(59, 130, 246, 0.35);
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.04);
@@ -76,6 +104,9 @@
 }
 
 .dark {
+  // Flips Material's light-dark() tokens; see the note in .light above.
+  color-scheme: dark;
+
   // surface
   --bg: #0b1220;
   --bg-elevated: #111a2e;
@@ -131,6 +162,13 @@
   --q4: #f87171;
   --q4-bg: rgba(248, 113, 113, 0.1);
   --q4-border: rgba(248, 113, 113, 0.28);
+
+  // mark dot fills — the dark accents are already brightened, so the mark
+  // brightens with them; geometry is identical across themes.
+  --mark-q1: var(--q1);
+  --mark-q2: var(--q2);
+  --mark-q3: var(--q3);
+  --mark-q4: var(--q4);
 
   // effects
   --focus-ring: rgba(96, 165, 250, 0.45);
