@@ -38,7 +38,16 @@
         <mat-icon class="header__theme-icon">{{ themeIcon() }}</mat-icon>
       </button>
 
-      <span class="header__divider" aria-hidden="true"></span>
+      <!--
+        Signed in, the divider separates the utility controls from the violet
+        identity disc. Signed out the account control is the same hairline
+        square-family button as the theme toggle, so a rule between two
+        identical-looking controls would read as arbitrary — the mocks omit it
+        there too.
+      -->
+      @if (currentUser()) {
+        <span class="header__divider" aria-hidden="true"></span>
+      }
 
       <ng-container
         [ngTemplateOutlet]="authBlock"
@@ -140,9 +149,18 @@
           <mat-icon class="header__avatar-chevron">{{ chevronIcon }}</mat-icon>
         </button>
       } @else {
-        <div class="header__auth">
-          <ng-container [ngTemplateOutlet]="authButtons" />
-        </div>
+        <!--
+          One quiet control instead of the Sign in / Sign up pair — the bar keeps
+          no persistent colour when nobody is signed in, and the two routes move
+          into its menu.
+        -->
+        <button
+          class="header__account-btn"
+          [matMenuTriggerFor]="authMenu"
+          [attr.aria-label]="authLabel"
+        >
+          <mat-icon class="header__account-icon">{{ profileIcon }}</mat-icon>
+        </button>
       }
     </div>
   } @else if (user) {
@@ -164,24 +182,27 @@
       </button>
     </div>
   } @else {
-    <div class="header__auth" data-variant="mobile">
-      <ng-container [ngTemplateOutlet]="authButtons" />
+    <!--
+      The panel keeps the full pair: it has the room, and a menu nested inside an
+      already-open panel would be a second layer for no gain.
+    -->
+    <div class="header__auth">
+      <a
+        matButton
+        class="header__signin"
+        [routerLink]="signInRoute"
+        i18n="@@signIn"
+        >Sign In</a
+      >
+      <a
+        matButton="filled"
+        class="header__signup"
+        [routerLink]="signUpRoute"
+        i18n="@@signUp"
+        >Sign Up</a
+      >
     </div>
   }
-</ng-template>
-
-<!-- The auth pair is declared once and reused by the bar and the mobile panel. -->
-<ng-template #authButtons>
-  <a matButton class="header__signin" [routerLink]="signInRoute" i18n="@@signIn"
-    >Sign In</a
-  >
-  <a
-    matButton="filled"
-    class="header__signup"
-    [routerLink]="signUpRoute"
-    i18n="@@signUp"
-    >Sign Up</a
-  >
 </ng-template>
 
 <!-- Identity is shared by the desktop menu header and the mobile panel. -->
@@ -193,6 +214,19 @@
     <span class="header__account-email">{{ user.email }}</span>
   }
 </ng-template>
+
+<!-- Reuses the @@signIn / @@signUp units, so no new translations are needed. -->
+<mat-menu #authMenu="matMenu" xPosition="before">
+  <a mat-menu-item class="header__auth-item" [routerLink]="signInRoute">
+    <mat-icon>{{ signInIcon }}</mat-icon>
+    <span i18n="@@signIn">Sign In</span>
+  </a>
+
+  <a mat-menu-item class="header__auth-item" [routerLink]="signUpRoute">
+    <mat-icon>{{ signUpIcon }}</mat-icon>
+    <span i18n="@@signUp">Sign Up</span>
+  </a>
+</mat-menu>
 
 <mat-menu #accountMenu="matMenu">
   <div class="header__menu-head">

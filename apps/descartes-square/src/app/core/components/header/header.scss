@@ -6,6 +6,9 @@
 $control-size: 34px;
 $avatar-size: 30px;
 $icon-glyph: 18px;
+// Material's menu min-width is 112px, which makes a two-word row look cramped;
+// the mock's panel is roughly this wide.
+$auth-item-width: 150px;
 
 :host {
   position: sticky;
@@ -94,9 +97,10 @@ $icon-glyph: 18px;
   margin-left: auto;
 }
 
-// Square icon button, hairline border, no elevation — same family as the
-// language pill so the two read as a pair.
-.header__theme {
+// Icon buttons with a hairline border and no elevation — same family as the
+// language pill, so the whole right cluster reads as one set of quiet controls.
+.header__theme,
+.header__account-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +109,6 @@ $icon-glyph: 18px;
   padding: 0;
   background-color: transparent;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
   color: var(--text-secondary);
   cursor: pointer;
   transition:
@@ -123,7 +126,18 @@ $icon-glyph: 18px;
   }
 }
 
-.header__theme-icon {
+.header__theme {
+  border-radius: var(--radius-md);
+}
+
+// Round, per the mock — the only shape difference from the theme control, and
+// enough to mark it as being about a person rather than a setting.
+.header__account-btn {
+  border-radius: var(--radius-pill);
+}
+
+.header__theme-icon,
+.header__account-icon {
   width: $icon-glyph;
   height: $icon-glyph;
   font-size: $icon-glyph;
@@ -144,25 +158,23 @@ $icon-glyph: 18px;
   align-items: center;
 }
 
+// Mobile panel only — the bar itself now shows a single account button. Side by
+// side in one row, filling the panel width.
 .header__auth {
   display: flex;
   align-items: center;
   gap: var(--small-indent);
+  width: 100%;
 
-  // Side by side in one row, filling the panel width.
-  &[data-variant="mobile"] {
-    width: 100%;
+  .header__signin,
+  .header__signup {
+    flex: 1;
+  }
 
-    .header__signin,
-    .header__signup {
-      flex: 1;
-    }
-
-    // In the panel the pair carries more weight, so `Sign in` is outlined here
-    // rather than the ghost it is up in the bar.
-    .header__signin.mdc-button.mat-mdc-button-base {
-      border: 1px solid var(--border);
-    }
+  // In the panel the pair carries weight, so `Sign in` is outlined rather than
+  // the ghost it used to be in the bar.
+  .header__signin.mdc-button.mat-mdc-button-base {
+    border: 1px solid var(--border);
   }
 }
 
@@ -376,6 +388,13 @@ $icon-glyph: 18px;
   color: var(--q4);
 }
 
+// The panel sizes to its widest row, so widening the rows is what widens the
+// menu — reachable from here because projected content keeps this component's
+// encapsulation attribute, unlike the panel itself.
+.header__auth-item {
+  min-width: $auth-item-width;
+}
+
 @keyframes header-panel-in {
   from {
     opacity: 0;
@@ -409,6 +428,7 @@ $icon-glyph: 18px;
 @media (prefers-reduced-motion: reduce) {
   .header__link,
   .header__theme,
+  .header__account-btn,
   .header__avatar {
     transition: none;
   }

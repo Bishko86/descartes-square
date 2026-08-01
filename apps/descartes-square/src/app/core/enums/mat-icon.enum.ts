@@ -8,6 +8,8 @@ export enum MatIcon {
   MENU = 'menu',
   CLOSE = 'close',
   EXPAND_MORE = 'expand_more',
+  LOGIN = 'login',
+  PERSON_ADD = 'person_add',
   // Shown on light, switches to dark — a crescent.
   DARK_MODE = 'dark_mode',
   // Shown on dark, switches to light — a sun.

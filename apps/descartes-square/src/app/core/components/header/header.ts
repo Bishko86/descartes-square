@@ -77,12 +77,15 @@ export class Header {
   readonly chevronIcon = MatIcon.EXPAND_MORE;
   readonly menuIcon = MatIcon.MENU;
   readonly closeIcon = MatIcon.CLOSE;
+  readonly signInIcon = MatIcon.LOGIN;
+  readonly signUpIcon = MatIcon.PERSON_ADD;
 
   // Declared once and reused by both the desktop account menu and the mobile
   // panel, so the two presentations cannot drift apart.
   readonly mySquaresLabel = $localize`:@@header.mySquares:My squares`;
   readonly signOutLabel = $localize`:@@signOut:Sign Out`;
   readonly accountLabel = $localize`:@@header.accountMenu:Account menu`;
+  readonly authLabel = $localize`:@@header.authMenu:Sign in or sign up`;
   readonly openMenuLabel = $localize`:@@header.openMenu:Open menu`;
   readonly closeMenuLabel = $localize`:@@header.closeMenu:Close menu`;
 

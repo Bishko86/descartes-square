@@ -72,6 +72,7 @@
     "header.mySquares": "My squares",
     "signOut": "Sign Out",
     "header.accountMenu": "Account menu",
+    "header.authMenu": "Sign in or sign up",
     "header.openMenu": "Open menu",
     "header.closeMenu": "Close menu",
     "header.themeToLight": "Switch to light theme",
