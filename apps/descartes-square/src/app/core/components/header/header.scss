@@ -142,8 +142,13 @@ $auth-item-width: 150px;
   border-radius: var(--radius-pill);
 }
 
+// One glyph size for every control in the bar. Setting all four properties keeps
+// the line box equal to the em box, which is what centres the glyph — an icon
+// left on Material's default 24px box inherits a mismatched line-height and
+// rides high.
 .header__theme-icon,
-.header__account-icon {
+.header__account-icon,
+.header__burger-icon {
   width: $icon-glyph;
   height: $icon-glyph;
   font-size: $icon-glyph;

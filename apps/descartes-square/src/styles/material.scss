@@ -39,7 +39,20 @@ html {
       "wght" 400,
       "GRAD" 0,
       "opsz" 24;
-    // The old font's stylesheet supplied these; it is no longer loaded.
+
+    // Everything below came from the Material Icons stylesheet we no longer load.
+    // Angular's own .mat-icon rule sets a 24px *box* but no glyph metrics, so
+    // without these an icon that doesn't size itself inherited the body font —
+    // rendering at ~13px and sitting high in its box, because the inherited
+    // line-height no longer matched the box. line-height 1 makes the line box
+    // equal the em box, which is what centres the glyph.
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
     font-feature-settings: "liga";
     -webkit-font-smoothing: antialiased;
   }

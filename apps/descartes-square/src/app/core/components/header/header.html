@@ -94,7 +94,9 @@
       aria-controls="header-panel"
       (click)="togglePanel()"
     >
-      <mat-icon>{{ panelOpen() ? closeIcon : menuIcon }}</mat-icon>
+      <mat-icon class="header__burger-icon">{{
+        panelOpen() ? closeIcon : menuIcon
+      }}</mat-icon>
     </button>
   </div>
 </header>
