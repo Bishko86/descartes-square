@@ -10,7 +10,11 @@
   <mat-icon class="lang-switch__chevron">expand_more</mat-icon>
 </button>
 
-<mat-menu #menu="matMenu">
+<!--
+  `header-menu` (styled in the app's material.scss) drops the panel clear of the
+  sticky bar. The switch is a header-only control, so the coupling is honest.
+-->
+<mat-menu #menu="matMenu" class="header-menu">
   @for (language of languages; track language.code) {
     <button
       mat-menu-item

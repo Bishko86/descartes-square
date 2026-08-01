@@ -1,11 +1,13 @@
 @use "breakpoints";
 
 // Structural dimensions, not colour or type — kept as literals per the note at
-// the top of typography.scss. The bar height itself is a token
-// (--header-height), because styles.scss needs it for scroll-padding-top.
-$control-size: 34px;
+// the top of typography.scss. The bar height and the control size are tokens
+// (--header-height, --header-control-size) because styles.scss and material.scss
+// need them for scroll-padding-top and the menu drop.
 $avatar-size: 30px;
+$panel-avatar-size: 48px;
 $icon-glyph: 18px;
+$panel-icon-glyph: 24px;
 // Material's menu min-width is 112px, which makes a two-word row look cramped;
 // the mock's panel is roughly this wide.
 $auth-item-width: 150px;
@@ -81,10 +83,14 @@ $auth-item-width: 150px;
     }
   }
 
+  // Taller rows and a softer chip in the sheet, per the mock — and a touch
+  // target worth tapping.
   &[data-variant="mobile"] {
     display: block;
     width: 100%;
     box-sizing: border-box;
+    padding: var(--basic-indent);
+    border-radius: var(--radius-lg);
     font-size: var(--text-base);
   }
 }
@@ -104,8 +110,8 @@ $auth-item-width: 150px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: $control-size;
-  height: $control-size;
+  width: var(--header-control-size);
+  height: var(--header-control-size);
   padding: 0;
   background-color: transparent;
   border: 1px solid var(--border);
@@ -181,19 +187,19 @@ $auth-item-width: 150px;
 // The deprecated global rule in material.scss (`html .mdc-button.mat-mdc-button-base`)
 // paints EVERY Material button `--surface` with primary text, which is the real
 // reason the four old header buttons were indistinguishable. These selectors
-// out-specify it — without !important — so the bar gets an actual hierarchy:
-// exactly one filled action, and a ghost beside it.
+// out-specify it — without !important — so the pair gets an actual hierarchy.
+//
+// Soft blue rather than solid: the mock's panel keeps `Sign up` as the weightier
+// of the two without turning it into the page's loudest element, and the bar no
+// longer carries a filled action to match.
 .header__signup.mdc-button.mat-mdc-button-base {
-  background-color: var(--primary);
-  color: var(--primary-contrast);
+  background-color: var(--primary-soft);
+  color: var(--primary);
   font-family: var(--font-sans);
+  font-weight: 600;
 
   &:hover {
-    background-color: var(--primary-hover);
-  }
-
-  &:active {
-    background-color: var(--primary-active);
+    background-color: var(--primary-soft-hover);
   }
 }
 
@@ -214,7 +220,7 @@ $auth-item-width: 150px;
   // Matches the mock, which gives the chevron real air rather than tucking it
   // against the disc.
   gap: var(--small-indent);
-  height: $control-size;
+  height: var(--header-control-size);
   padding: 0 var(--x-small-indent) 0 0;
   background-color: transparent;
   border: none;
@@ -233,18 +239,19 @@ $auth-item-width: 150px;
   }
 }
 
-.header__initials {
+.header__avatar-disc {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: none;
   width: $avatar-size;
   height: $avatar-size;
   border-radius: var(--radius-pill);
   // Violet, per the mocks: #eeedfe disc / #534ab7 initials on light, #252b48 /
   // #9c94e8 on dark — and no ring. The avatar is identity, not an action, so it
-  // deliberately sits off the bar's one blue accent. --info-bg is the closest
-  // token pair and, unlike the 8%-alpha --primary-soft it replaces, reads as a
-  // disc on its own without needing a hairline.
+  // deliberately sits off the bar's blue accent. --info-bg is the closest token
+  // pair and, unlike the 8%-alpha --primary-soft it replaces, reads as a disc on
+  // its own without needing a hairline.
   background-color: var(--info-bg);
   color: var(--info);
   font-family: var(--font-sans);
@@ -265,8 +272,8 @@ $auth-item-width: 150px;
   display: none;
   align-items: center;
   justify-content: center;
-  width: $control-size;
-  height: $control-size;
+  width: var(--header-control-size);
+  height: var(--header-control-size);
   padding: 0;
   background-color: transparent;
   border: 1px solid var(--border);
@@ -279,11 +286,12 @@ $auth-item-width: 150px;
     outline-offset: 2px;
   }
 
-  // Open state is filled, so the ✕ reads as active.
+  // Open state is filled, so the ✕ reads as active — but neutral, not blue. The
+  // mocks keep it grey, and the bar is meant to hold one point of colour.
   &--active {
-    background-color: var(--primary-soft);
-    border-color: var(--primary-border);
-    color: var(--primary);
+    background-color: var(--surface-hover);
+    border-color: var(--border-strong);
+    color: var(--text);
   }
 }
 
@@ -322,23 +330,60 @@ $auth-item-width: 150px;
   gap: var(--x-small-indent);
 }
 
-.header__account {
+// The sheet's first row: a larger disc beside the name and email. The disc and
+// glyph are scaled here rather than duplicated, so the violet treatment stays
+// defined in one place.
+.header__panel-identity {
   display: flex;
-  flex-direction: column;
-  gap: var(--x-small-indent);
+  align-items: center;
+  gap: var(--basic-indent);
+  padding: var(--small-indent) var(--basic-indent);
+
+  .header__avatar-disc {
+    width: $panel-avatar-size;
+    height: $panel-avatar-size;
+    font-size: var(--text-base);
+  }
+
+  .header__avatar-fallback {
+    width: $panel-icon-glyph;
+    height: $panel-icon-glyph;
+    font-size: $panel-icon-glyph;
+    line-height: $panel-icon-glyph;
+  }
+
+  // The name leads the sheet, so it carries more weight here than in the
+  // desktop menu's cramped header.
+  .header__account-name {
+    font-size: var(--text-lg);
+  }
+
+  .header__account-email {
+    font-size: var(--text-sm);
+  }
 }
 
 .header__identity {
   display: flex;
   flex-direction: column;
   gap: var(--extra-small-indent);
-  padding: var(--small-indent) var(--basic-indent);
+  // Long addresses must not push the disc out of the row.
+  min-width: 0;
 }
 
-.header__account-row {
-  padding: var(--small-indent) var(--basic-indent);
+.header__panel-divider {
+  width: 100%;
+  height: 0;
+  margin: 0;
   border: none;
-  border-radius: var(--radius-md);
+  border-top: 1px solid var(--border-subtle);
+}
+
+// Sized like the nav rows above it, so the sheet reads as one list.
+.header__account-row {
+  padding: var(--basic-indent);
+  border: none;
+  border-radius: var(--radius-lg);
   background-color: transparent;
   color: var(--text-secondary);
   font-family: var(--font-sans);
@@ -382,6 +427,8 @@ $auth-item-width: 150px;
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+  // A long address wraps rather than widening the sheet.
+  overflow-wrap: anywhere;
 }
 
 .header__menu-signout {

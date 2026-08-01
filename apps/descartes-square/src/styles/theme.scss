@@ -11,6 +11,11 @@
   // anchors don't land underneath the bar.
   --header-height: 64px;
 
+  // Edge of the bar's icon controls — language pill, theme toggle, account
+  // button, hamburger. A token because material.scss needs it to work out how
+  // far a menu must drop to clear the bar, and the two must not drift.
+  --header-control-size: 34px;
+
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 14px;
