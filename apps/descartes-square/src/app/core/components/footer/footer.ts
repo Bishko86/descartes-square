@@ -16,13 +16,8 @@ export class Footer {
   readonly currentYear = new Date().getFullYear();
 
   readonly homeRoute = `/${MenuRoutes.HOME}`;
+  readonly methodRoute = `/${MenuRoutes.METHOD}`;
   readonly privacyRoute = `/${MenuRoutes.PRIVACY}`;
-
-  /**
-   * `/method` (Layer 3 of #52) doesn't exist yet, so `The method` points at the
-   * home page's how-it-works section. Re-point when the route lands.
-   */
-  readonly methodFragment = 'how-it-works';
 
   readonly feedbackHref = `mailto:${CONTACT_EMAIL}`;
 }

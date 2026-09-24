@@ -55,6 +55,10 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home/home').then((mod) => mod.Home),
   },
   {
+    path: MenuRoutes.METHOD,
+    loadComponent: () => import('./method/method').then((mod) => mod.Method),
+  },
+  {
     path: MenuRoutes.PRIVACY,
     loadComponent: () =>
       import('./privacy/privacy').then((mod) => mod.Privacy),
