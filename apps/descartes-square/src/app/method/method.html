@@ -1,0 +1,410 @@
+<article class="method">
+  <!-- ── Page head ──────────────────────────────────────────────────────── -->
+  <header class="method__head">
+    <p class="method__eyebrow" i18n="@@method.eyebrow">The method</p>
+    <h1 class="method__title" i18n="@@method.title">Descartes' Square</h1>
+    <p class="method__lead" i18n="@@method.lead">
+      The four-question technique — how to fill it in, why it works, and a
+      worked example in full.
+    </p>
+  </header>
+
+  <!-- ── What it is ─────────────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.whatHeading">What it is</h2>
+
+    <p i18n="@@method.whatIntro">
+      A decision-making technique in which you look at one and the same choice
+      from four angles instead of the usual two. Instead of a list of pros and
+      cons, you fill in four cells:
+    </p>
+
+    <!-- The matrix itself. Column headers carry the "do / don't" axis and row
+         headers the "appears / disappears" axis; on mobile the headers give way
+         to a per-cell axis label (see method.scss). -->
+    <div class="quadrants">
+      <span class="quadrants__corner" aria-hidden="true"></span>
+      <span class="quadrants__col-head" i18n="@@method.axisDo">If I do it</span>
+      <span class="quadrants__col-head" i18n="@@method.axisDont"
+        >If I don't</span
+      >
+
+      <h3 class="quadrants__row-head" i18n="@@method.rowAppears">
+        What appears
+      </h3>
+      <div class="quadrants__cell quadrants__cell--q1">
+        <span class="quadrant-num quadrant-num--q1 quadrants__num">1</span>
+        <span class="quadrants__axis" i18n="@@method.axisDo">If I do it</span>
+        <strong class="quadrants__cell-title" i18n="@@method.cellGain"
+          >What I gain</strong
+        >
+      </div>
+      <div class="quadrants__cell quadrants__cell--q2">
+        <span class="quadrant-num quadrant-num--q2 quadrants__num">2</span>
+        <span class="quadrants__axis" i18n="@@method.axisDont">If I don't</span>
+        <strong class="quadrants__cell-title" i18n="@@method.cellKeep"
+          >What I keep</strong
+        >
+      </div>
+
+      <h3 class="quadrants__row-head" i18n="@@method.rowDisappears">
+        What disappears
+      </h3>
+      <div class="quadrants__cell quadrants__cell--q3">
+        <span class="quadrant-num quadrant-num--q3 quadrants__num">3</span>
+        <span class="quadrants__axis" i18n="@@method.axisDo">If I do it</span>
+        <strong class="quadrants__cell-title" i18n="@@method.cellRisk"
+          >What I risk</strong
+        >
+      </div>
+      <div class="quadrants__cell quadrants__cell--q4">
+        <span class="quadrant-num quadrant-num--q4 quadrants__num">4</span>
+        <span class="quadrants__axis" i18n="@@method.axisDont">If I don't</span>
+        <strong class="quadrants__cell-title" i18n="@@method.cellMiss"
+          >What I miss</strong
+        >
+      </div>
+    </div>
+
+    <p i18n="@@method.classicIntro">The classic phrasings run like this:</p>
+
+    <ul class="method__classic">
+      @for (question of classicQuestions; track question) {
+        <li class="method__classic-item">{{ question }}</li>
+      }
+    </ul>
+
+    <p i18n="@@method.classicNote">
+      Double negatives are hard to hold in your head, so they are put in plainer
+      language above — the meaning is the same.
+    </p>
+
+    <p i18n="@@method.bottomRow">
+      All the power of the method is in the bottom row. Thinking a decision
+      through, most people automatically work with only the top half of the
+      square. The bottom half is about cost — and not only the cost of acting,
+      but the cost of doing nothing, which we almost never count.
+    </p>
+
+    <p class="method__callout" i18n="@@method.callout">
+      You need 30–40 minutes, quiet, and honesty.
+    </p>
+  </section>
+
+  <!-- ── Why it works ───────────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.whyHeading">Why it works</h2>
+
+    <p i18n="@@method.whyIntro">
+      The method looks too simple to change anything. But each cell closes off a
+      specific trap in thinking.
+    </p>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.whyNarrowLead">
+        "Should I…" narrows the field.
+      </h3>
+      <p i18n="@@method.whyNarrowBody">
+        In "Decisive", Chip and Dan Heath cite Paul Nutt's research:
+        organisational decisions framed as "whether or not" failed roughly twice
+        as often as those where several options were on the table. The phrase
+        "should I" is itself a signal that you are standing on one patch of the
+        field. The square won't invent a third option for you, but it will shake
+        the illusion that the choice is binary.
+      </p>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.whyInactionLead">
+        Doing nothing feels free.
+      </h3>
+      <p i18n="@@method.whyInactionBody">
+        Doing nothing feels like the neutral option — in fact it is a decision
+        too, just one with a deferred bill. Research by Gilovich and Medvec
+        showed a consistent pattern (though not an iron-clad one — later
+        replications found a weaker effect): we regret actions more sharply
+        straight away, and inactions for longer. The "what I'll miss if I don't"
+        quadrant puts that bill in front of you now, rather than in five years.
+      </p>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.whyDistanceLead">
+        We are smarter about other people's business.
+      </h3>
+      <p i18n="@@method.whyDistanceBody">
+        In their own situation a person reasons worse than in an identical
+        situation belonging to someone else — but the difference disappears if
+        you look at yourself from a distance. Writing things down is a primitive
+        form of that distance: a thought moved onto paper stops being you and
+        becomes an object.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── How to fill it in ──────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.stepsHeading">
+      How to fill it in
+    </h2>
+
+    <ol class="method__steps">
+      <li class="method__step">
+        <h3 class="method__step-title" i18n="@@method.step1Title">
+          State the decision as one concrete action.
+        </h3>
+        <p i18n="@@method.step1Body">
+          Not "something about work", but "resign before the end of September".
+          A vague statement gives vague answers in all four cells.
+        </p>
+      </li>
+
+      <li class="method__step">
+        <h3 class="method__step-title" i18n="@@method.step2Title">
+          Go in the order 1 → 4 → 2 → 3.
+        </h3>
+        <p i18n="@@method.step2Body">
+          Easiest first — the gains from acting. Then straight to the hardest
+          and most useful — the losses from not acting. That order stops you
+          gutting the bottom half once you are already tired.
+        </p>
+      </li>
+
+      <li class="method__step">
+        <h3 class="method__step-title" i18n="@@method.step3Title">
+          At least five points in each cell.
+        </h3>
+        <p i18n="@@method.step3Body">
+          The first two or three are what you already knew. The valuable part
+          starts at the fourth.
+        </p>
+      </li>
+
+      <li class="method__step">
+        <h3 class="method__step-title" i18n="@@method.step4Title">
+          Write facts, not feelings.
+        </h3>
+        <p i18n="@@method.step4Body">
+          "It'll be scary" is not a point. "For the first 3–4 months income will
+          be about 30% lower" is a point. If there is no specificity, that often
+          means you are short on information, not on nerve.
+        </p>
+      </li>
+
+      <li class="method__step">
+        <h3 class="method__step-title" i18n="@@method.step5Title">
+          Don't count the points.
+        </h3>
+        <p i18n="@@method.step5Body">
+          The square is not a calculator. Three points in one cell can outweigh
+          twelve in another. You are not looking for a majority — you are
+          looking for the thing you are not prepared to live with.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── Worked example ─────────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.exampleHeading">An example</h2>
+
+    <div class="method__decision">
+      <span class="method__decision-label" i18n="@@method.exampleDecisionLabel"
+        >The decision</span
+      >
+      <p class="method__decision-body" i18n="@@method.exampleDecisionBody">
+        Take the offer from another company. The current job is stable, the team
+        is good, growth has stopped. The offer is +25% on salary, an unfamiliar
+        product, less predictability.
+      </p>
+    </div>
+
+    <!-- Deliberately in the 1 → 4 → 2 → 3 order step 2 recommends, not in grid
+         order — the sequence is part of what the example demonstrates, and the
+         numbers tie each card back to its cell in the square above. -->
+    <div class="example">
+      <div class="example__card example__card--q1">
+        <h3 class="example__card-title">
+          <span class="quadrant-num quadrant-num--q1">1</span>
+          <span i18n="@@method.exampleGainTitle">What I gain if I move</span>
+        </h3>
+        <ul class="example__list">
+          <li i18n="@@method.exampleGain1">Salary a quarter higher.</li>
+          <li i18n="@@method.exampleGain2">
+            A new domain area that isn't on my CV.
+          </li>
+          <li i18n="@@method.exampleGain3">
+            Experience onboarding into someone else's codebase — a skill I
+            haven't trained in four years.
+          </li>
+          <li i18n="@@method.exampleGain4">A formally more senior title.</li>
+        </ul>
+      </div>
+
+      <div class="example__card example__card--q4">
+        <h3 class="example__card-title">
+          <span class="quadrant-num quadrant-num--q4">4</span>
+          <span i18n="@@method.exampleMissTitle"
+            >What I lose if I don't move</span
+          >
+        </h3>
+        <ul class="example__list">
+          <li i18n="@@method.exampleMiss1">
+            Another year in a role I have already outgrown.
+          </li>
+          <li i18n="@@method.exampleMiss2">
+            Market value: in four years my CV has gained one line.
+          </li>
+          <li i18n="@@method.exampleMiss3">
+            This particular offer — there aren't many like it in the domain.
+          </li>
+          <li i18n="@@method.exampleMiss4">
+            Probably my motivation: for the last six months I have been working
+            at exactly the minimum.
+          </li>
+        </ul>
+      </div>
+
+      <div class="example__card example__card--q2">
+        <h3 class="example__card-title">
+          <span class="quadrant-num quadrant-num--q2">2</span>
+          <span i18n="@@method.exampleKeepTitle"
+            >What I keep if I don't move</span
+          >
+        </h3>
+        <ul class="example__list">
+          <li i18n="@@method.exampleKeep1">A team I am comfortable in.</li>
+          <li i18n="@@method.exampleKeep2">
+            A reputation I built over four years.
+          </li>
+          <li i18n="@@method.exampleKeep3">A predictable schedule.</li>
+          <li i18n="@@method.exampleKeep4">
+            The chance to see a project that matters to me through to release.
+          </li>
+        </ul>
+      </div>
+
+      <div class="example__card example__card--q3">
+        <h3 class="example__card-title">
+          <span class="quadrant-num quadrant-num--q3">3</span>
+          <span i18n="@@method.exampleRiskTitle">What I risk if I move</span>
+        </h3>
+        <ul class="example__list">
+          <li i18n="@@method.exampleRisk1">
+            The company is younger — there is a chance it won't survive the
+            year.
+          </li>
+          <li i18n="@@method.exampleRisk2">
+            For the first three months I will look incompetent.
+          </li>
+          <li i18n="@@method.exampleRisk3">
+            The promised freedom may turn out to be chaos, and you can't see
+            that in an interview.
+          </li>
+          <li i18n="@@method.exampleRisk4">
+            I don't know my future manager, and that is the single biggest
+            factor in job satisfaction.
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.exampleOutcomeLead">
+        What to do with this.
+      </h3>
+      <p i18n="@@method.exampleOutcomeBody">
+        The hardest thing here isn't the pros against the cons, it is two
+        points: "I don't know the manager" and "the freedom may turn out to be
+        chaos". Neither is about courage — both are about missing information.
+        The square didn't say what to do. It said that before deciding, it is
+        worth asking for one more conversation — with the future manager, and
+        with someone who has already worked there a year.
+      </p>
+    </div>
+
+    <p i18n="@@method.exampleTypical">
+      This is the typical result. The square rarely delivers a verdict — far
+      more often it shows you what you haven't yet found out. And after that the
+      decision often becomes obvious.
+    </p>
+  </section>
+
+  <!-- ── Common mistakes ────────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.mistakesHeading">
+      Common mistakes
+    </h2>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.mistakeStateLead">
+        Phrasings along the lines of "should I be happier".
+      </h3>
+      <p i18n="@@method.mistakeStateBody">
+        The square works on an action, not on a desired state.
+      </p>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.mistakeDuplicateLead">
+        The same point in different cells.
+      </h3>
+      <p i18n="@@method.mistakeDuplicateBody">
+        If "I'll be left without stability" sits in both the risks and the
+        losses, you are writing one thought twice.
+      </p>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.mistakeConfirmLead">
+        Filling it in for confirmation.
+      </h3>
+      <p i18n="@@method.mistakeConfirmBody">
+        If you have already decided, the square becomes your decision's
+        advocate. The tell: the bottom half is filled in more briefly, and
+        reluctantly.
+      </p>
+    </div>
+
+    <div class="method__point">
+      <h3 class="method__point-lead" i18n="@@method.mistakePeakLead">
+        Filling it in at an emotional peak.
+      </h3>
+      <p i18n="@@method.mistakePeakBody">
+        Under heavy stress or euphoria the square records your state, not your
+        situation. Better to put it aside for a day and reread it.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── When it doesn't fit ────────────────────────────────────────────── -->
+  <section class="method__section" #animatedSection>
+    <h2 class="method__heading" i18n="@@method.limitsHeading">
+      When the square isn't the right tool
+    </h2>
+
+    <p i18n="@@method.limitsBody">
+      You don't need it for reversible decisions: if a mistake can be fixed in a
+      week, it is cheaper just to try. It works poorly for choosing between
+      three or more options — there you need criteria and a comparison table.
+      And it doesn't replace professional help on medical, legal or financial
+      questions: it is a tool for preparing for the conversation with a
+      specialist, not an alternative to it.
+    </p>
+  </section>
+
+  <!-- ── Closing CTA ────────────────────────────────────────────────────── -->
+  <footer class="method__outro" #animatedSection>
+    <p class="method__outro-line" i18n="@@method.outro">
+      Four angles. One honest view of your choice.
+    </p>
+    <a
+      mat-flat-button
+      class="method__cta"
+      [routerLink]="createRoute"
+      i18n="@@method.cta"
+    >
+      Try it now
+    </a>
+  </footer>
+</article>

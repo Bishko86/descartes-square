@@ -1,0 +1,477 @@
+@use "breakpoints" as *;
+
+// Same 900px prose measure as the privacy page and the home page — this is a
+// long read, and the column has to stay readable next to the 1280px shell.
+.method {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--large-indent) var(--basic-indent) var(--x-large-indent);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: 1.7;
+
+  // Block-only so it leaves the lead's auto inline margins alone.
+  p {
+    margin-block: 0 var(--basic-indent);
+  }
+
+  // ── Page head ─────────────────────────────────────────────────────────────
+  &__head {
+    padding-bottom: var(--large-indent);
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+  }
+
+  &__eyebrow {
+    margin: 0 0 var(--small-indent);
+    color: var(--primary);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__title {
+    margin: 0 0 var(--basic-indent);
+    color: var(--text);
+    font-family: var(--font-serif);
+    font-size: 2.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  &__lead {
+    max-width: 620px;
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    margin: 0 auto;
+  }
+
+  // ── Sections ──────────────────────────────────────────────────────────────
+  // Scroll-reveal mirrors the home page: hidden until .visible lands, and
+  // method.ts skips the observer outright under prefers-reduced-motion.
+  &__section,
+  &__outro {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.6s ease-out,
+      transform 0.6s ease-out;
+
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  &__section {
+    padding-top: var(--x-large-indent);
+  }
+
+  &__heading {
+    margin: 0 0 var(--medium-indent);
+    color: var(--text);
+    font-family: var(--font-serif);
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  // Bold lead-in plus body — a heading element rather than a <strong> so the
+  // page keeps a usable outline for screen readers.
+  &__point {
+    margin-bottom: var(--medium-indent);
+
+    p {
+      margin: 0;
+    }
+  }
+
+  &__point-lead {
+    margin: 0 0 var(--x-small-indent);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  // The four classic double-negative phrasings, pulled from the shared map.
+  &__classic {
+    margin: 0 0 var(--basic-indent);
+    padding: 0;
+    list-style: none;
+  }
+
+  &__classic-item {
+    padding: var(--x-small-indent) 0 var(--x-small-indent) var(--basic-indent);
+    border-left: 2px solid var(--border-strong);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+  }
+
+  &__callout {
+    margin: var(--medium-indent) 0 0;
+    padding: var(--basic-indent);
+    border: 1px solid var(--primary-border);
+    border-radius: var(--radius-md);
+    background: var(--primary-soft);
+    color: var(--text);
+    font-size: var(--text-base);
+  }
+
+  // ── Numbered steps ────────────────────────────────────────────────────────
+  // Counter rather than a native marker so the number can be a filled disc in
+  // the primary colour, matching the home page's timeline nodes.
+  &__steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: method-step;
+  }
+
+  &__step {
+    position: relative;
+    counter-increment: method-step;
+    margin-bottom: var(--medium-indent);
+    padding-left: calc(var(--large-indent) + var(--small-indent));
+
+    p {
+      margin: 0;
+    }
+
+    &::before {
+      content: counter(method-step);
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--primary-contrast);
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 700;
+      line-height: 1;
+    }
+  }
+
+  &__step-title {
+    margin: 0 0 var(--x-small-indent);
+    padding-top: var(--x-small-indent);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  // ── Worked example ────────────────────────────────────────────────────────
+  &__decision {
+    margin-bottom: var(--medium-indent);
+    padding: var(--basic-indent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+  }
+
+  &__decision-label {
+    display: block;
+    margin-bottom: var(--x-small-indent);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__decision-body {
+    margin: 0;
+    color: var(--text);
+  }
+
+  // ── Closing CTA ───────────────────────────────────────────────────────────
+  &__outro {
+    margin-top: var(--x-large-indent);
+    padding-top: var(--large-indent);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  &__outro-line {
+    margin: 0 0 var(--medium-indent);
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+    font-style: italic;
+  }
+
+  &__cta {
+    font-size: var(--text-base);
+    padding: var(--small-indent) var(--large-indent);
+    transition:
+      transform 0.2s ease-out,
+      box-shadow 0.2s ease-out;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 12px rgb(0 0 0 / 12%);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+    }
+  }
+}
+
+// ── The 2×2 matrix ──────────────────────────────────────────────────────────
+// Column 1 holds the row labels ("what appears" / "what disappears"), so the
+// bottom row reads as the cost half rather than as two more cells. The four
+// cells round only their outer corners, so together they read as one square.
+// ── Quadrant number ─────────────────────────────────────────────────────────
+// Shared by the square and the example cards, so "1 → 4 → 2 → 3" in step 2
+// maps onto something the reader can see. Outlined rather than filled: amber
+// and red discs can't carry legible text in both themes.
+.quadrant-num {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  line-height: 1;
+
+  @each $q in q1, q2, q3, q4 {
+    &--#{$q} {
+      border-color: var(--#{$q});
+    }
+  }
+}
+
+.quadrants {
+  display: grid;
+  grid-template-columns: max-content 1fr 1fr;
+  gap: var(--x-small-indent);
+  align-items: stretch;
+  margin: 0 0 var(--medium-indent);
+}
+
+.quadrants__col-head {
+  align-self: end;
+  padding-bottom: var(--x-small-indent);
+  text-align: center;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.quadrants__row-head {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  padding-right: var(--basic-indent);
+  max-width: 8em;
+  text-align: right;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.quadrants__cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--x-small-indent);
+  padding: var(--medium-indent) var(--basic-indent);
+  text-align: center;
+  border-radius: var(--radius-sm);
+
+  @each $q in q1, q2, q3, q4 {
+    &--#{$q} {
+      background: var(--#{$q}-bg);
+      border: 1px solid var(--#{$q}-border);
+    }
+  }
+
+  &--q1 {
+    border-top-left-radius: var(--radius-lg);
+  }
+
+  &--q2 {
+    border-top-right-radius: var(--radius-lg);
+  }
+
+  &--q3 {
+    border-bottom-left-radius: var(--radius-lg);
+  }
+
+  &--q4 {
+    border-bottom-right-radius: var(--radius-lg);
+  }
+}
+
+.quadrants__num {
+  position: absolute;
+  top: var(--small-indent);
+  left: var(--small-indent);
+}
+
+// Redundant while the column headers are visible — it takes over on mobile.
+.quadrants__axis {
+  display: none;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.quadrants__cell-title {
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+// ── Example cards ───────────────────────────────────────────────────────────
+// Quadrant tint keeps the four blocks tied to their cells in the square above.
+.example {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--basic-indent);
+  margin-bottom: var(--medium-indent);
+}
+
+.example__card {
+  padding: var(--basic-indent);
+  border-radius: var(--radius-md);
+
+  @each $q in q1, q2, q3, q4 {
+    &--#{$q} {
+      background: var(--#{$q}-bg);
+      border: 1px solid var(--#{$q}-border);
+    }
+  }
+}
+
+.example__card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--small-indent);
+  margin: 0 0 var(--small-indent);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.example__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--x-small-indent);
+  margin: 0;
+  padding-left: var(--basic-indent);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+
+  li::marker {
+    color: var(--text-muted);
+  }
+}
+
+// ── Reduced motion ──────────────────────────────────────────────────────────
+// Belt-and-braces with the same check in method.ts, which skips the observer.
+@media (prefers-reduced-motion: reduce) {
+  .method__section,
+  .method__outro {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .method__cta {
+    transition: none;
+
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: $mobile) {
+  .method__title {
+    font-size: 2rem;
+  }
+
+  .method__lead {
+    font-size: var(--text-base);
+  }
+
+  // Drop the label column: the row label spans the pair it introduces, and the
+  // "do / don't" axis moves inside each cell.
+  .quadrants {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quadrants__corner,
+  .quadrants__col-head {
+    display: none;
+  }
+
+  .quadrants__row-head {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    max-width: none;
+    margin-top: var(--small-indent);
+    padding-right: 0;
+    text-align: left;
+  }
+
+  .quadrants__axis {
+    display: block;
+  }
+
+  .quadrants__cell {
+    padding: var(--basic-indent);
+    border-radius: var(--radius-lg);
+  }
+
+  .example {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Below ~500px the paired cells are too narrow for the titles — stack them.
+@media (max-width: 500px) {
+  .quadrants {
+    grid-template-columns: 1fr;
+  }
+}
