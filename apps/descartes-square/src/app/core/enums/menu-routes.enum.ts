@@ -8,5 +8,6 @@ export enum MenuRoutes {
   FORGOT_PASSWORD = 'forgot-password',
   RESET_PASSWORD = 'auth/reset-password',
   // Footer-only — deliberately absent from MENU_ITEMS.
+  METHOD = 'method',
   PRIVACY = 'privacy',
 }
