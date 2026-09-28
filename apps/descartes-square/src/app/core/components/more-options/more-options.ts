@@ -1,4 +1,9 @@
-import { Component, input, output } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { MoreOptionAction } from '@core/enums/more-options-action.enum';
 import { MatIcon } from '@core/enums/mat-icon.enum';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
@@ -10,6 +15,7 @@ import { IMoreOptions } from '@core/interfaces/more-options.interface';
   selector: 'app-more-options',
   imports: [MatMenuTrigger, MatMenu, MatMenuItem, MatIconButton, MatIconModule],
   templateUrl: './more-options.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './more-options.scss',
 })
 export class MoreOptions {

@@ -16,7 +16,8 @@
       "@descartes/*": ["apps/descartes-square/src/app/descartes-square/*"]
     },
     "module": "preserve",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-descartes-square',
   imports: [RouterOutlet, MatButtonModule],
   templateUrl: './descartes-square.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './descartes-square.scss',
 })
 export class DescartesSquare {}

@@ -7,6 +7,7 @@ import {
   QueryList,
   signal,
   ViewChildren,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatButton } from '@angular/material/button';
@@ -15,6 +16,7 @@ import { MatButton } from '@angular/material/button';
   selector: 'app-home',
   imports: [RouterLink, MatButton],
   templateUrl: './home.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './home.scss',
 })
 export class Home implements AfterViewInit {
