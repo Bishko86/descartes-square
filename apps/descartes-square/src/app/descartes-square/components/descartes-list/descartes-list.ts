@@ -5,6 +5,7 @@ import {
   input,
   OnInit,
   signal,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IDescartesSolution } from '../../definitions/interfaces/descartes-solution.interface';
@@ -25,6 +26,7 @@ function isSolution(item: IDescartesSolution): boolean {
   selector: 'app-descartes-list',
   imports: [MatButton, MatIcon, DescartesSolutionCard],
   templateUrl: './descartes-list.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './descartes-list.scss',
 })
 export class DescartesList implements OnInit {

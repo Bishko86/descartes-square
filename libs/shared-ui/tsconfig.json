@@ -9,7 +9,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@shared/*": ["libs/shared/*"]
-    }
+    },
+    "ignoreDeprecations": "6.0"
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

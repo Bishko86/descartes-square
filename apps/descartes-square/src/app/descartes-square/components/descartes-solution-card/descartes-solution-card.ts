@@ -1,4 +1,10 @@
-import { Component, computed, input, output } from '@angular/core';
+import {
+  Component,
+  computed,
+  input,
+  output,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -15,6 +21,7 @@ import { DescartesQuestionsIds } from '@shared/src';
   selector: 'app-descartes-solution-card',
   imports: [DatePipe, MatIconButton, MatIcon, MatTooltipModule],
   templateUrl: './descartes-solution-card.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './descartes-solution-card.scss',
 })
 export class DescartesSolutionCard {

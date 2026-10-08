@@ -14,3 +14,5 @@
 /.angular/cache
 
 .angular
+
+.nx/self-healing

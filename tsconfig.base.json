@@ -12,6 +12,11 @@
       "shared": ["libs/shared/src/index.ts"],
       "polyfills": ["polyfills.ts"],
       "shared-ui": ["libs/shared-ui/src/index.ts"]
-    }
+    },
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false,
+    "ignoreDeprecations": "6.0"
   }
 }
